@@ -1,0 +1,3 @@
+Technique ID,Name,Tactics,Status,Comment
+T1136,(parent),Persistence,Tested,LocalAccountCreated – [status: Tested]
+T1136.001,LocalAccountCreated,Persistence,Tested,LocalAccountCreated – [status: Tested]

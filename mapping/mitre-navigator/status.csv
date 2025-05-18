@@ -1,0 +1,2 @@
+Technique ID,Name,Tactics,Status,Linked Rule
+T1136.001,LocalAccountCreated,Persistence,Tested,1_local_account_created_deleted.md
