@@ -1,111 +1,71 @@
-# Defender Lab Framework
+# Defender Lab Framework – Opis Techniczny
 
-Framework do tworzenia, testowania i dokumentowania scenariuszy detekcyjnych z mapowaniem na MITRE ATT&CK®. Projekt skupia się na środowisku Microsoft Defender for Endpoint oraz powiązanych komponentach systemu Windows i O365.
+## 🎯 Cel projektu
+
+Ten framework służy do:
+- tworzenia realistycznych scenariuszy ataków i detekcji,
+- testowania zachowania Microsoft Defender for Endpoint,
+- mapowania technik do MITRE ATT&CK®,
+- generowania raportów pokrycia i dokumentacji bezpieczeństwa.
 
 ---
 
-## 📁 Struktura repozytorium
+## 🧱 Komponenty
+
+- `scenarios/` – atomic tests, detection + logs + tags
+- `alerts/` – reguły alertowe (np. MDE, Splunk)
+- `hunting/` – KQL, Sigma, YARA
+- `mapping/` – warstwy Navigatora, statusy
+- `tools/` – skrypty do automatyzacji (build, walidacja, raport)
+
+---
+
+## 🔁 Pipeline automatyczny
+
+Skrypt `merge_all.py` wykonuje:
+
+1. Walidację `tags.json` we wszystkich scenariuszach
+2. Generuje `techniques.csv` do mapowania
+3. Generuje interaktywny raport HTML
+4. Automatycznie otwiera raport w przeglądarce
+
+---
+
+## 🧪 Przykład scenariusza
 
 ```
-defender-lab-framework/
-├── alerts/                       # Opis detekcji i alertów (np. MDE)
-│   └── identity-management/
-├── hunting/                      # KQL, Sigma i inne reguły huntingowe
-├── mapping/mitre-navigator/     # Mapowanie na ATT&CK + statusy
-│   ├── techniques.csv
-│   └── lab-detection-mapping.json
-├── scenarios/                   # Scenariusze testowe z logami i detekcją
-│   └── T1136.001_LocalAccountCreated/
-├── tools/                       # Skrypty automatyzujące generowanie
-│   ├── generate_scenario.py
-│   ├── generate_status.py
-│   └── generate_report.py
-├── report/                      # Wygenerowane raporty (HTML)
-└── README.md
+scenarios/T1136.001_LocalAccountCreated/
+├── attack.ps1
+├── detection.md
+├── tags.json
+└── logs/
 ```
 
----
-
-##  Przebieg pracy (flow)
-
-1.  Utwórz nowy scenariusz: `generate_scenario.py`
-2.  Przeprowadź test / atak z `attack.ps1`
-3.  Zbierz logi i opisz detekcję w `detection.md`
-4.  Uzupełnij `tags.json` (technika, status, taktyki)
-5.  Wygeneruj `techniques.csv`: `generate_status.py`
-6.  Wygeneruj raport HTML: `generate_report.py`
-
----
-
-##  Skrypty
-
-### `generate_scenario.py`
-Tworzy szablon folderu scenariusza.
-
-```bash
-python tools/generate_scenario.py --id T1136.001 --name LocalAccountCreated
-```
-
----
-
-### `generate_status.py`
-Tworzy plik `techniques.csv` z podsumowaniem statusów i taktyk na podstawie `tags.json` w scenariuszach.
-
-```bash
-python tools/generate_status.py
-```
-
----
-
-### `generate_report.py`
-Tworzy przejrzysty raport HTML z podziałem na taktyki, wykresem i linkami.
-
-```bash
-python tools/generate_report.py
-```
-
----
-
-##  Co jest zautomatyzowane?
-
- Automatyczne:
-- Tworzenie struktury scenariusza
-- Generowanie statusów (`techniques.csv`)
-- Generowanie raportu HTML + wykresów
-- Otwieranie raportu w przeglądarce
-
- Ręczne:
-- Przeprowadzenie testu (`attack.ps1`)
-- Wypełnienie `detection.md`
-- Uzupełnienie `tags.json` (techniki, status, taktyki)
-- Dodanie hunting queries do `hunting/`
-
----
-
-##  Przykład `tags.json`
-
+`tags.json`:
 ```json
 {
   "id": "T1136.001",
   "name": "LocalAccountCreated",
   "tactics": ["Persistence", "Privilege Escalation"],
   "status": "Tested",
-  "linked_rule": "1_local_account_created_deleted.md"
+  "linked_alert": "alerts/identity-management/1_local_account_created_deleted.md",
+  "linked_hunting": "hunting/T1136_user_created.kql"
 }
 ```
 
 ---
 
-##  Statusy w `tags.json`
+## 📊 Efekt końcowy
 
-- `Pending` – jeszcze nie realizowany
-- `Audit` – reguła działa w trybie monitoringu
-- `Tested` – przetestowany w środowisku
+Interaktywny raport w `report/lab-detection-report.html` z:
+- podziałem na taktyki ATT&CK
+- kolorami statusów
+- linkami do alertów i reguł
+- wykresem pokrycia
 
 ---
 
-##  Autor
+## 🧠 Autor
 
-Prepared by **Krzysztof Krzymowski** – defender-lab-framework  
-MITRE ATT&CK® is a registered trademark of The MITRE Corporation.
-
+Projekt: Krzysztof Krzymowski  
+Repozytorium: [defender-lab-framework](https://github.com/SheriffBLN/defender-lab-framework)
