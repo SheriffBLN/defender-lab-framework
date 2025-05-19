@@ -1,26 +1,3 @@
-#  Alert: Wykrycie modyfikacji lokalnego konta użytkownika (UserAccountModified)
-
-##  Opis
-
-Ten alert wykrywa przypadki **modyfikacji istniejącego lokalnego konta użytkownika** w systemie Windows. Zmiana może dotyczyć np. ustawienia nazwy wyświetlanej, wymuszenia zmiany hasła przy kolejnym logowaniu, czy zmiany flag UAC. Takie działania mogą świadczyć o:
-
-- modyfikacjach dokonywanych przez administratora,
-- próbach zakamuflowania konta przez atakującego (np. usunięcie opisu, wyłączenie konta),
-- technikach persistence lub lateral movement.
-
----
-
-## Techniczne szczegóły
-
-| Źródło                           | Tabela MDE       | Event ID (klasyczny) | ActionType              |
-|----------------------------------|------------------|-----------------------|--------------------------|
-| Microsoft Defender for Endpoint | `DeviceEvents`   | 4738                  | `UserAccountModified`    |
-
----
-
-##  KQL – hunting query
-
-```kql
 DeviceEvents
 | where ActionType == "UserAccountModified"
 | extend AdditionalFieldsJson = parse_json(AdditionalFields)
@@ -62,4 +39,3 @@ DeviceEvents
     WasUACChanged,
     NewUAC_Decoded
 | order by Timestamp desc
-```

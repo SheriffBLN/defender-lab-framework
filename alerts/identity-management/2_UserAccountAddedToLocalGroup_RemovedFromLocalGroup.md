@@ -48,3 +48,4 @@ DeviceEvents
     GroupSid,
     InitiatingUser
 | order by Timestamp desc
+```
