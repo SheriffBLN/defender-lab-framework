@@ -1,0 +1,6 @@
+Technique ID,Name,Tactics,Status,Linked Rule
+T1098.003,LocalAccountManipulation,"Privilege Escalation, Defense Evasion",Tested,alerts/identity-management/3_LocalUserAccountModified.md
+T1136.001,LocalAccountCreated,"Persistence, Privilege Escalation",Tested,alerts/identity-management/1_local_account_created_deleted.md
+T1136.002,LocalAccountGroupMembership,"Privilege Escalation, Defense Evasion",Tested,alerts/identity-management/2_UserAccountAddedToLocalGroup_RemovedFromLocalGroup.md
+T1569.002,ASRWMI,"Execution, Persistence",Tested,alerts/asr-configuration-guide.md
+T1136.001,LocalAccountCreated,Persistence,Tested,1_local_account_created_deleted.md

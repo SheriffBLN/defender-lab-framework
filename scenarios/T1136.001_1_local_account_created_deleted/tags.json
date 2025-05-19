@@ -1,0 +1,10 @@
+{
+    "id": "T1136.001",
+    "name": "LocalAccountCreated",
+    "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+    ],
+    "status": "Tested",
+    "linked_alert": "alerts/identity-management/1_local_account_created_deleted.md"
+}
