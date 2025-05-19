@@ -53,6 +53,6 @@ DeviceEvents
 <!--
 Tactics: Privilege Escalation, Defense Evasion
 Technique ID: T1136.002
-Technique Name: LocalAccountGroupMembership
+Technique Name: Create Account: Domain Account
 Status: Tested
 -->

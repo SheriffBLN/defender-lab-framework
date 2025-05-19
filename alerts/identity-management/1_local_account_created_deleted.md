@@ -79,6 +79,6 @@ W przypadku wyzwolenia alertu warto sprawdzić:
 <!--
 Tactics: Persistence, Privilege Escalation
 Technique ID: T1136.001
-Technique Name: LocalAccountCreated
+Technique Name: Create Account: Local Account
 Status: Tested
 -->
