@@ -41,12 +41,6 @@
             "score": 1,
             "comment": "alerts/asr-configuration-guide.md",
             "color": "#66ff66"
-        },
-        {
-            "techniqueID": "T1136.001",
-            "score": 1,
-            "comment": "1_local_account_created_deleted.md",
-            "color": "#66ff66"
         }
     ],
     "gradient": {
