@@ -1,7 +1,0 @@
-{
-  "id": "T1136.001",
-  "name": "LocalAccountCreated",
-  "tactics": ["Persistence"],
-  "status": "Tested",
-  "linked_rule": "1_local_account_created_deleted.md"
-}
