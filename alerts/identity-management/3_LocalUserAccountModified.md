@@ -63,3 +63,10 @@ DeviceEvents
     NewUAC_Decoded
 | order by Timestamp desc
 ```
+
+<!--
+Tactics: Privilege Escalation, Defense Evasion
+Technique ID: T1098.003
+Technique Name: LocalAccountManipulation
+Status: Tested
+-->

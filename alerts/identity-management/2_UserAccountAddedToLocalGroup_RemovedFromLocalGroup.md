@@ -49,3 +49,10 @@ DeviceEvents
     InitiatingUser
 | order by Timestamp desc
 ```
+
+<!--
+Tactics: Privilege Escalation, Defense Evasion
+Technique ID: T1136.002
+Technique Name: LocalAccountGroupMembership
+Status: Tested
+-->

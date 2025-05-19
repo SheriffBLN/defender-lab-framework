@@ -1,0 +1,10 @@
+{
+    "id": "T1098.003",
+    "name": "LocalAccountManipulation",
+    "tactics": [
+        "Privilege Escalation",
+        "Defense Evasion"
+    ],
+    "status": "Tested",
+    "linked_alert": "alerts/identity-management/3_LocalUserAccountModified.md"
+}

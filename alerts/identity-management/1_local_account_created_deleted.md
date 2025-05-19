@@ -75,3 +75,10 @@ W przypadku wyzwolenia alertu warto sprawdzić:
 
 ---
 **Autor:** Krzysztof Krzymowski
+
+<!--
+Tactics: Persistence, Privilege Escalation
+Technique ID: T1136.001
+Technique Name: LocalAccountCreated
+Status: Tested
+-->

@@ -6,7 +6,8 @@ def validate_tags():
     valid = 0
     errors = 0
 
-    print("📋 Walidacja scenariuszy:")
+    print("📋 Walidacja scenariuszy:
+")
 
     for folder in get_all_scenario_folders():
         tags_path = folder / "tags.json"
@@ -29,7 +30,8 @@ def validate_tags():
             print(f"[✓] {folder.name}: OK")
             valid += 1
 
-    print(f"✅ Poprawnych scenariuszy: {valid}")
+    print(f"
+✅ Poprawnych scenariuszy: {valid}")
     print(f"❌ Błędnych lub niekompletnych: {errors}")
 
 if __name__ == "__main__":
