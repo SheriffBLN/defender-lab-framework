@@ -35,12 +35,6 @@
             "score": 1,
             "comment": "alerts/identity-management/2_UserAccountAddedToLocalGroup_RemovedFromLocalGroup.md",
             "color": "#66ff66"
-        },
-        {
-            "techniqueID": "T1569.002",
-            "score": 1,
-            "comment": "alerts/asr-configuration-guide.md",
-            "color": "#66ff66"
         }
     ],
     "gradient": {

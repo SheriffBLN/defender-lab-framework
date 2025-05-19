@@ -1,62 +1,62 @@
 {
-    "version": "4.3",
-    "name": "defender-lab-framework - Auto Generated Mapping",
-    "domain": "mitre-enterprise",
-    "description": "Automatycznie wygenerowana warstwa na podstawie tags.json w folderze scenarios/",
-    "filters": {
-        "platforms": [
-            "Windows"
-        ]
-    },
-    "sorting": 0,
-    "layout": {
-        "layout": "side",
-        "showID": true,
-        "showName": true,
-        "aggregateFunction": "average",
-        "countUnscored": false
-    },
-    "hideDisabled": false,
-    "techniques": [
-        {
-            "techniqueID": "T1136",
-            "score": 1,
-            "color": "#66ff66",
-            "comment": "LocalAccountCreated \u2013 [status: Tested]"
-        },
-        {
-            "techniqueID": "T1136.001",
-            "score": 1,
-            "color": "#66ff66",
-            "comment": "LocalAccountCreated \u2013 [status: Tested]"
-        }
-    ],
-    "gradient": {
-        "colors": [
-            "#ffffff",
-            "#66ff66"
-        ],
-        "minValue": 0,
-        "maxValue": 1
-    },
-    "legendItems": [
-        {
-            "label": "Tested in lab",
-            "color": "#66ff66"
-        },
-        {
-            "label": "Audit only",
-            "color": "#ffff66"
-        },
-        {
-            "label": "Pending",
-            "color": "#cccccc"
-        }
-    ],
-    "metadata": [
-        {
-            "name": "generated",
-            "value": "true"
-        }
+  "version": "4.5",
+  "name": "defender-lab-framework - Auto Generated Mapping",
+  "domain": "mitre-enterprise",
+  "description": "Automatycznie wygenerowana warstwa na podstawie tags.json w folderze scenarios/",
+  "filters": {
+    "platforms": [
+      "Windows"
     ]
+  },
+  "sorting": 0,
+  "layout": {
+    "layout": "side",
+    "showID": true,
+    "showName": true,
+    "aggregateFunction": "average",
+    "countUnscored": false
+  },
+  "hideDisabled": false,
+  "techniques": [
+    {
+      "techniqueID": "T1136",
+      "score": 1,
+      "color": "#66ff66",
+      "comment": "LocalAccountCreated \u2013 [status: Tested]"
+    },
+    {
+      "techniqueID": "T1136.001",
+      "score": 1,
+      "color": "#66ff66",
+      "comment": "LocalAccountCreated \u2013 [status: Tested]"
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#ffffff",
+      "#66ff66"
+    ],
+    "minValue": 0,
+    "maxValue": 1
+  },
+  "legendItems": [
+    {
+      "label": "Tested in lab",
+      "color": "#66ff66"
+    },
+    {
+      "label": "Audit only",
+      "color": "#ffff66"
+    },
+    {
+      "label": "Pending",
+      "color": "#cccccc"
+    }
+  ],
+  "metadata": [
+    {
+      "name": "generated",
+      "value": "true"
+    }
+  ]
 }

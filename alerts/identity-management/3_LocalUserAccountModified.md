@@ -67,6 +67,6 @@ DeviceEvents
 <!--
 Tactics: Privilege Escalation, Defense Evasion
 Technique ID: T1098.003
-Technique Name: LocalAccountManipulation
+Technique Name: Account Manipulation: Add Account to Group
 Status: Tested
 -->

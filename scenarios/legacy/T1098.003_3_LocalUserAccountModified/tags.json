@@ -1,6 +1,6 @@
 {
     "id": "T1098.003",
-    "name": "Account Manipulation: Add Account to Group",
+    "name": "LocalAccountManipulation",
     "tactics": [
         "Privilege Escalation",
         "Defense Evasion"

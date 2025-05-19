@@ -1,3 +1,3 @@
-# Detection notes for T1136.002 (LocalAccountGroupMembership)
+# Detection notes for T1136.002 (Create Account: Domain Account)
 
 TODO

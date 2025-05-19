@@ -1,6 +1,6 @@
 {
     "id": "T1136.001",
-    "name": "Create Account: Local Account",
+    "name": "LocalAccountCreated",
     "tactics": [
         "Persistence",
         "Privilege Escalation"
