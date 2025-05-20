@@ -12,8 +12,24 @@ STATUS_COLORS = {
     "Pending": "#cccccc"
 }
 
+# Oficjalne identyfikatory taktyk w MITRE Navigator
+TACTIC_MAP = {
+    "Initial Access": "initial-access",
+    "Execution": "execution",
+    "Persistence": "persistence",
+    "Privilege Escalation": "privilege-escalation",
+    "Defense Evasion": "defense-evasion",
+    "Credential Access": "credential-access",
+    "Discovery": "discovery",
+    "Lateral Movement": "lateral-movement",
+    "Collection": "collection",
+    "Command and Control": "command-and-control",
+    "Exfiltration": "exfiltration",
+    "Impact": "impact"
+}
+
 BASE_LAYER = {
-    "version": "4.3",
+    "version": "4.6",
     "name": "defender-lab-framework - Auto Generated Mapping",
     "domain": "mitre-enterprise",
     "description": "Warstwa wygenerowana na podstawie status.csv",
@@ -50,21 +66,29 @@ def build_layer():
     with open(INPUT_CSV, newline='', encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            tid = row.get("Technique ID", "")
-            status = row.get("Status", "Pending")
-            comment = row.get("Linked Rule", "")
+            tid = row.get("Technique ID", "").strip()
+            status = row.get("Status", "Pending").strip()
+            comment = row.get("Linked Rule", "").strip()
+            tactics_raw = row.get("Tactics", "").strip()
 
-            techniques.append({
-                "techniqueID": tid,
-                "score": 1,
-                "comment": comment,
-                "color": STATUS_COLORS.get(status, "#cccccc")
-            })
+            if not tid:
+                continue
+
+            # Mapuj każdą taktykę na identyfikator Navigatora
+            tactic_list = [TACTIC_MAP.get(t.strip()) for t in tactics_raw.split(",") if t.strip() in TACTIC_MAP]
+            for tactic in tactic_list:
+                techniques.append({
+                    "techniqueID": tid,
+                    "tactic": tactic,
+                    "score": 1,
+                    "comment": comment,
+                    "color": STATUS_COLORS.get(status, "#cccccc")
+                })
 
             rows.append([
                 tid,
                 row.get("Name", ""),
-                row.get("Tactics", ""),
+                tactics_raw,
                 status,
                 comment
             ])
@@ -74,7 +98,7 @@ def build_layer():
     Path(OUTPUT_JSON).write_text(json.dumps(BASE_LAYER, indent=4), encoding="utf-8")
     print(f"[✓] Zapisano warstwę do: {OUTPUT_JSON}")
 
-    with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as out:
+    with open(OUTPUT_CSV, "w", newline='', encoding="utf-8") as out:
         writer = csv.writer(out)
         writer.writerow(["Technique ID", "Name", "Tactics", "Status", "Comment"])
         writer.writerows(rows)
