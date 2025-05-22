@@ -1,0 +1,16 @@
+{
+    "techniques": [
+        {
+            "technique_id": "T1568",
+            "technique_name": "Dynamic Resolution",
+            "tactics": [
+                "Command-And-Control"
+            ],
+            "alert_name": "T1568"
+        }
+    ],
+    "apt_mode": true,
+    "apt_name": "niewiem",
+    "status": "Tested",
+    "author": "Krzysztof"
+}

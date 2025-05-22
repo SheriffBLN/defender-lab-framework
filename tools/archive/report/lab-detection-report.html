@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html><head><meta charset='UTF-8'>
+<title>Defender Lab Detection Report</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 2em; }
+h1, h2 { color: #333; }
+.header { display: flex; align-items: center; }
+.logo { width: 60px; height: 60px; background: #ccc; margin-right: 1em; display: inline-block; }
+.footer { margin-top: 3em; font-style: italic; }
+.chart { width: 400px; height: 300px; margin-bottom: 2em; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 2em; }
+th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+th { background-color: #f2f2f2; cursor: pointer; }
+</style>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script>
+function sortTable(n, tableID) {
+  var table = document.getElementById(tableID);
+  var switching = true, dir = 'asc', switchcount = 0;
+  while (switching) {
+    switching = false; var rows = table.rows;
+    for (var i = 1; i < (rows.length - 1); i++) {
+      var x = rows[i].getElementsByTagName('TD')[n];
+      var y = rows[i + 1].getElementsByTagName('TD')[n];
+      var shouldSwitch = (dir === 'asc') ? (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) : (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase());
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true; switchcount++; break;
+      }
+    }
+    if (switchcount === 0 && dir === 'asc') { dir = 'desc'; switching = true; }
+  }
+}
+</script>
+</head><body>
+<div class='header'><div class='logo'></div><div>
+<h1>Defender Lab Detection Report</h1>
+<p><strong>Generated:</strong> 2025-05-18 22:55:18</p>
+<p><strong>Total Scenarios:</strong> 2</p>
+</div></div>
+<canvas class='chart' id='statusChart'></canvas>
+<script>
+const ctx = document.getElementById('statusChart');
+new Chart(ctx, {type: 'bar', data: {
+labels: ['Tested', 'Audit', 'Pending'],
+datasets: [{label: 'Scenario Status', data: [2, 0, 0], backgroundColor: ['#d4edda', '#fff3cd', '#f8d7da']}]
+}, options: {scales: {y: {beginAtZero: true}}}});
+</script>
+<h2>Persistence</h2>
+<table id='table_Persistence'><tr>
+<th onclick="sortTable(0, 'table_Persistence')">#</th>
+<th onclick="sortTable(1, 'table_Persistence')">Technique ID</th>
+<th onclick="sortTable(2, 'table_Persistence')">Name</th>
+<th onclick="sortTable(3, 'table_Persistence')">Status</th>
+<th onclick="sortTable(4, 'table_Persistence')">Comment</th>
+</tr>
+<tr style='background-color: #d4edda;'>
+<td>1</td><td>T1136</td>
+<td title='Tactics: Persistence'>(parent)</td>
+<td>Tested</td><td>LocalAccountCreated – [status: Tested]</td></tr>
+<tr style='background-color: #d4edda;'>
+<td>2</td><td>T1136.001</td>
+<td title='Tactics: Persistence'>LocalAccountCreated</td>
+<td>Tested</td><td>LocalAccountCreated – [status: Tested]</td></tr>
+</table>
+<div class='footer'>Prepared by Krzysztof Krzymowski – defender-lab-framework</div></body></html>

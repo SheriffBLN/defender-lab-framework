@@ -1,33 +1,26 @@
-"""
-shared_utils.py – Wspólne funkcje dla wszystkich skryptów frameworka
-"""
-
 import json
 from pathlib import Path
 
-def load_json(file_path):
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, FileNotFoundError) as e:
-        print(f"[!] Błąd ładowania pliku JSON: {file_path} -> {e}")
-        return None
+def load_json(path):
+    path = Path(path)
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
 
-def write_json(data, file_path):
-    try:
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4)
-    except Exception as e:
-        print(f"[!] Błąd zapisu JSON: {file_path} -> {e}")
+def write_json(data, path):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    json_str = json.dumps(data, indent=4)
+    path.write_text(json_str, encoding="utf-8")
 
-def get_all_scenario_folders(base_dir="scenarios"):
-    base_path = Path(base_dir)
-    return [f for f in base_path.iterdir() if f.is_dir() and not f.name.startswith(".")]
+def get_all_scenario_folders(base_path="scenarios/"):
+    """Zwraca listę folderów zawierających plik tags.json."""
+    base = Path(base_path)
+    if not base.exists():
+        return []
 
-def get_scenario_by_id(scenario_id, base_dir="scenarios"):
-    base_path = Path(base_dir)
-    search_prefix = scenario_id if scenario_id.startswith("T") else f"T{scenario_id}"
-    for folder in base_path.iterdir():
-        if folder.is_dir() and folder.name.startswith(search_prefix + "_"):
-            return folder
-    return None
+    return [
+        folder for folder in base.rglob("*")
+        if folder.is_dir() and (folder / "tags.json").exists()
+    ]

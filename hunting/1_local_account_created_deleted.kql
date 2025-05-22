@@ -1,4 +1,0 @@
-DeviceEvents
-| where ActionType == "UserAccountCreated"
-| project Timestamp, DeviceName, ReportId, InitiatingProcessAccountName, InitiatingProcessCommandLine, AdditionalFields
-| order by Timestamp desc
