@@ -19,18 +19,19 @@ Framework pozwala:
 
 defender-lab-framework/
 │
-├── alerts/ # pliki .md z opisami alertów (generowane)
-├── hunting/ # KQL, Sigma, YARA (generowane)
-├── mapping/ # warstwy do MITRE Navigator, status.csv, etc. (generowane)
-├── report/ # raporty HTML z macierzą ATT&CK (generowane)
-├── scenarios/ # pliki scenariuszy i tagi (generowane)
-├── tools/ # główny kod frameworka oraz narzędzia dodatkowe
-│ ├── archive/ # stare, nieużywane już skrypty i narzędzia
-│ ├── helpers/ # helpery do importu, konwersji itp.
-│ ├── enterprise_attack.csv # źródło technik MITRE
-│ └── defender_lab.py lub 99_merge_all_for_apt.py # główny skrypt
-├── docs/ # dodatkowa dokumentacja, quickstart, FAQ
-└── README.md
+├─ alerts/
+├─ hunting/
+├─ mapping/
+├─ report/
+├─ scenarios/
+├─ tools/
+├─ docs/
+│   ├─ Quickstart.md
+│   ├─ ...
+│   └─ templates/
+│        └─ defender-lab-framework-template.zip   <--- tutaj wrzuć ZIP
+│
+├─ README.md
 
 
 
@@ -57,6 +58,15 @@ Alerty: /alerts/
 Scenariusze: /scenarios/
 Hunting queries: /hunting/
 Pełna dokumentacja: /docs/
+
+---
+
+### 📦 Szybki start – czysty szablon repo
+
+Jeśli chcesz zacząć od czystej, przygotowanej struktury folderów – pobierz starter ZIP:
+[docs/templates/defender-lab-framework-template.zip](docs/templates/defender-lab-framework-template.zip)
+
+Rozpakuj go lokalnie i postępuj zgodnie z instrukcjami z [Quickstart.md](../Quickstart.md).
 
 ---
 
