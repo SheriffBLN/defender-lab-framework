@@ -342,12 +342,12 @@ def choose_or_create_folder(base_name):
     # Pokazuje istniejące foldery i pozwala wybrać lub utworzyć nowy
     existing = sorted([d for d in os.listdir(MAPPING_DIR) if os.path.isdir(os.path.join(MAPPING_DIR, d))])
     print(f"Dostępne foldery: {', '.join(existing) if existing else '[Brak – utworzysz nowy]'}")
-    name = input(f"Podaj nazwę grupy APT lub wybierz istniejący folder (np. {base_name}): ").strip()
+    name = input(f"Podaj nazwę nowego folderu dla grupy APT lub wybierz istniejący folder (np. {base_name}): ").strip()
     return name if name else base_name
 
 def main():
     print_banner()
-    print("1. APT (osobny folder)\n2. SingleTechnique (sumuje)\n3. Masowy update – odśwież statusy i raporty dla wszystkich folderów")
+    print("1. APT Mode (utworzy osobny folder dla adwersarza)\n2. SingleMode (sumuje dodawane techniki na jednej matrycy mitre)\n3. Masowa aktualizacja – odśwież statusy i raporty dla wszystkich folderów")
     mode = input("Twój wybór [1/2/3]: ").strip()
     attack_db = read_attack_db()
     if mode == "3":
@@ -374,7 +374,7 @@ def main():
             status_raw = input("Podaj status (Pending/Audit/Tested): ").strip().lower()
             status = ALLOWED_STATUSES.get(status_raw, None)
         default_alert_name = f"{tid}_alert.md"
-        alert_name = input(f"Podaj nazwę pliku alertu (domyślnie {default_alert_name}): ").strip() or default_alert_name
+        alert_name = input(f"Podaj nazwę pliku dla tworzonego alertu (domyślnie {default_alert_name}): ").strip() or default_alert_name
         linked_rule_path = write_alert_md(apt_name, tid, tname, tactics, status, alert_name)
         write_hunting_kql(apt_name, tid, tname)
         write_scenario_md(apt_name, tid, tname, tactics, status)
@@ -385,7 +385,7 @@ def main():
             "Status": status,
             "Linked Rule": linked_rule_path
         })
-        if input("Dodać kolejną technikę? [T/n]: ").strip().lower() == "n":
+        if input("Czy dodać kolejną technikę? [T/n]: ").strip().lower() == "n":
             break
     rows += techs
     out_csv = os.path.join(MAPPING_DIR, apt_name, "status.csv")
