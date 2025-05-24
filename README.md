@@ -1,21 +1,23 @@
 # 🛡️ Defender Lab Framework
 
-**Defender Lab Framework** to modularny framework do budowania, testowania oraz mapowania scenariuszy detekcyjnych w środowisku **Microsoft Defender for Endpoint (MDE)** oraz do automatycznego generowania raportów, warstw MITRE ATT&CK® Navigator, plików do huntingu i dokumentacji.
+**Defender Lab Framework** to modularne środowisko do **budowania, testowania, mapowania i automatycznego raportowania scenariuszy detekcyjnych** na bazie Microsoft Defender for Endpoint (MDE). Pozwala generować dokumentację techniczną, raporty HTML, warstwy do MITRE ATT&CK® Navigator oraz śledzić efektywność detekcji zarówno dla pojedynczych technik, jak i całych grup APT.
 
 ---
 
-## 🔎 Co znajdziesz w tym repozytorium?
+## Do czego przydaje się ten framework?
 
-Framework pozwala:
-- tworzyć i rozwijać własne scenariusze detekcyjne,
-- mapować techniki na MITRE ATT&CK®,
-- generować gotowe warstwy do MITRE Navigatora,
-- prowadzić dokumentację i automatyczne raportowanie (HTML),
-- łatwo zarządzać statusami testów i detekcji (Pending / Audit / Tested).
+- **Automatyzuje dokumentowanie i testowanie scenariuszy detekcyjnych** – każde wdrożenie nowej reguły, symulacja ataku czy zmiana w środowisku może być łatwo udokumentowana, przypisana do technik ATT&CK i przetestowana.
+- **Generuje warstwy do MITRE ATT&CK® Navigator** (wraz z mapowaniem statusów i score), pomagając w analizie pokrycia detekcji.
+- **Tworzy interaktywne raporty HTML** (z heatmapą, statusami i filtrami), umożliwiające szybki przegląd statusu testów, pokrycia technik oraz aktywności powiązanych z alertami MDE.
+- **Porządkuje i standaryzuje dokumentację** – scenariusze, alerty, reguły huntingowe, mappingi oraz statusy przechowywane są w logicznej strukturze.
+- **Ułatwia testy regresyjne i rozwój nowych detekcji** – łatwo możesz wracać do istniejących scenariuszy i rozszerzać je, a także śledzić, które techniki zostały przetestowane, a które wymagają walidacji.
+- **Wspiera pracę zespołów SOC, threat hunterów oraz inżynierów detekcji** w analizie luk, planowaniu rozwoju detekcji oraz raportowaniu do audytów lub przełożonych.
 
 ---
 
 ## 📁 Struktura projektu
+
+
 
 - defender-lab-framework/
 - alerts/
@@ -33,67 +35,61 @@ Framework pozwala:
 
 
 
-Szczegóły w [docs/Quickstart.md](docs/Quickstart.md) oraz [docs/Pipeline.md](docs/Pipeline.md).
 
 ---
 
-## 🚀 Szybki start
+## 🏃‍♂️ Szybki start
 
-1. **Uruchom główny skrypt**  
-   W katalogu `/tools` znajdziesz `defender_lab.py` (lub `99_merge_all_for_apt.py`).  
-   Uruchom poleceniem:
-   ```powershell
-   python .\tools\defender_lab.py
+1. **Wybierz tryb pracy:**
+   - **SingleTechnique** – pojedyncze techniki, sumowane do wspólnej matrycy
+   - **APT Group** – tworzenie osobnej matrycy dla grupy APT (np. FIN7, APT29)
+   - **Update** – masowa aktualizacja na podstawie status.csv
 
-Podążaj za kreatorem
-Wybierz tryb pracy (SingleTechnique / APT Group / Update). Kreator przeprowadzi Cię przez kolejne kroki.
+2. **Podążaj za kreatorem:**
+   Framework poprowadzi Cię przez proces (dodawanie technik, nazw, statusów itp.)
 
-Wyniki:
-
-Raporty: /report/
-Mappingi i warstwy: /mapping/
-Alerty: /alerts/
-Scenariusze: /scenarios/
-Hunting queries: /hunting/
-Pełna dokumentacja: /docs/
-
----
-
-### 📦 Szybki start – czysty szablon repo
-
-Jeśli chcesz zacząć od czystej, przygotowanej struktury folderów – pobierz starter ZIP:
-[docs/templates/defender-lab-framework-template.zip](docs/templates/defender-lab-framework-template.zip)
-
-Rozpakuj go lokalnie i postępuj zgodnie z instrukcjami z [Quickstart.md](../Quickstart.md).
+3. **Otwórz wygenerowane raporty:**
+   - Raporty HTML znajdziesz w `/report/`
+   - Matryce i mappingi w `/mapping/`
+   - Alerty w `/alerts/`
+   - Scenariusze w `/scenarios/`
 
 ---
 
 ## 🗂️ Dokumentacja
 
-- [docs/Quickstart.md](docs/Quickstart.md) — szybki start, jak uruchomić i co generuje framework  
-- [docs/Pipeline.md](docs/Pipeline.md) — szczegółowy opis pipeline’u  
-- [docs/FAQ.md](docs/FAQ.md) — pytania, porady, dobre praktyki  
-- [docs/Instrukcja update.md](docs/Instrukcja%20update.md) — jak aktualizować statusy/scenariusze  
+- [docs/Quickstart.md](docs/Quickstart.md) — szybki start, jak uruchomić i co generuje framework
+- [docs/Pipeline.md](docs/Pipeline.md) — szczegółowy opis pipeline’u
+- [docs/FAQ.md](docs/FAQ.md) — pytania, porady, dobre praktyki
+- [docs/Instrukcja update.md](docs/Instrukcja%20update.md) — jak aktualizować statusy/scenariusze
+- [docs/lab-setup-how-configure-tenant/README_lab_setup.md](docs/lab-setup-how-configure-tenant/README_lab_setup.md) — jak skonfigurować tenant do labów
 
 ---
 
-##♻️ Aktualizowanie statusów/scenariuszy
+## ♻️ Aktualizowanie statusów/scenariuszy
 
 Możesz łatwo masowo aktualizować statusy/scenariusze:
 
-- Edytuj `/mapping/NAZWA/status.csv` (np. zmień status na `Tested`, `Audit` lub `Pending`)
+- Edytuj `/mapping/NAZWA/status.csv` (np. zmień status na Tested, Audit lub Pending)
 - Użyj trybu **Update** (w kreatorze frameworka), aby zaktualizować raporty i macierz
-- Szczegóły: [docs/Instrukcja update.md](docs/Instrukcja%20update.md)
+
+Szczegóły: [docs/Instrukcja update.md](docs/Instrukcja%20update.md)
 
 ---
 
+## ℹ️ Inne informacje
 
-##📬 Kontrybucja / Kontakt
-Masz pomysł na nowe scenariusze lub chcesz ulepszyć framework? Otwórz issue lub PR na GitHubie!
+- **MITRE ATT&CK® Navigator:** Warstwy generowane automatycznie na bazie statusów i heatmapy (score)
+- **Automatyczna heatmapa:** Sekcja pokazująca wyzwolone techniki (na bazie alertów Defendera) — progi kolorów, scoring oraz liczbę wystąpień
+- **Elastyczność:** Możesz rozbudowywać framework, dostosować szablony oraz pipeline do własnych potrzeb SOC/threat huntingu
+- **Backup/Archiwum:** Stare wersje, eksperymentalne scenariusze i testowe pliki znajdziesz w `/archive`
+
+---
+
+## 📣 Kontakt i rozwój
+
+Masz pomysły na rozbudowę, znalazłeś błąd lub chcesz dodać własny pipeline/scenariusz? Otwórz Issue na GitHub lub skontaktuj się z autorem.
 
 ---
 
-##📜 Licencja
-Projekt dostępny na licencji MIT.
-
----
+> 🛡️ **Defender Lab Framework** — Twój własny system do dokumentowania, testowania i rozwijania detekcji w MDE.
