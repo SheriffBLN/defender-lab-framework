@@ -1,0 +1,7 @@
+Technique ID,Name,Tactics,Status,Linked Rule,Author
+T1059.001,PowerShell,Execution,Tested,alerts\APT29-DEMO\T1059.001_alert.md,Krzysztof Krzymowski
+T1078.003,Local Accounts,"Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation",Tested,alerts\APT29-DEMO\T1078.003_konta_lokalne.md,Krzysztof Krzymowski
+T1210,Exploitation of Remote Services,Lateral-Movement,Pending,alerts\APT29-DEMO\alert.md,Krzysztof Krzymowski
+T1650,Acquire Access,Resource-Development,Audit,alerts\APT29-DEMO\alert1.md,Rafał Demontracyjny
+T1059,Command and Scripting Interpreter,Execution,Pending,alerts\APT29-DEMO\alert.md,Krzysztof Krzymowski
+T1078,Valid Accounts,"Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation",Audit,alerts\APT29-DEMO\alert.md,Krzysztof Krzymowski

@@ -1,0 +1,4 @@
+﻿Timestamp,AlertId,Title,Category,Severity,ServiceSource,DetectionSource,AttackTechniques,SentinelWorkspaceIds
+"May 14, 2025 1:24:46 PM",ed638828190342649939_-2113952893,Local Account / Groups activity,Persistence,Medium,Microsoft Defender for Endpoint,Custom detection,"[""Local Accounts (T1078.003)""]",
+"May 13, 2025 9:31:00 PM",daef0462ed-587d-4aeb-9bad-ddc7c60439ff_1,Suspicious PowerShell command line,Execution,Medium,Microsoft Defender for Endpoint,EDR,"[""PowerShell (T1059.001)""]",
+"May 13, 2025 9:30:58 PM",da44095e9e-b901-40d9-9adf-4065093ecb0a_1,[Test Alert] Suspicious Powershell commandline,Execution,Informational,Microsoft Defender for Endpoint,EDR,"[""PowerShell (T1059.001)""]",

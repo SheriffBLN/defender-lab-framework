@@ -17,21 +17,19 @@ Framework pozwala:
 
 ## 📁 Struktura projektu
 
-defender-lab-framework/
-│
-├─ alerts/
-├─ hunting/
-├─ mapping/
-├─ report/
-├─ scenarios/
-├─ tools/
-├─ docs/
-│   ├─ Quickstart.md
-│   ├─ ...
-│   └─ templates/
-│        └─ defender-lab-framework-template.zip   <--- tutaj wrzuć ZIP
-│
-├─ README.md
+- defender-lab-framework/
+- alerts/
+- hunting/
+- mapping/
+- report/
+- scenarios/
+- tools/
+- docs/
+- Quickstart.md
+- templates/
+- defender-lab-framework-template.zip
+- README.md
+
 
 
 

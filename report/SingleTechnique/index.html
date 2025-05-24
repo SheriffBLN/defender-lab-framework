@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7fafd; color: #23293b; margin: 0; padding: 0; }
+.container { max-width: 1400px; margin: 0 auto; padding: 30px; }
+h1 { color: #14247a; margin-top: 0; }
+.matrix-table { width: 100%; border-collapse: collapse; background: #f5f8ff; font-size: 1.05em; }
+.matrix-table th, .matrix-table td { border: 1px solid #dde3ef; padding: 11px 7px; text-align: left; min-width: 140px; }
+.matrix-table th { background: #eaf0fa; color: #222b44; font-size: 1.09em; font-weight: 600; letter-spacing: 0.01em; position: sticky; top: 49px; z-index: 2; }
+.matrix-table td { background: #f9fbfd; vertical-align: top; min-width: 140px; }
+.matrix-technique { margin-bottom: 10px; padding: 10px 8px 10px 14px; border-radius: 7px; border: 1.2px solid #e5e9f2; background: #fff; box-shadow: 0 1.5px 7px #dde3ef33; position: relative; transition: box-shadow 0.13s; }
+.matrix-technique:hover { box-shadow: 0 2px 13px #8cc2ff33; border-color: #b3d3ff; }
+.matrix-technique b { font-size: 1.01em; color: #14247a; letter-spacing: 0.3px; }
+.badge { display: inline-block; padding: 3px 11px; border-radius: 6px; font-size: 0.93em; color: #fff; font-weight: 500; margin-right: 3px; margin-top: 2px; margin-bottom: 3px; }
+.badge-Tested { background: #40c057; }
+.badge-Audit { background: #ffd43b; color: #222; }
+.badge-Pending { background: #ff6b6b; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</h1>
+<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla grupy: <b>SingleTechnique</b></div>
+<p style="color:#557;">Wygenerowano: 2025-05-24 15:06:55</p>
+<table class="matrix-table"><tr>
+<th>initial-access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege-escalation</th>
+<th>defense-evasion</th>
+<th>credential-access</th>
+<th>discovery</th>
+<th>lateral-movement</th>
+<th>collection</th>
+<th>command-and-control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-Tested">Tested</span></div>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1059</b><br>Command and Scripting Interpreter<br><span class="badge badge-Tested">Tested</span></div>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr></table>
+<h2>🔥 Heatmapa wyzwolonych technik dla grupy <b>SingleTechnique</b></h2>
+<table class="matrix-table"><tr>
+<th>initial-access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege-escalation</th>
+<th>defense-evasion</th>
+<th>credential-access</th>
+<th>discovery</th>
+<th>lateral-movement</th>
+<th>collection</th>
+<th>command-and-control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffd480;border:1.5px solid #b6b6b6;"><b>T1059.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1059</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffd480;border:1.5px solid #b6b6b6;"><b>T1059.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+</tr></table>
+<h2>📊 Tabela statusów</h2>
+<table class="matrix-table"><tr>
+<th>Technique ID</th><th>Name</th><th>Status</th><th>Linked Rule</th><th>Author</th></tr>
+<tr style='background:#e9fbe8;'><td>T1059.001</td><td>PowerShell</td><td><span class='badge badge-Tested'>Tested</span></td><td></td><td>Krzysztof Krzymowski</td></tr>
+<tr style='background:#e9fbe8;'><td>T1059</td><td>Command and Scripting Interpreter</td><td><span class='badge badge-Tested'>Tested</span></td><td>alerts\SingleTechnique\Suspicious_PS_Exec.md</td><td>Krzysztof Krzymowski</td></tr>
+<tr style='background:#e9fbe8;'><td>T1059.001</td><td>PowerShell</td><td><span class='badge badge-Tested'>Tested</span></td><td>alerts\SingleTechnique\alert.md</td><td>Krzysztof Krzymowski</td></tr>
+<tr style='background:#e9fbe8;'><td>T1078.003</td><td>Local Accounts</td><td><span class='badge badge-Tested'>Tested</span></td><td>alerts\SingleTechnique\test_alerted.md.md</td><td>Krzysztof Krzymowski</td></tr>
+</table>
+</div></body></html>
