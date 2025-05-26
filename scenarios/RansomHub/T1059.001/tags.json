@@ -1,0 +1,10 @@
+{
+    "id": "T1059.001",
+    "name": "PowerShell",
+    "tactics": [
+        "Execution"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Command and Scripting Interpreter.md",
+    "author": "Krzysztof K."
+}

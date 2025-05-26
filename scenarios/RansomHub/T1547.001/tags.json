@@ -1,0 +1,11 @@
+{
+    "id": "T1547.001",
+    "name": "Registry Run Keys / Startup Folder",
+    "tactics": [
+        "Persistence",
+        "Privilege-Escalation"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Boot_or_Logon_Autostart_Execution.md",
+    "author": "Krzysztof K."
+}

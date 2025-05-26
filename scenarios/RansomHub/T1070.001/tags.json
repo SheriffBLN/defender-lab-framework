@@ -1,0 +1,10 @@
+{
+    "id": "T1070.001",
+    "name": "Clear Windows Event Logs",
+    "tactics": [
+        "Defense-Evasion"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Clear_Windows_Event_Logs.md",
+    "author": "Krzysztof K."
+}

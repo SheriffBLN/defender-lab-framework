@@ -1,0 +1,10 @@
+{
+    "id": "T1219",
+    "name": "Remote Access Tools",
+    "tactics": [
+        "Command-And-Control"
+    ],
+    "status": "Tested",
+    "linked_rule": "alerts\\RansomHub\\Remote Access.md",
+    "author": "Krzysztof Krzymowski"
+}

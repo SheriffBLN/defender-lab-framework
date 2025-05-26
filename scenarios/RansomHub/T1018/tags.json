@@ -1,0 +1,10 @@
+{
+    "id": "T1018",
+    "name": "Remote System Discovery",
+    "tactics": [
+        "Discovery"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Remote_System_Discovery.md",
+    "author": "Krzysztof K."
+}

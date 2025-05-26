@@ -1,0 +1,10 @@
+{
+    "id": "T1480",
+    "name": "Execution Guardrails",
+    "tactics": [
+        "Defense-Evasion"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Execution_Guardrails.md",
+    "author": "Krzysztof K."
+}

@@ -1,0 +1,10 @@
+{
+    "id": "T1021.002",
+    "name": "SMB/Windows Admin Shares",
+    "tactics": [
+        "Lateral-Movement"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\remote_services_smb_windows_Admin_shares.md",
+    "author": "Krzysztof K."
+}

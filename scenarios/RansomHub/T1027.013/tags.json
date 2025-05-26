@@ -1,0 +1,10 @@
+{
+    "id": "T1027.013",
+    "name": "Encrypted/Encoded File",
+    "tactics": [
+        "Defense-Evasion"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Encrypted_encoded_file.md",
+    "author": "Krzysztof K."
+}

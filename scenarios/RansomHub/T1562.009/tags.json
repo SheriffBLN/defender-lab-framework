@@ -1,0 +1,10 @@
+{
+    "id": "T1562.009",
+    "name": "Safe Mode Boot",
+    "tactics": [
+        "Defense-Evasion"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Impair_defenses_safe_mode_boot.md",
+    "author": "Krzysztof K."
+}

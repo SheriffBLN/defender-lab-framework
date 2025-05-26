@@ -1,0 +1,10 @@
+{
+    "id": "T1486",
+    "name": "Data Encrypted for Impact",
+    "tactics": [
+        "Impact"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Data_encrypted_for_Impact.md",
+    "author": "Krzysztof K."
+}

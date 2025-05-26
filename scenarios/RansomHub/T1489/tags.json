@@ -1,0 +1,10 @@
+{
+    "id": "T1489",
+    "name": "Service Stop",
+    "tactics": [
+        "Impact"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Service_stop.md",
+    "author": "Krzysztof K."
+}

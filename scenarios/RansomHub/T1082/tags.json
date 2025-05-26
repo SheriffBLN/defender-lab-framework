@@ -1,0 +1,10 @@
+{
+    "id": "T1082",
+    "name": "System Information Discovery",
+    "tactics": [
+        "Discovery"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\System_information_discovery.md",
+    "author": "Krzysztof K."
+}

@@ -1,0 +1,15 @@
+Technique ID,Tactic,Count
+T1078.003,persistence,2
+T1059.001,execution,4
+T1547.001,persistence,1
+T1566.001,initial-access,3
+T1105,command-and-control,7
+T1021.002,lateral-movement,1
+T1110,credential-access,0
+T1087.001,discovery,5
+T1490,impact,2
+T1567.002,exfiltration,1
+T1003.001,credential-access,3
+T1543.003,privilege-escalation,2
+T1036,defense-evasion,4
+T1056.001,collection,0

@@ -1,0 +1,11 @@
+{
+    "id": "T1497.003",
+    "name": "Time Based Evasion",
+    "tactics": [
+        "Defense-Evasion",
+        "Discovery"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\virtualization_sandbox_evasion_time_based_evasion.md",
+    "author": "Krzysztof K."
+}

@@ -1,0 +1,10 @@
+{
+    "id": "T1090",
+    "name": "Proxy",
+    "tactics": [
+        "Command-And-Control"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Proxy.md",
+    "author": "Krzysztof K."
+}

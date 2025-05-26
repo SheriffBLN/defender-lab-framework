@@ -1,0 +1,10 @@
+{
+    "id": "T1491.001",
+    "name": "Internal Defacement",
+    "tactics": [
+        "Impact"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Internal_Defacement.md",
+    "author": "Krzysztof K."
+}

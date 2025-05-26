@@ -1,0 +1,16 @@
+let certInfo = DeviceFileCertificateInfo
+    | where Signer has_any ("AnyDesk", "TeamViewer", "RealVNC", "LogMeIn","Splashtop", "Ammyy", "AeroAdmin", "UltraVNC", "SolarWinds")
+    | project DeviceName, SHA1, Signer, CertTimestamp=Timestamp;
+let fileEvents = DeviceFileEvents
+    | project DeviceName, SHA1, FolderPath, FileName, FileEventTimestamp=Timestamp;
+certInfo
+| join kind=inner (fileEvents) on DeviceName, SHA1
+| extend EventHour = bin(FileEventTimestamp, 1h)
+| summarize 
+    AlertCount = count(),
+    Files = make_list(pack("FileName", FileName, "FolderPath", FolderPath, "CertTimestamp", CertTimestamp, "FileEventTimestamp", FileEventTimestamp)),
+    FirstSeen = min(FileEventTimestamp),
+    LastSeen = max(FileEventTimestamp)
+    by DeviceName, Signer, EventHour
+| project DeviceName, Signer, EventHour, AlertCount, FirstSeen, LastSeen, Files
+| sort by LastSeen desc

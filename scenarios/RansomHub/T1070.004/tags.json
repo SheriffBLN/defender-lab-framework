@@ -1,0 +1,10 @@
+{
+    "id": "T1070.004",
+    "name": "File Deletion",
+    "tactics": [
+        "Defense-Evasion"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Indicator_removal_file_deletion.md",
+    "author": "Krzysztof K."
+}

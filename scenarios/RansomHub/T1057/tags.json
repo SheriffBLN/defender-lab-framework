@@ -1,0 +1,10 @@
+{
+    "id": "T1057",
+    "name": "Process Discovery",
+    "tactics": [
+        "Discovery"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Process_Discovery.md",
+    "author": "Krzysztof K."
+}

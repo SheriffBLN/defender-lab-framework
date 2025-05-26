@@ -1,0 +1,10 @@
+{
+    "id": "T1135",
+    "name": "Network Share Discovery",
+    "tactics": [
+        "Discovery"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Network_share_discovery.md",
+    "author": "Krzysztof K."
+}

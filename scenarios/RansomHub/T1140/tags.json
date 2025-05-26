@@ -1,0 +1,10 @@
+{
+    "id": "T1140",
+    "name": "Deobfuscate/Decode Files or Information",
+    "tactics": [
+        "Defense-Evasion"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Decode_files_or_information.md",
+    "author": "Krzysztof K."
+}

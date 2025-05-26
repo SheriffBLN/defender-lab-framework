@@ -1,0 +1,10 @@
+{
+    "id": "T1490",
+    "name": "Inhibit System Recovery",
+    "tactics": [
+        "Impact"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\Inhibit_system_recovery.md",
+    "author": "Krzysztof K."
+}

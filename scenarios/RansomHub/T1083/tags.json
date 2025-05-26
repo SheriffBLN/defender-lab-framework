@@ -1,0 +1,10 @@
+{
+    "id": "T1083",
+    "name": "File and Directory Discovery",
+    "tactics": [
+        "Discovery"
+    ],
+    "status": "Pending",
+    "linked_rule": "alerts\\RansomHub\\File_and_Directory_Discovery.md",
+    "author": "Krzysztof K."
+}

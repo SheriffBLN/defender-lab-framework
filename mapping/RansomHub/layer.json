@@ -1,0 +1,183 @@
+{
+    "name": "RansomHub \u2013 Lab Coverage + Heatmap",
+    "version": "4.6",
+    "domain": "enterprise-attack",
+    "description": "Score = liczba alert\u00f3w (heatmapa, ostatnie 30 dni). Im ciemniej, tym wi\u0119cej wykrytych alert\u00f3w. 0.1 = technika obecna, ale cicha.",
+    "techniques": [
+        {
+            "techniqueID": "T1547.001",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1059.001",
+            "score": 2.0,
+            "color": "#ffd480",
+            "comment": "Liczba alert\u00f3w: 2"
+        },
+        {
+            "techniqueID": "T1059.003",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1486",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1491.001",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1140",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1480",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1083",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1562.009",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1070.001",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1070.004",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1490",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1135",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1027.013",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1057",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1090",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1021.002",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1018",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1489",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1082",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1497.003",
+            "score": 0.1,
+            "color": "#e0e0e0",
+            "comment": "Brak alert\u00f3w w ostatnich 30 dniach"
+        },
+        {
+            "techniqueID": "T1219",
+            "score": 2.0,
+            "color": "#ffd480",
+            "comment": "Liczba alert\u00f3w: 2"
+        }
+    ],
+    "gradient": {
+        "colors": [
+            "#e0e0e0",
+            "#ffffb3",
+            "#ffd480",
+            "#ffa366",
+            "#ff704d",
+            "#c653ff",
+            "#6f42c1"
+        ],
+        "minValue": 0,
+        "maxValue": 2.0
+    },
+    "legendItems": [
+        {
+            "label": "Brak alert\u00f3w",
+            "color": "#e0e0e0"
+        },
+        {
+            "label": "1 alert",
+            "color": "#ffffb3"
+        },
+        {
+            "label": "2 alerty",
+            "color": "#ffd480"
+        },
+        {
+            "label": "3 alerty",
+            "color": "#ffa366"
+        },
+        {
+            "label": "4 alerty",
+            "color": "#ff704d"
+        },
+        {
+            "label": "5+ alert\u00f3w",
+            "color": "#c653ff"
+        },
+        {
+            "label": "10+ alert\u00f3w",
+            "color": "#6f42c1"
+        }
+    ]
+}

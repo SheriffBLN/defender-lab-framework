@@ -1,3 +1,5 @@
-Technique ID,Count
+AttackTechniques,Count
+T1219,2
+T1204.001,1
 T1078.003,1
 T1059.001,2

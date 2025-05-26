@@ -1,5 +1,0 @@
-Technique ID,Name,Tactics,Status,Linked Rule,Author
-T1059.001,PowerShell,Execution,Tested,,Krzysztof Krzymowski
-T1059,Command and Scripting Interpreter,Execution,Tested,alerts\SingleTechnique\Suspicious_PS_Exec.md,Krzysztof Krzymowski
-T1059.001,PowerShell,Execution,Tested,alerts\SingleTechnique\alert.md,Krzysztof Krzymowski
-T1078.003,Local Accounts,"Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation",Tested,alerts\SingleTechnique\test_alerted.md.md,Krzysztof Krzymowski
