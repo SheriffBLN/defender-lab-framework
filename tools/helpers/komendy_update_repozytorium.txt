@@ -1,0 +1,6 @@
+git status
+git add .
+git status
+git commit -m "Opis zmian"
+git pull origin main
+git push origin main
