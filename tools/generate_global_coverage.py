@@ -11,6 +11,13 @@ STATUS_PATH = os.path.join(OUTPUT_DIR, "status.csv")
 REPORT_PATH = os.path.join("report", "global_coverage", "index.html")
 AUTHOR = "Global Coverage"
 
+# --- TACTICS_ORDER ---
+TACTICS_ORDER = [
+    "reconnaissance", "resource-development", "initial-access", "execution",
+    "persistence", "privilege-escalation", "defense-evasion", "credential-access",
+    "discovery", "lateral-movement", "collection", "command-and-control", "exfiltration", "impact"
+]
+
 def check_files_exist():
     print("\n[DIAGNOSTYKA] Sprawdzam środowisko:")
     print(f"Python: {sys.version}")
@@ -46,16 +53,80 @@ def run_demo_mode():
         writer.writeheader()
         for row in demo_status:
             writer.writerow(row)
-    # Generuj matrycę HTML
     try:
-        from defender_lab import generate_matrix_html
-        os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)
-        generate_matrix_html("global_coverage", REPORT_PATH, apt_mode=True)
+        generate_matrix_html("global_coverage", REPORT_PATH)
         print(f"[✓] Demo matryca dostępna w {REPORT_PATH}")
     except Exception as e:
         print("[!] Błąd importu: ", e)
     input("\nNaciśnij ENTER, aby zakończyć...")
     sys.exit(0)
+
+def generate_matrix_html(folder, outpath):
+    status_path = os.path.join(OUTPUT_DIR, "status.csv")
+    with open(status_path, encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        status_rows = list(reader)
+
+    # --- KLUCZ: macierz jako defaultdict(list), normalizacja taktyk ---
+    matrix = {t: [] for t in TACTICS_ORDER}
+    for r in status_rows:
+        tactics = [t.strip().lower().replace(" ", "-") for t in r["Tactics"].split(",") if t.strip()]
+        for t in tactics:
+            if t in TACTICS_ORDER:
+                matrix[t].append(r)
+
+    now = json.dumps(str(os.path.getmtime(status_path)))
+    html = [
+        "<style>",
+        "body { font-family: Segoe UI, Arial, sans-serif; }",
+        ".container { max-width:1180px; margin:0 auto; }",
+        ".matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }",
+        ".matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }",
+        ".matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }",
+        ".matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }",
+        ".badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }",
+        ".badge-Tested { background:#43a047; }",
+        ".badge-Audit { background:#ffb300; color:#333 !important; }",
+        ".badge-Pending { background:#e53935; }",
+        ".badge-Disabled { background:#757575; color:#222 !important; }",
+        ".badge-Suppressed { background:#bdbdbd; color:#222 !important; }",
+        "</style>",
+        "<body style='font-family:Segoe UI,Arial,sans-serif;'>",
+        '<div class="container">',
+        f'<h1>🛡️ Global Coverage Matrix</h1>',
+        f'<div style="margin:10px 0 18px 0; font-size:1.18em;">Macierz MITRE ATT&CK – globalna pokrycie detekcji</div>',
+        '<table class="matrix-table"><tr>'
+    ]
+    for tactic in TACTICS_ORDER:
+        html.append(f"<th>{tactic}</th>")
+    html.append("</tr><tr>")
+    for tactic in TACTICS_ORDER:
+        html.append("<td>")
+        for row in matrix.get(tactic, []):
+            status = row["Status"]
+            html.append(
+                f'<div class="matrix-technique" style="background:#a3e4a1;">'
+                f'<b>{row["Technique ID"]}</b><br>{row["Name"]}'
+                f'<br><span class="badge badge-{status}">{status}</span>'
+                f'<br><span style="font-size:0.95em; color:#565;">{row.get("Linked Rule", "-")}</span>'
+                '</div>'
+            )
+        html.append("</td>")
+    html.append("</tr></table>")
+    # --- tabela statusów ---
+    html.append('<h2>📊 Tabela statusów</h2>')
+    html.append('<table class="matrix-table"><tr><th>Technique ID</th><th>Name</th><th>Tactics</th><th>Status</th><th>Linked Rule</th><th>Author</th><th>Description</th><th>MITRE Link</th></tr>')
+    for row in status_rows:
+        status = row["Status"]
+        html.append(
+            f"<tr style='background:#fff;'>" +
+            "".join(f"<td>{row.get(c,'')}</td>" for c in ["Technique ID","Name","Tactics","Status","Linked Rule","Author","Description","MITRE Link"]) +
+            "</tr>"
+        )
+    html.append("</table>")
+    html.append("</div></body></html>")
+    with open(outpath, "w", encoding="utf-8") as f:
+        f.write("\n".join(html))
 
 def main():
     print("\n=== Global Coverage Matrix (przyjazna obsługa plików) ===")
@@ -114,15 +185,9 @@ def main():
 
     print(f"[✓] Wygenerowano mapping/global_coverage/status.csv")
 
-    # 4. Generuj macierz MITRE (macierz + heatmapa) jak w defender_lab.py
-    try:
-        from defender_lab import generate_matrix_html
-    except ImportError:
-        print("Błąd: nie mogę zaimportować generate_matrix_html z defender_lab.py")
-        sys.exit(1)
-
+    # 4. Generuj macierz MITRE (macierz + heatmapa)
     os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)
-    generate_matrix_html("global_coverage", REPORT_PATH, apt_mode=True)
+    generate_matrix_html("global_coverage", REPORT_PATH)
     print(f"[✓] Wygenerowano raport MITRE matrix z heatmapą: {REPORT_PATH}")
 
     # 5. Panel statystyk + wykres (dołączony na końcu HTML)
@@ -218,7 +283,6 @@ def main():
     </script>
     """
 
-    # Dołącz panel POD główną zawartością (tuż przed </div></body></html>)
     insert_pos = html.rfind('</div></body></html>')
     if insert_pos == -1:
         insert_pos = len(html)

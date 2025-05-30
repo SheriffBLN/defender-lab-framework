@@ -44,7 +44,6 @@ FIELD_TO_CSV = {
     "Host": "DeviceName",
     "Application": "FileName"
 }
-TIMELINE_GROUPS = {"RemoteIP", "User", "Host"}  # tylko dla tych będzie timeline
 
 def check_files_exist():
     print("\n[DIAGNOSTYKA] Sprawdzam środowisko:")
@@ -72,7 +71,7 @@ def run_demo_mode():
     os.makedirs(demo_dir, exist_ok=True)
     outpath = os.path.join(demo_dir, "demo_user.html")
     html = """
-    <html><head><meta charset='utf-8'><title>DEMO: AlertEvidence</title></head><body style='font-family:Segoe UI,Arial,sans-serif;'>
+    <html><head><meta charset='utf-8'><title>DEMO: AlertEvidence</title></head><body>
     <h1>Raport AlertEvidence DEMO</h1>
     <p>To jest widok demonstracyjny na podstawie przykładowych danych.</p>
     <ul>
@@ -158,92 +157,6 @@ def generate_status_rows(rows, group_field, value, techniques_db):
         })
     return status_rows
 
-def highlight_alertid(val):
-    # Zwraca HTML linku do security.microsoft.com jeśli AlertId istnieje
-    if not val or not val.strip():
-        return ""
-    url = f"https://security.microsoft.com/alerts/{val.strip()}"
-    return f"<a href='{url}' style='color:#1976d2; font-weight:bold;' target='_blank' title='Otwórz alert w Microsoft 365 Defender'>{val}</a>"
-
-def generate_timeline(events, techniques_db):
-    # Posortuj po czasie
-    def parse_dt(r):
-        for fld in ["Timestamp", "DetectionTimeUtc", "CreationTimeUtc"]:
-            v = r.get(fld)
-            if v:
-                try:
-                    return datetime.fromisoformat(v.replace("Z",""))
-                except Exception:
-                    continue
-        return None
-
-    events_sorted = sorted(events, key=lambda x: parse_dt(x[0]) or datetime.min)
-    out = []
-    out.append("""
-<h2>Oś czasu aktywności (timeline)</h2>
-<div class="timeline-container">
-  <div class="timeline-line"></div>
-""")
-    for r, addf in events_sorted:
-        dt = r.get("Timestamp") or r.get("DetectionTimeUtc") or r.get("CreationTimeUtc") or ""
-        tid = extract_technique_id(r.get("AttackTechniques") or "")
-        technique = tid[0] if tid else ""
-        tdata = techniques_db.get(technique, {})
-        tname = tdata.get("name", technique)
-        tactics = ", ".join(tdata.get("tactics", []))
-        status = "Tested"  # zakładamy tested, możesz rozwinąć logikę jeśli masz inne statusy
-        cmd = addf.get("CommandLine") or addf.get("ImageFile") or ""
-        alertid = r.get("AlertId")
-        # Spróbuj zbudować pełny link (jeśli AlertId już zawiera ?tid=... to nie doklejaj .com/alerts/)
-        if alertid and ("?" in alertid or alertid.startswith("https://")):
-            alert_link = f"<a href='{alertid}' target='_blank' style='color:#1976d2;font-weight:bold;' title='Otwórz alert'>{alertid}</a>"
-        elif alertid:
-            alert_link = highlight_alertid(alertid)
-        else:
-            alert_link = ""
-        out.append(f"""
-  <div class="timeline-event" style="background:{STATUS_BG_COLORS.get(status, '#d7eaf3')};">
-    <div class="timeline-date">{dt}</div>
-    <div class="timeline-title">{tname} <span style='color:#888;font-size:.97em;'>({technique})</span></div>
-    <div class="timeline-tactics" style='color:#666;font-size:.95em;'>{tactics}</div>
-    {'<div class="timeline-cmd">cmd: <span style="color:#1976d2;">'+cmd+'</span></div>' if cmd else ""}
-    <div class="timeline-alertid">{alert_link}</div>
-  </div>
-""")
-    out.append("</div>")
-    # styl
-    out.append("""
-<style>
-.timeline-container { position:relative; margin:30px 0 60px 0; padding-left:42px; }
-.timeline-line { position:absolute; left:13px; top:0; bottom:0; width:6px; background:#e3eaf4; border-radius:3px; }
-.timeline-event {
-    position:relative;
-    margin-bottom:27px;
-    padding:15px 20px 13px 22px;
-    border-radius:10px;
-    box-shadow:1px 4px 16px #e3e3e3;
-    min-width:330px;
-    max-width:600px;
-}
-.timeline-date { font-size:1.09em; font-weight:600; color:#1456a6; margin-bottom:3px; }
-.timeline-title { font-size:1.15em; font-weight:700; margin-bottom:1px; }
-.timeline-tactics { font-size:.99em; margin-bottom:2px; }
-.timeline-cmd { font-size:.99em; color:#888; }
-.timeline-alertid { font-size:1.01em; margin-top:4px; }
-.timeline-event:before {
-    content:"";
-    position:absolute;
-    left:-29px; top:22px;
-    width:22px; height:22px;
-    border-radius:11px;
-    background:#fff;
-    border:3px solid #1976d2;
-    z-index:1;
-}
-</style>
-""")
-    return "\n".join(out)
-
 # --- KLUCZOWA FUNKCJA: matryca MITRE (technika w każdej taktyce!) ---
 def generate_matrix_html(status_rows, title, apt_folder):
     matrix = defaultdict(list)
@@ -255,7 +168,6 @@ def generate_matrix_html(status_rows, title, apt_folder):
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     html = [
         "<style>",
-        "body { font-family: Segoe UI, Arial, sans-serif; }",
         ".container { max-width:1180px; margin:0 auto; }",
         ".matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }",
         ".matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }",
@@ -268,7 +180,6 @@ def generate_matrix_html(status_rows, title, apt_folder):
         ".badge-Disabled { background:%s; color:#222 !important; }" % BADGE_COLORS["Disabled"],
         ".badge-Suppressed { background:%s; color:#222 !important; }" % BADGE_COLORS["Suppressed"],
         "</style>",
-        "<body style='font-family:Segoe UI,Arial,sans-serif;'>",
         '<div class="container">',
         f'<h1>{title or "🛡️ Macierz MITRE ATT&CK"}</h1>',
         f'<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla: <b>{apt_folder or ""}</b></div>',
@@ -402,13 +313,16 @@ def main():
             f"<p>Liczba zdarzeń: <b>{len(rows)}</b></p>",
             f"<p><b>Liczba unikalnych taktyk MITRE:</b> <span style='color: #1976d2;'>{len(all_tactics)}</span></p>",
             matrix_html,
+            "<h2>Pełna lista zdarzeń (bez pustych kolumn)</h2>",
+            r"""
+<style>
+    .hl { background: #fff89a !important; }
+    #eventsTable th { position: sticky; top: 0; background: #f3f7fa; cursor:pointer; }
+    #eventsTable th.sorted-asc:after { content: " \25B2"; color: #1976d2; }
+    #eventsTable th.sorted-desc:after { content: " \25BC"; color: #1976d2; }
+</style>
+"""
         ]
-
-        # ---- TIMELINE tylko dla Host, RemoteIP, User ----
-        if group_field in TIMELINE_GROUPS:
-            html.append(generate_timeline(events, techniques_db))
-
-        html.append("<h2>Pełna lista zdarzeń (bez pustych kolumn)</h2>")
         inputs_row = "".join(
             f"<td><input type='text' onkeyup='filterEventsTable({i})' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td>"
             for i in range(len(used_cols))
@@ -423,7 +337,7 @@ def main():
 """)
         for r, addf in events:
             html.append("<tr>" + "".join(
-                f"<td>{highlight_alertid(addf.get(c, r.get(c,''))) if c=='AlertId' else addf.get(c, r.get(c,''))}</td>" for c in used_cols
+                f"<td>{addf.get(c, r.get(c,''))}</td>" for c in used_cols
             ) + "</tr>")
         html.append("</table></div>")
 
