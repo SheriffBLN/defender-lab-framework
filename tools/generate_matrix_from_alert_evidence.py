@@ -2,6 +2,7 @@ import os
 import csv
 import re
 import json
+import sys
 from datetime import datetime
 from collections import defaultdict, Counter
 
@@ -45,6 +46,56 @@ FIELD_TO_CSV = {
     "Application": "FileName"
 }
 
+def check_files_exist():
+    print("\n[DIAGNOSTYKA] Sprawdzam środowisko:")
+    print(f"Python: {sys.version}")
+    print(f"CWD: {os.getcwd()}")
+    missing = []
+    for path in [ALERT_EVIDENCE_CSV, ENTERPRISE_CSV]:
+        print(f" - {path} ...", end="")
+        if not os.path.exists(path):
+            print("❌ NIE ZNALEZIONO")
+            missing.append(path)
+        else:
+            try:
+                with open(path, encoding="utf-8") as f:
+                    head = f.readline().strip()
+                    print(f" ✅ OK (nagłówki: {head[:80]})")
+            except Exception as e:
+                print(f" ⚠️ Problem: {e}")
+                missing.append(path)
+    return missing
+
+def run_demo_mode():
+    print("\n[DEMO MODE] Przykładowa matryca dla demo_user:")
+    demo_dir = os.path.join(OUTDIR, "DEMO")
+    os.makedirs(demo_dir, exist_ok=True)
+    outpath = os.path.join(demo_dir, "demo_user.html")
+    html = """
+    <html><head><meta charset='utf-8'><title>DEMO: AlertEvidence</title></head><body>
+    <h1>Raport AlertEvidence DEMO</h1>
+    <p>To jest widok demonstracyjny na podstawie przykładowych danych.</p>
+    <ul>
+        <li>AccountName: demo_user</li>
+        <li>DeviceName: host-01</li>
+        <li>FileName: powershell.exe</li>
+        <li>RemoteIP: 192.168.0.1</li>
+    </ul>
+    <h2>Techniki</h2>
+    <table border=1>
+    <tr><th>Technique ID</th><th>Name</th><th>Tactics</th><th>Status</th><th>Liczba wystąpień</th></tr>
+    <tr><td>T1059.001</td><td>PowerShell</td><td>execution</td><td>Tested</td><td>1</td></tr>
+    </table>
+    <div style="color:#888;">(tu byłaby pełna macierz/heatmapa jak w oryginalnym layoucie)</div>
+    </body></html>
+    """
+    with open(outpath, "w", encoding="utf-8") as f:
+        f.write(html)
+    print(f"[✓] Demo raport dostępny w {outpath}")
+    input("\nNaciśnij ENTER, aby zakończyć...")
+    sys.exit(0)
+
+# --- TWÓJ ORYGINALNY KOD: ---
 def safe_filename(value):
     return re.sub(r'[\\/:"*?<>| ]', '_', value)
 
@@ -169,6 +220,17 @@ def generate_matrix_html(status_rows, title, apt_folder):
 
 def main():
     print("\n=== AlertEvidence Matrix (layout DefenderLab – niezależny kod) ===\n")
+    # DIAGNOSTYKA + DEMO
+    missing = check_files_exist()
+    if missing:
+        print("\n[!] Brak wymaganych plików: ", ", ".join(missing))
+        demo = input("Czy uruchomić DEMO MODE? (t/n): ").strip().lower()
+        if demo == "t":
+            run_demo_mode()
+        else:
+            print("\nPrzerwano. Uzupełnij brakujące pliki i spróbuj ponownie.")
+            sys.exit(1)
+
     print("Wybierz pole, po którym chcesz generować oddzielne macierze/raporty:\n")
     for i, (f, pretty) in enumerate(GROUP_FIELDS.items()):
         print(f"  {i+1}) {pretty}")
@@ -295,7 +357,7 @@ function filterEventsTable(colIdx) {
     var trs = table.getElementsByTagName('tr');
     var filters = [];
     var filterInputs = trs[1].getElementsByTagName('input');
-    for (var i=0; i<filterInputs.length; i++) {
+    for (var i=0;i<filterInputs.length;i++){
         filters.push(filterInputs[i].value.toLowerCase());
     }
     for (var r=2; r<trs.length; r++) {

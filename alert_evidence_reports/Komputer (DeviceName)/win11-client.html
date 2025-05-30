@@ -1,0 +1,213 @@
+<html><head><meta charset='utf-8'><title>Host: win11-client</title></head><body style='font-family:Segoe UI,Arial,sans-serif;'>
+<h1>Raport AlertEvidence: Host = win11-client</h1>
+<p>Data generowania: 2025-05-30 10:41:17</p>
+<p>Liczba zdarzeń: <b>42</b></p>
+<p><b>Liczba unikalnych taktyk MITRE:</b> <span style='color: #1976d2;'>6</span></p>
+<style>
+.container { max-width:1180px; margin:0 auto; }
+.matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }
+.matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }
+.matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }
+.matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }
+.badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }
+.badge-Tested { background:#43a047; }
+.badge-Audit { background:#ffb300; color:#333 !important; }
+.badge-Pending { background:#e53935; }
+.badge-Disabled { background:#757575; color:#222 !important; }
+.badge-Suppressed { background:#bdbdbd; color:#222 !important; }
+</style>
+<div class="container">
+<h1>🛡️ Macierz MITRE ATT&CK</h1>
+<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla: <b>Host=win11-client</b></div>
+<p style="color:#557;">Wygenerowano: 2025-05-30 10:41:17</p>
+<table class="matrix-table"><tr>
+<th>reconnaissance</th>
+<th>resource development</th>
+<th>initial access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege escalation</th>
+<th>defense evasion</th>
+<th>credential access</th>
+<th>discovery</th>
+<th>lateral movement</th>
+<th>collection</th>
+<th>command and control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1204.001</b><br>Malicious Link<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Liczba wystąpień: <b>1</b></span></div>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Liczba wystąpień: <b>2</b></span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Liczba wystąpień: <b>30</b></span></div>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr></table>
+<h2>📊 Tabela statusów</h2>
+<table class="matrix-table"><tr><th>Technique ID</th><th>Name</th><th>Tactics</th><th>Status</th><th>Liczba wystąpień</th><th>Author</th></tr>
+<tr style='background:#a3e4a1;'><td>T1204.001</td><td>Malicious Link</td><td>Execution</td><td>Tested</td><td>1</td><td>AlertEvidence Matrix</td></tr>
+<tr style='background:#a3e4a1;'><td>T1219</td><td>Remote Access Tools</td><td>Command-And-Control</td><td>Tested</td><td>10</td><td>AlertEvidence Matrix</td></tr>
+<tr style='background:#a3e4a1;'><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td>Tested</td><td>2</td><td>AlertEvidence Matrix</td></tr>
+<tr style='background:#a3e4a1;'><td>T1078.003</td><td>Local Accounts</td><td>Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation</td><td>Tested</td><td>30</td><td>AlertEvidence Matrix</td></tr>
+</table>
+</div>
+<h2>Pełna lista zdarzeń (bez pustych kolumn)</h2>
+
+<style>
+    .hl { background: #fff89a !important; }
+    #eventsTable th { position: sticky; top: 0; background: #f3f7fa; cursor:pointer; }
+    #eventsTable th.sorted-asc:after { content: " \25B2"; color: #1976d2; }
+    #eventsTable th.sorted-desc:after { content: " \25BC"; color: #1976d2; }
+</style>
+
+
+<label for="eventsTableSearch" style="font-size:1.12em;">🔍 Filtrowanie zdarzeń: </label>
+<span style="color: #888; font-size: 1em;">(Możesz wpisać coś w kilka kolumn naraz)</span>
+<div style='overflow-x:auto; max-width:95vw;'>
+<table id='eventsTable' border='1' style='border-collapse:collapse; background:#f7fafd; font-size:1em;'>
+<tr><th onclick='sortEventsTable(0)'>DeviceId</th><th onclick='sortEventsTable(1)'>DeviceName</th><th onclick='sortEventsTable(2)'>EvidenceRole</th><th onclick='sortEventsTable(3)'>LocalIP</th><th onclick='sortEventsTable(4)'>DetectionSource</th><th onclick='sortEventsTable(5)'>AttackTechniques</th><th onclick='sortEventsTable(6)'>﻿Timestamp</th><th onclick='sortEventsTable(7)'>Title</th><th onclick='sortEventsTable(8)'>AlertId</th><th onclick='sortEventsTable(9)'>ServiceSource</th><th onclick='sortEventsTable(10)'>EntityType</th><th onclick='sortEventsTable(11)'>Categories</th><th onclick='sortEventsTable(12)'>Severity</th></tr>
+<tr><td><input type='text' onkeyup='filterEventsTable(0)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(1)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(2)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(3)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(4)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(5)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(6)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(7)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(8)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(9)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(10)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(11)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(12)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td></tr>
+
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td>192.168.100.20</td><td>Antivirus</td><td>["Malicious Link (T1204.001)","Remote Access Software (T1219)"]</td><td>May 25, 2025 10:06:24 PM</td><td>'AmmyyAdmin' unwanted software was prevented</td><td>da50c89f4f-1e22-4150-9967-b4ec1c803a30_1</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["DefenseEvasion"]</td><td>Informational</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Remote Access Software (T1219)"]</td><td>May 25, 2025 10:02:47 PM</td><td>Remote Access Software detected</td><td>ed638838557556943584_-1678594684</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["CommandAndControl"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Remote Access Software (T1219)"]</td><td>May 25, 2025 10:06:21 PM</td><td>Remote Access Software detected</td><td>ed638838557556943584_-1678594684</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["CommandAndControl"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Antivirus</td><td>["Remote Access Software (T1219)"]</td><td>May 25, 2025 10:06:34 PM</td><td>'AmmyyAdmin' unwanted software was prevented</td><td>da50c89f4f-1e22-4150-9967-b4ec1c803a30_1</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["DefenseEvasion"]</td><td>Informational</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Remote Access Software (T1219)"]</td><td>May 26, 2025 10:00:42 AM</td><td>Remote Access Software detected</td><td>ed638838557556943584_-1678594684</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["CommandAndControl"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Remote Access Software (T1219)"]</td><td>May 26, 2025 10:00:42 AM</td><td>Remote Access Software detected</td><td>ed638838557556943584_-1678594684</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["CommandAndControl"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Remote Access Software (T1219)"]</td><td>May 26, 2025 10:00:43 AM</td><td>Remote Access Software detected</td><td>ed638838557556943584_-1678594684</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["CommandAndControl"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Remote Access Software (T1219)"]</td><td>May 26, 2025 10:00:44 AM</td><td>Remote Access Software detected</td><td>ed638838557556943584_-1678594684</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["CommandAndControl"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Remote Access Software (T1219)"]</td><td>May 26, 2025 10:00:44 AM</td><td>Remote Access Software detected</td><td>ed638838557556943584_-1678594684</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["CommandAndControl"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Remote Access Software (T1219)"]</td><td>May 26, 2025 10:00:45 AM</td><td>Remote Access Software detected</td><td>ed638838557556943584_-1678594684</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["CommandAndControl"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td>192.168.100.20</td><td>EDR</td><td>["PowerShell (T1059.001)"]</td><td>May 13, 2025 9:30:58 PM</td><td>[Test Alert] Suspicious Powershell commandline</td><td>da44095e9e-b901-40d9-9adf-4065093ecb0a_1</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Execution"]</td><td>Informational</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td>192.168.100.20</td><td>EDR</td><td>["PowerShell (T1059.001)"]</td><td>May 13, 2025 9:31:00 PM</td><td>Suspicious PowerShell command line</td><td>daef0462ed-587d-4aeb-9bad-ddc7c60439ff_1</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Execution"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:24:46 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:23:11 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:21:53 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:00:53 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:01:27 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:06:19 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:28:09 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:24:46 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:12:57 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:06:19 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:24:22 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:32:30 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:06:19 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:22:57 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:32:38 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:07:52 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:22:48 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:23:04 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:20:34 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:20:34 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 1:20:34 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 14, 2025 2:00:53 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 16, 2025 7:36:54 AM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 16, 2025 7:43:31 AM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 16, 2025 7:48:51 AM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 16, 2025 7:56:33 AM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 16, 2025 8:41:17 AM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 16, 2025 2:40:23 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 16, 2025 2:40:23 PM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+<tr><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>win11-client</td><td>Impacted</td><td></td><td>Custom detection</td><td>["Local Accounts (T1078.003)"]</td><td>May 16, 2025 7:56:37 AM</td><td>Local Account / Groups activity</td><td>ed638828190342649939_-2113952893</td><td>Microsoft Defender for Endpoint</td><td>Machine</td><td>["Persistence"]</td><td>Medium</td></tr>
+</table></div>
+
+<script>
+function filterEventsTable(colIdx) {
+    var table = document.getElementById('eventsTable');
+    var trs = table.getElementsByTagName('tr');
+    var filters = [];
+    var filterInputs = trs[1].getElementsByTagName('input');
+    for (var i=0;i<filterInputs.length;i++){
+        filters.push(filterInputs[i].value.toLowerCase());
+    }
+    for (var r=2; r<trs.length; r++) {
+        var tds = trs[r].getElementsByTagName('td');
+        var show = true;
+        for (var c=0; c<filters.length; c++) {
+            var cell = tds[c];
+            var txt = cell.textContent || cell.innerText || '';
+            cell.innerHTML = txt.replace(/<span class="hl">|<\/span>/g, '');
+            if (filters[c] && txt.toLowerCase().indexOf(filters[c]) == -1) {
+                show = false;
+            }
+        }
+        if (show) {
+            for (var c=0; c<filters.length; c++) {
+                var cell = tds[c];
+                var filter = filters[c];
+                var txt = cell.innerHTML;
+                if (filter) {
+                    var re = new RegExp("(" + filter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ")", "gi");
+                    cell.innerHTML = txt.replace(re, '<span class="hl">$1</span>');
+                }
+            }
+        }
+        trs[r].style.display = show ? "" : "none";
+    }
+}
+function sortEventsTable(col) {
+    var table = document.getElementById("eventsTable");
+    var switching = true, dir = "asc", switchcount = 0;
+    var ths = table.getElementsByTagName('th');
+    for(var i=0;i<ths.length;i++){ths[i].classList.remove("sorted-asc","sorted-desc");}
+    while (switching) {
+        switching = false;
+        var rows = table.rows;
+        for (var i = 2; i < (rows.length - 1); i++) {
+            var shouldSwitch = false;
+            var x = rows[i].getElementsByTagName("TD")[col];
+            var y = rows[i + 1].getElementsByTagName("TD")[col];
+            var xVal = x ? x.textContent || x.innerText : '';
+            var yVal = y ? y.textContent || y.innerText : '';
+            var xNum = parseFloat(xVal.replace(/[^0-9\.\-]/g, ''));
+            var yNum = parseFloat(yVal.replace(/[^0-9\.\-]/g, ''));
+            if (!isNaN(xNum) && !isNaN(yNum)) {
+                if (dir == "asc" ? xNum > yNum : xNum < yNum) { shouldSwitch = true; break; }
+            } else {
+                if (dir == "asc" ? xVal.toLowerCase() > yVal.toLowerCase() : xVal.toLowerCase() < yVal.toLowerCase()) {
+                    shouldSwitch = true; break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount ++;
+        } else {
+            if (switchcount == 0 && dir == "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+    ths[col].classList.add(dir == "asc" ? "sorted-asc" : "sorted-desc");
+}
+</script>
+
+</body></html>
