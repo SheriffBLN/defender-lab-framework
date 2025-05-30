@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7fafd; color: #23293b; margin: 0; padding: 0; }
+.container { max-width: 1400px; margin: 0 auto; padding: 30px; }
+h1 { color: #14247a; margin-top: 0; }
+.matrix-table { width: 100%; border-collapse: collapse; background: #f5f8ff; font-size: 1.05em; }
+.matrix-table th, .matrix-table td { border: 1px solid #dde3ef; padding: 11px 7px; text-align: left; min-width: 140px; }
+.matrix-table th { background: #eaf0fa; color: #222b44; font-size: 1.09em; font-weight: 600; letter-spacing: 0.01em; position: sticky; top: 49px; z-index: 2; }
+.matrix-table td { background: #f9fbfd; vertical-align: top; min-width: 140px; }
+.matrix-technique { margin-bottom: 10px; padding: 10px 8px 10px 14px; border-radius: 7px; border: 1.2px solid #e5e9f2; background: #fff; box-shadow: 0 1.5px 7px #dde3ef33; position: relative; transition: box-shadow 0.13s; }
+.matrix-technique:hover { box-shadow: 0 2px 13px #8cc2ff33; border-color: #b3d3ff; }
+.matrix-technique b { font-size: 1.01em; color: #14247a; letter-spacing: 0.3px; }
+.badge { display: inline-block; padding: 3px 11px; border-radius: 6px; font-size: 0.93em; color: #fff; font-weight: 500; margin-right: 3px; margin-top: 2px; margin-bottom: 3px; }
+.badge-Tested { background: #40c057; }
+.badge-Audit { background: #ffd43b; color: #222; }
+.badge-Pending { background: #ff6b6b; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+<h1>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</h1>
+<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla grupy: <b>global_coverage</b></div>
+<p style="color:#557;">Wygenerowano: 2025-05-30 09:30:15</p>
+<table class="matrix-table"><tr>
+<th>initial-access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege-escalation</th>
+<th>defense-evasion</th>
+<th>credential-access</th>
+<th>discovery</th>
+<th>lateral-movement</th>
+<th>collection</th>
+<th>command-and-control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1204.001</b><br>Malicious Link<br><span class="badge badge-Tested">Tested</span></div>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9fbe8;"><b>T1219</b><br>Remote Access Tools<br><span class="badge badge-Tested">Tested</span></div>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr></table>
+<h2>🔥 Heatmapa wyzwolonych technik dla grupy <b>global_coverage</b></h2>
+<table class="matrix-table"><tr>
+<th>initial-access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege-escalation</th>
+<th>defense-evasion</th>
+<th>credential-access</th>
+<th>discovery</th>
+<th>lateral-movement</th>
+<th>collection</th>
+<th>command-and-control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1204.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffd480;border:1.5px solid #b6b6b6;"><b>T1059.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffd480;border:1.5px solid #b6b6b6;"><b>T1219</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+</tr></table>
+
+<div class="panel" style="background:#fff; border-radius:12px; box-shadow:0 2px 13px #dde3ef66; padding:28px 32px; margin-top:44px;">
+<ul class="stat-list" style="font-size:1.09em; margin-bottom:20px;">
+<li><b>Technik z co najmniej 1 alertem:</b> 4 / 4 (100.0%)</li>
+<li><b>Najczęściej wykrywane techniki (Top 5):</b> T1219 (Remote Access Tools, 2 razy), T1059.001 (PowerShell, 2 razy), T1204.001 (Malicious Link, 1 razy), T1078.003 (Local Accounts, 1 razy)</li>
+<li><b>Techniki bez żadnej detekcji:</b> Brak</li>
+<li><b>Średnia liczba alertów na technikę:</b> 1.50</li>
+</ul>
+<div class="disclaimer" style="color:#888; font-size:.99em; margin-top:15px;">To jest widok statystyczny. Liczba wykryć = suma alertów dla danej techniki, nie konkretna reguła.<br>
+Aby zobaczyć szczegóły (np. scenariusze czy reguły), przejdź do widoku APT lub pojedynczej techniki.</div>
+</div>
+<div class="chart-box" style="margin:38px 0 20px 0; background:#f7fafd; padding:22px; border-radius:13px;">
+<h2 style="margin-top:0;">🔝 Top 5 najczęściej wykrywanych technik</h2>
+<canvas id="top5Chart" width="600" height="260"></canvas>
+</div>
+<table class="mini-table" style="margin-top:30px; border-collapse:collapse; width:80%; font-size:1.02em; background:#fff;">
+<tr><th>Technique ID</th><th>Name</th><th>Liczba detekcji</th><th>MITRE</th></tr>
+<tr><td>T1219</td><td>Remote Access Tools</td><td>2</td><td></td></tr><tr><td>T1059.001</td><td>PowerShell</td><td>2</td><td></td></tr><tr><td>T1204.001</td><td>Malicious Link</td><td>1</td><td></td></tr><tr><td>T1078.003</td><td>Local Accounts</td><td>1</td><td></td></tr></table>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var ctx = document.getElementById('top5Chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["T1219 (Remote Access Tools)", "T1059.001 (PowerShell)", "T1204.001 (Malicious Link)", "T1078.003 (Local Accounts)"],
+            datasets: [{
+                label: 'Liczba wykryć',
+                data: [2, 2, 1, 1],
+                backgroundColor: [
+                    'rgba(64, 192, 87, 0.85)',
+                    'rgba(72, 123, 255, 0.85)',
+                    'rgba(255, 212, 67, 0.85)',
+                    'rgba(255, 107, 107, 0.85)',
+                    'rgba(198, 83, 255, 0.85)'
+                ],
+                borderRadius: 10,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: false,
+            plugins: {
+                legend: { display: false },
+                title: { display: false }
+            },
+            scales: {
+                x: { beginAtZero: true, ticks: { precision:0 } },
+                y: { beginAtZero: true }
+            }
+        }
+    });
+});
+</script>
+</div></body></html>
