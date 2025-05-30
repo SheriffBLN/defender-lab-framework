@@ -1,4 +1,5 @@
 import sys
+import os
 from defender_lab import main as defender_lab_main
 import generate_matrix_from_apt as apt_matrix
 
@@ -15,15 +16,17 @@ def main_menu():
     print("=== Wybierz tryb pracy ===")
     print("1) Tryby klasyczne: SingleTechnique / APT Group / Update")
     print("2) Automatyczne generowanie macierzy dla grupy APT (STIX)")
+    print("3) Global Coverage (ostatnie 30 dni, MITRE Layer + markdown)")
+    print("4) AlertEvidence Matrix (per RemoteIP/Host/User/Application)")
     print("0) Wyjście")
     while True:
         try:
-            mode = int(input("Wybierz tryb (1/2/0): "))
-            if mode in [0,1,2]:
+            mode = int(input("Wybierz tryb (1/2/3/4/0): "))
+            if mode in [0,1,2,3,4]:
                 return mode
         except ValueError:
             pass
-        print("Podaj poprawną wartość (1/2/0)")
+        print("Podaj poprawną wartość (0/1/2/3/4)")
 
 def apt_matrix_menu():
     print("\n[2] Automatyczne generowanie macierzy APT (STIX)")
@@ -38,7 +41,7 @@ def apt_matrix_menu():
                 return opt
         except ValueError:
             pass
-        print("Podaj poprawną wartość (1/2/0)")
+        print("Podaj poprawną wartość (0/1/2)")
 
 def run_apt_matrix(mode):
     STIX_PATH = "tools/helpers/enterprise-attack.json"
@@ -52,7 +55,7 @@ def run_apt_matrix(mode):
     if not group_entry:
         print("Anulowano wybór grupy.")
         return
-    apt_matrix.main(group_entry=group_entry)  # UWAGA: zobacz poniżej wyjaśnienie!
+    apt_matrix.main(group_entry=group_entry)
 
 def main():
     while True:
@@ -64,6 +67,10 @@ def main():
             if submode == 0:
                 continue
             run_apt_matrix(submode)
+        elif mode == 3:
+            os.system("python tools/generate_global_coverage.py")
+        elif mode == 4:
+            os.system("python tools/generate_matrix_from_alert_evidence.py")
         elif mode == 0:
             print("Do zobaczenia!")
             sys.exit(0)

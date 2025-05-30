@@ -46,7 +46,7 @@ def choose_mode():
     print("=== Wybierz tryb pracy ===")
     print("1) SingleTechnique (sumuje techniki do wspólnej matrycy)")
     print("2) APT Group (osobna matryca dla grupy)")
-    print("3) Update (masowa aktualizacja raportów na podstawi status.csv)")
+    print("3) Update (masowa aktualizacja raportów na podstawie status.csv)")
     while True:
         try:
             mode = int(input("Wybierz tryb (1/2/3): "))
@@ -172,13 +172,7 @@ def append_or_update_status_csv(apt_folder, new_row):
         writer.writerows(all_rows)
 
 def generate_layer_json(apt_folder, techniques):
-    """
-    Rozbudowana warstwa Navigatora:
-    - Zaciąga liczbę alertów (score) z heatmapy (last30days_alerts.csv)
-    - Score: 1+ dla często wyzwalanych technik
-    - Jeśli technika nie ma alertów, score = 0.1 (jest, ale cicha)
-    - Dodaje opis i kolory.
-    """
+    # ...bez zmian (jw.)
     out = os.path.join("mapping", apt_folder, "layer.json")
     os.makedirs(os.path.dirname(out), exist_ok=True)
 
@@ -193,7 +187,6 @@ def generate_layer_json(apt_folder, techniques):
                 if tid:
                     heatmap_counts[tid.strip().upper()] = int(row.get("Count", 1))
 
-    # Kolorowanie wg score (na bazie heatmapy)
     def score_color(score):
         if score >= 10:
             return "#6f42c1"    # fiolet
@@ -210,12 +203,11 @@ def generate_layer_json(apt_folder, techniques):
         else:
             return "#e0e0e0"    # szary
 
-    # Budujemy listę technik z score i kolorem
     layer_techniques = []
     for t in techniques:
         tid = t["Technique ID"].strip().upper()
         count = heatmap_counts.get(tid, 0)
-        score = float(count) if count else 0.1  # ciche = 0.1
+        score = float(count) if count else 0.1
         entry = {
             "techniqueID": tid,
             "score": score,
@@ -224,7 +216,6 @@ def generate_layer_json(apt_folder, techniques):
         }
         layer_techniques.append(entry)
 
-    # Cała warstwa Navigatora
     layer = {
         "name": f"{apt_folder} – Lab Coverage + Heatmap",
         "version": "4.6",
@@ -251,9 +242,7 @@ def generate_layer_json(apt_folder, techniques):
     with open(out, "w", encoding="utf-8") as f:
         json.dump(layer, f, indent=4)
 
-
 def parse_heatmap_data():
-    """Zwraca dict: technique_id -> count, na podstawie last30days_alerts.csv"""
     path = "tools/helpers/last30days_alerts.csv"
     if not os.path.exists(path):
         return {}
@@ -273,7 +262,6 @@ def heatmap_color_for_count(cnt):
     return HEATMAP_COLORS[-1][1]
 
 def render_heatmap_section_for_matrix(matrix, apt_folder, only_techniques=None):
-    """Generuje sekcję heatmapy HTML."""
     heatmap_counts = parse_heatmap_data()
     if not heatmap_counts:
         return "<p><i>Brak danych do wygenerowania heatmapy – plik last30days_alerts.csv nie został znaleziony lub pusty.</i></p>"
@@ -281,7 +269,6 @@ def render_heatmap_section_for_matrix(matrix, apt_folder, only_techniques=None):
         f'<h2>🔥 Heatmapa wyzwolonych technik dla grupy <b>{apt_folder}</b></h2>',
         '<table class="matrix-table"><tr>'
     ]
-    # TACTICS_ORDER == header
     for tactic in TACTICS_ORDER:
         html.append(f"<th>{tactic}</th>")
     html.append("</tr><tr>")
@@ -290,7 +277,6 @@ def render_heatmap_section_for_matrix(matrix, apt_folder, only_techniques=None):
         found = False
         for row in matrix.get(tactic, []):
             tid = row["Technique ID"]
-            # Filtruj tylko techniki danej grupy APT, jeśli podano (dla Single sumuje globalnie!)
             if only_techniques is not None and tid not in only_techniques:
                 continue
             cnt = heatmap_counts.get(tid, 0)
@@ -313,13 +299,11 @@ def render_heatmap_section_for_matrix(matrix, apt_folder, only_techniques=None):
     return "\n".join(html)
 
 def generate_matrix_html(apt_folder, report_path, apt_mode=True):
-    """Generuje index.html z matrycą, heatmapą, tabelką statusów."""
     status_path = os.path.join("mapping", apt_folder, "status.csv")
     if not os.path.exists(status_path):
         print(f"(!) Brak pliku {status_path}")
         return
     rows = list(csv.DictReader(open(status_path, encoding="utf-8")))
-    # Uporządkuj do macierzy
     matrix = defaultdict(list)
     for r in rows:
         for t in r["Tactics"].split(","):
@@ -334,11 +318,9 @@ def generate_matrix_html(apt_folder, report_path, apt_mode=True):
         '<meta charset="UTF-8">',
         f'<title>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</title>',
         '<style>',
-        # --- Styl z Twojego index.html demo! ---
         "body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7fafd; color: #23293b; margin: 0; padding: 0; }",
         ".container { max-width: 1400px; margin: 0 auto; padding: 30px; }",
         "h1 { color: #14247a; margin-top: 0; }",
-        # ...tu cały CSS, jak miałeś (możesz skopiować z index.html demo)...
         ".matrix-table { width: 100%; border-collapse: collapse; background: #f5f8ff; font-size: 1.05em; }",
         ".matrix-table th, .matrix-table td { border: 1px solid #dde3ef; padding: 11px 7px; text-align: left; min-width: 140px; }",
         ".matrix-table th { background: #eaf0fa; color: #222b44; font-size: 1.09em; font-weight: 600; letter-spacing: 0.01em; position: sticky; top: 49px; z-index: 2; }",
@@ -351,6 +333,8 @@ def generate_matrix_html(apt_folder, report_path, apt_mode=True):
         ".badge-Audit { background: #ffd43b; color: #222; }",
         ".badge-Pending { background: #ff6b6b; }",
         "</style>",
+        # Chart.js CDN
+        '<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>',
         '</head>',
         '<body>',
         '<div class="container">',
@@ -375,34 +359,33 @@ def generate_matrix_html(apt_folder, report_path, apt_mode=True):
             )
         html.append("</td>")
     html.append("</tr></table>")
-    # ---- Dodaj heatmapę (tylko techniki danej grupy!) ----
     html.append(render_heatmap_section_for_matrix(
         matrix, apt_folder,
         only_techniques=[row["Technique ID"] for row in rows] if apt_mode else None
     ))
-    # ---- Dodaj tabelę statusów (jak w index.html demo) ----
-    html.append('<h2>📊 Tabela statusów</h2>')
-    html.append('<table class="matrix-table"><tr>')
-    html.append('<th>Technique ID</th><th>Name</th><th>Status</th><th>Linked Rule</th><th>Author</th></tr>')
-    for row in rows:
-        status = row["Status"]
-        bg = STATUS_BG_COLORS.get(status, "#fff")
-        html.append(
-            f"<tr style='background:{bg};'>"
-            f"<td>{row['Technique ID']}</td>"
-            f"<td>{row['Name']}</td>"
-            f"<td><span class='badge badge-{status}'>{status}</span></td>"
-            f"<td>{row['Linked Rule']}</td>"
-            f"<td>{row.get('Author','')}</td>"
-            "</tr>"
-        )
-    html.append("</table>")
+    # --- Tabela statusów tylko jeśli nie global_coverage ---
+    if apt_folder != "global_coverage":
+        html.append('<h2>📊 Tabela statusów</h2>')
+        html.append('<table class="matrix-table"><tr>')
+        html.append('<th>Technique ID</th><th>Name</th><th>Status</th><th>Linked Rule</th><th>Author</th></tr>')
+        for row in rows:
+            status = row["Status"]
+            bg = STATUS_BG_COLORS.get(status, "#fff")
+            html.append(
+                f"<tr style='background:{bg};'>"
+                f"<td>{row['Technique ID']}</td>"
+                f"<td>{row['Name']}</td>"
+                f"<td><span class='badge badge-{status}'>{status}</span></td>"
+                f"<td>{row['Linked Rule']}</td>"
+                f"<td>{row.get('Author','')}</td>"
+                "</tr>"
+            )
+        html.append("</table>")
     html.append("</div></body></html>")
     os.makedirs(os.path.dirname(report_path), exist_ok=True)
     with open(report_path, "w", encoding="utf-8") as f:
         f.write("\n".join(html))
     print(f"[✓] Raport HTML wygenerowany do: {report_path}")
-
 def main():
     print_banner()
     mode = choose_mode()
@@ -465,17 +448,32 @@ def main():
         generate_layer_json(apt_folder, techniques)
         generate_matrix_html(apt_folder, os.path.join("report", apt_folder, "index.html"), apt_mode=True)
 
-    elif mode == 3:  # Update
+    elif mode == 3:  # Update (automatyczny dla wszystkich status.csv)
         print("--- Tryb UPDATE ---")
-        print("Podaj nazwę grupy do update (lub SingleTechnique):")
-        apt_folder = input("Nazwa: ").strip()
-        if not apt_folder:
-            apt_folder = "SingleTechnique"
-        print("Aktualizuję raporty oraz warstwy...")
-        techniques = list(csv.DictReader(open(os.path.join("mapping", apt_folder, "status.csv"), encoding="utf-8")))
-        generate_layer_json(apt_folder, techniques)
-        generate_matrix_html(apt_folder, os.path.join("report", apt_folder, "index.html"), apt_mode=(apt_folder!="SingleTechnique"))
-        print("[✓] Update zakończony.")
+        print("Wyszukiwanie wszystkich plików status.csv w mapping/ ...")
+        mapping_dir = "mapping"
+        status_files = []
+        for root, dirs, files in os.walk(mapping_dir):
+            for file in files:
+                if file == "status.csv":
+                    apt_folder = os.path.relpath(root, mapping_dir)
+                    status_files.append((apt_folder, os.path.join(root, file)))
+        if not status_files:
+            print("(!) Nie znaleziono żadnych plików status.csv w mapping/")
+            return
+        print(f"Znaleziono {len(status_files)} plików status.csv. Aktualizuję wszystkie raporty i warstwy ...\n")
+        for apt_folder, status_path in status_files:
+            # apt_folder może być '.' dla głównego mapping/
+            folder_name = apt_folder if apt_folder != '.' else ''
+            try:
+                print(f"⏳ Aktualizuję: mapping/{folder_name}/status.csv")
+                techniques = list(csv.DictReader(open(status_path, encoding="utf-8")))
+                generate_layer_json(folder_name, techniques)
+                report_path = os.path.join("report", folder_name, "index.html")
+                generate_matrix_html(folder_name, report_path, apt_mode=(folder_name!="SingleTechnique"))
+            except Exception as e:
+                print(f"(!) Błąd przy aktualizacji {status_path}: {e}")
+        print("\n[✓] Masowa aktualizacja raportów zakończona.")
 
 if __name__ == "__main__":
     main()
