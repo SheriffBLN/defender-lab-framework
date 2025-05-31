@@ -28,6 +28,23 @@ BADGE_COLORS = {
     "Suppressed": "#bdbdbd"
 }
 
+# --- PATCH: 2x MATRIX --- # Heatmap color logic (zgodna z defender_lab.py)
+def heatmap_color(count):
+    if count >= 10:
+        return "#6f42c1"
+    elif count >= 5:
+        return "#c653ff"
+    elif count >= 4:
+        return "#ff704d"
+    elif count >= 3:
+        return "#ffa366"
+    elif count >= 2:
+        return "#ffd480"
+    elif count >= 1:
+        return "#ffffb3"
+    else:
+        return "#e0e0e0"
+
 ALERT_EVIDENCE_CSV = "tools/helpers/AlertEvidence.csv"
 ENTERPRISE_CSV = "tools/enterprise_attack.csv"
 OUTDIR = "alert_evidence_reports"
@@ -244,7 +261,7 @@ def generate_timeline(events, techniques_db):
 """)
     return "\n".join(out)
 
-# --- KLUCZOWA FUNKCJA: matryca MITRE (technika w każdej taktyce!) ---
+# --- KLUCZOWA FUNKCJA: matryca MITRE (status) ---
 def generate_matrix_html(status_rows, title, apt_folder):
     matrix = defaultdict(list)
     for r in status_rows:
@@ -268,11 +285,11 @@ def generate_matrix_html(status_rows, title, apt_folder):
         ".badge-Disabled { background:%s; color:#222 !important; }" % BADGE_COLORS["Disabled"],
         ".badge-Suppressed { background:%s; color:#222 !important; }" % BADGE_COLORS["Suppressed"],
         "</style>",
-        "<body style='font-family:Segoe UI,Arial,sans-serif;'>",
-        '<div class="container">',
+        "<div class=\"container\">",
         f'<h1>{title or "🛡️ Macierz MITRE ATT&CK"}</h1>',
         f'<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla: <b>{apt_folder or ""}</b></div>',
         f'<p style="color:#557;">Wygenerowano: {now}</p>',
+        '<h2>Status macierzy (Tested / Audit / Pending)</h2>',
         '<table class="matrix-table"><tr>'
     ]
     for tactic in TACTICS_ORDER:
@@ -292,18 +309,54 @@ def generate_matrix_html(status_rows, title, apt_folder):
             )
         html.append("</td>")
     html.append("</tr></table>")
-    # --- tabela statusów ---
-    html.append('<h2>📊 Tabela statusów</h2>')
-    html.append('<table class="matrix-table"><tr><th>Technique ID</th><th>Name</th><th>Tactics</th><th>Status</th><th>Liczba wystąpień</th><th>Author</th></tr>')
-    for row in status_rows:
-        status = row["Status"]
-        html.append(
-            f"<tr style='background:{STATUS_BG_COLORS.get(status, '#fff')};'>" +
-            "".join(f"<td>{row.get(c,'')}</td>" for c in ["Technique ID","Name","Tactics","Status","Liczba wystąpień","Author"]) +
-            "</tr>"
-        )
-    html.append("</table>")
-    html.append("</div>")
+    return "\n".join(html)
+
+# --- PATCH: 2x MATRIX --- # Dodajemy heatmapę na bazie tych samych status_rows
+def generate_heatmap_matrix_html(status_rows, title, apt_folder):
+    tech_counts = {row["Technique ID"]: int(row.get("Liczba wystąpień", 0)) for row in status_rows}
+    matrix = defaultdict(list)
+    for r in status_rows:
+        tactics = [t.strip().lower().replace(" ", "-") for t in r["Tactics"].split(",") if t.strip()]
+        for t in tactics:
+            if t in TACTICS_ORDER:
+                matrix[t].append(r)
+    html = [
+        '<h2>🔥 Heatmapa wyzwolonych technik</h2>',
+        '<table class="matrix-table"><tr>'
+    ]
+    for tactic in TACTICS_ORDER:
+        html.append(f"<th>{tactic}</th>")
+    html.append("</tr><tr>")
+    for tactic in TACTICS_ORDER:
+        html.append("<td>")
+        for row in matrix.get(tactic, []):
+            tid = row["Technique ID"]
+            count = tech_counts.get(tid, 0)
+            color = heatmap_color(count)
+            html.append(
+                f'<div class="matrix-technique" style="background:{color};border:1.5px solid #b6b6b6;">'
+                f'<b>{tid}</b><br>{row["Name"]}'
+                f'<div style="margin-top:5px;">'
+                f'<span style="font-size:1.09em;font-weight:600;color:#d7263d;">{"🔥" if count else "–"}</span> '
+                f'<span style="font-size:1.04em;">{count} alertów</span>'
+                '</div></div>'
+            )
+        if not matrix.get(tactic, []):
+            html.append('<div class="matrix-technique" style="background:#ececec;">–</div>')
+        html.append("</td>")
+    html.append("</tr></table>")
+    # Legenda
+    html.append("""
+    <div style="margin-top:12px; font-size:1.01em; color:#555;">
+        <b>Legenda kolorów:</b>
+        <span style="background:#ffffb3; padding:2px 8px; margin-right:8px;">1</span>
+        <span style="background:#ffd480; padding:2px 8px; margin-right:8px;">2</span>
+        <span style="background:#ffa366; padding:2px 8px; margin-right:8px;">3</span>
+        <span style="background:#ff704d; padding:2px 8px; margin-right:8px;">4</span>
+        <span style="background:#c653ff; padding:2px 8px; margin-right:8px;">5+</span>
+        <span style="background:#6f42c1; padding:2px 8px; margin-right:8px;">10+</span>
+    </div>
+    """)
     return "\n".join(html)
 
 def main():
@@ -373,6 +426,7 @@ def main():
 
         status_rows = generate_status_rows(rows, group_field, value, techniques_db)
         matrix_html = generate_matrix_html(status_rows, title="🛡️ Macierz MITRE ATT&CK", apt_folder=f"{group_field}={value}")
+        heatmap_html = generate_heatmap_matrix_html(status_rows, title="🔥 Heatmapa MITRE", apt_folder=f"{group_field}={value}")  # --- PATCH: 2x MATRIX ---
 
         # --- Parsowanie eventów i generowanie sekcji zdarzeń ---
         events = []
@@ -402,11 +456,23 @@ def main():
             f"<p>Liczba zdarzeń: <b>{len(rows)}</b></p>",
             f"<p><b>Liczba unikalnych taktyk MITRE:</b> <span style='color: #1976d2;'>{len(all_tactics)}</span></p>",
             matrix_html,
+            heatmap_html,   # --- PATCH: 2x MATRIX ---
         ]
 
         # ---- TIMELINE tylko dla Host, RemoteIP, User ----
         if group_field in TIMELINE_GROUPS:
             html.append(generate_timeline(events, techniques_db))
+
+        html.append("<h2>📊 Tabela statusów</h2>")
+        html.append('<table class="matrix-table"><tr><th>Technique ID</th><th>Name</th><th>Tactics</th><th>Status</th><th>Liczba wystąpień</th><th>Author</th></tr>')
+        for row in status_rows:
+            status = row["Status"]
+            html.append(
+                f"<tr style='background:{STATUS_BG_COLORS.get(status, '#fff')};'>" +
+                "".join(f"<td>{row.get(c,'')}</td>" for c in ["Technique ID","Name","Tactics","Status","Liczba wystąpień","Author"]) +
+                "</tr>"
+            )
+        html.append("</table>")
 
         html.append("<h2>Pełna lista zdarzeń (bez pustych kolumn)</h2>")
         inputs_row = "".join(

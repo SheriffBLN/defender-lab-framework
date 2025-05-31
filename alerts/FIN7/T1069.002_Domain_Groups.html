@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Alert: Domain Groups</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    h1 { margin-top: 0; font-size: 2rem; }
+    .desc, .id, .link, .author { margin-bottom: 1.1em; }
+    .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
+    .section { font-size: .99em; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Alert: Domain Groups</h1>
+  <div class="meta"><b>Technique ID:</b> T1069.002</div>
+  <div class="desc section"><b>Description:</b><br>Adversaries may attempt to find domain-level groups and permission settings. The knowledge of domain-level permission groups can help adversaries determine which groups exist and which users belong to a particular group. Adversaries may use this information to determine which users have elevated permissions, such as domain administrators.  Commands such as <code>net group /domain</code> of the [Net](https://attack.mitre.org/software/S0039) utility,  <code>dscacheutil -q group</code> on macOS, and <code>ldapsearch</code> on Linux can list domain-level groups.</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1069/002/" target="_blank">https://attack.mitre.org/techniques/T1069/002/</a></div>
+  <div class="author section"><b>Author:</b> APT Matrix Generator</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Alert: Remote Desktop Protocol</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    h1 { margin-top: 0; font-size: 2rem; }
+    .desc, .id, .link, .author { margin-bottom: 1.1em; }
+    .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
+    .section { font-size: .99em; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Alert: Remote Desktop Protocol</h1>
+  <div class="meta"><b>Technique ID:</b> T1021.001</div>
+  <div class="desc section"><b>Description:</b><br>Adversaries may use [Valid Accounts](https://attack.mitre.org/techniques/T1078) to log into a computer using the Remote Desktop Protocol (RDP). The adversary may then perform actions as the logged-on user.  Remote desktop is a common feature in operating systems. It allows a user to log into an interactive session with a system desktop graphical user interface on a remote system. Microsoft refers to its implementation of the Remote Desktop Protocol (RDP) as Remote Desktop Services (RDS).(Citation: TechNet Remote Desktop Services)   Adversaries may connect to a remote system over RDP/RDS to expand access if the service is enabled and allows access to accounts with known credentials. Adversaries will likely use Credential Access techniques to acquire credentials to use with RDP. Adversaries may also use RDP in conjunction with the [Accessibility Features](https://attack.mitre.org/techniques/T1546/008) or [Terminal Services DLL](https://attack.mitre.org/techniques/T1505/005) for Persistence.(Citation: Alperovitch Malware)</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1021/001/" target="_blank">https://attack.mitre.org/techniques/T1021/001/</a></div>
+  <div class="author section"><b>Author:</b> APT Matrix Generator</div>
+</div>
+</body>
+</html>

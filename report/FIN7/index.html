@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</title>
+<style>
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7fafd; color: #23293b; margin: 0; padding: 0; }
+.container { max-width: 1400px; margin: 0 auto; padding: 30px; }
+h1 { color: #14247a; margin-top: 0; }
+.matrix-table { width: 100%; border-collapse: collapse; background: #f5f8ff; font-size: 1.05em; }
+.matrix-table th, .matrix-table td { border: 1px solid #dde3ef; padding: 11px 7px; text-align: left; min-width: 140px; }
+.matrix-table th { background: #eaf0fa; color: #222b44; font-size: 1.09em; font-weight: 600; letter-spacing: 0.01em; position: sticky; top: 49px; z-index: 2; }
+.matrix-table td { background: #f9fbfd; vertical-align: top; min-width: 140px; }
+.matrix-technique { margin-bottom: 10px; padding: 10px 8px 10px 14px; border-radius: 7px; border: 1.2px solid #e5e9f2; background: #fff; box-shadow: 0 1.5px 7px #dde3ef33; position: relative; transition: box-shadow 0.13s; }
+.matrix-technique:hover { box-shadow: 0 2px 13px #8cc2ff33; border-color: #b3d3ff; }
+.matrix-technique b { font-size: 1.01em; color: #14247a; letter-spacing: 0.3px; }
+.badge { display: inline-block; padding: 3px 11px; border-radius: 6px; font-size: 0.93em; color: #fff; font-weight: 500; margin-right: 3px; margin-top: 2px; margin-bottom: 3px; }
+.badge-Tested { background: #40c057; }
+.badge-Audit { background: #ffd43b; color: #222; }
+.badge-Pending { background: #ff6b6b; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="container">
+<h1>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</h1>
+<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla grupy: <b>FIN7</b></div>
+<p style="color:#557;">Wygenerowano: 2025-05-31 23:44:58</p>
+<table class="matrix-table"><tr>
+<th>initial-access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege-escalation</th>
+<th>defense-evasion</th>
+<th>credential-access</th>
+<th>discovery</th>
+<th>lateral-movement</th>
+<th>collection</th>
+<th>command-and-control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1078</b><br>Valid Accounts<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1091</b><br>Replication Through Removable Media<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1190</b><br>Exploit Public-Facing Application<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1195.002</b><br>Compromise Software Supply Chain<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1566.001</b><br>Spearphishing Attachment<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1566.002</b><br>Spearphishing Link<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1047</b><br>Windows Management Instrumentation<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1053.005</b><br>Scheduled Task<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1059</b><br>Command and Scripting Interpreter<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1059.003</b><br>Windows Command Shell<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1059.005</b><br>Visual Basic<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1059.007</b><br>JavaScript<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1204.001</b><br>Malicious Link<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1204.002</b><br>Malicious File<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1559.002</b><br>Dynamic Data Exchange<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1674</b><br>Input Injection<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1053.005</b><br>Scheduled Task<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1078</b><br>Valid Accounts<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1543.003</b><br>Windows Service<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1546.011</b><br>Application Shimming<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1547.001</b><br>Registry Run Keys / Startup Folder<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1053.005</b><br>Scheduled Task<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1078</b><br>Valid Accounts<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1543.003</b><br>Windows Service<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1546.011</b><br>Application Shimming<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1547.001</b><br>Registry Run Keys / Startup Folder<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1027.010</b><br>Command Obfuscation<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1027.016</b><br>Junk Code Insertion<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1036.004</b><br>Masquerade Task or Service<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1036.005</b><br>Match Legitimate Resource Name or Location<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1078</b><br>Valid Accounts<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1218.005</b><br>Mshta<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1218.011</b><br>Rundll32<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1497.002</b><br>User Activity Based Checks<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1553.002</b><br>Code Signing<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1558.003</b><br>Kerberoasting<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1033</b><br>System Owner/User Discovery<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1069.002</b><br>Domain Groups<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1497.002</b><br>User Activity Based Checks<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1021.001</b><br>Remote Desktop Protocol<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1021.004</b><br>SSH<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1021.005</b><br>VNC<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1091</b><br>Replication Through Removable Media<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1210</b><br>Exploitation of Remote Services<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1005</b><br>Data from Local System<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1113</b><br>Screen Capture<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1125</b><br>Video Capture<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1008</b><br>Fallback Channels<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1071.004</b><br>DNS<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1102.002</b><br>Bidirectional Communication<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1105</b><br>Ingress Tool Transfer<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1219</b><br>Remote Access Tools<br><span class="badge badge-Pending">Pending</span></div>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1571</b><br>Non-Standard Port<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1567.002</b><br>Exfiltration to Cloud Storage<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffeaea;"><b>T1486</b><br>Data Encrypted for Impact<br><span class="badge badge-Pending">Pending</span></div>
+</td>
+</tr></table>
+<h2>🔥 Heatmapa wyzwolonych technik dla grupy <b>FIN7</b></h2>
+<table class="matrix-table"><tr>
+<th>initial-access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege-escalation</th>
+<th>defense-evasion</th>
+<th>credential-access</th>
+<th>discovery</th>
+<th>lateral-movement</th>
+<th>collection</th>
+<th>command-and-control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1078</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1091</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1190</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1195.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1566.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1566.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1047</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1053.005</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1059</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffd480;border:1.5px solid #b6b6b6;"><b>T1059.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1059.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1059.005</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1059.007</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1204.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1204.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1559.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1674</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1053.005</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1078</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1543.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1546.011</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1547.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1053.005</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1078</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1543.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1546.011</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1547.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1027.010</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1027.016</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1036.004</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1036.005</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1078</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1218.005</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1218.011</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1497.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1553.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1558.003</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1033</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1069.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1497.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1021.001</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1021.004</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1021.005</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1091</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1210</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1005</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1113</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1125</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1008</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1071.004</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1102.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1105</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ffd480;border:1.5px solid #b6b6b6;"><b>T1219</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1571</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1567.002</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#e9ecef;border:1.5px solid #b6b6b6;"><b>T1486</b><div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+</tr></table>
+<h2>📊 Tabela statusów</h2>
+<table class="matrix-table"><tr>
+<th>Technique ID</th><th>Name</th><th>Status</th><th>Linked Rule</th><th>Author</th></tr>
+<tr style='background:#ffeaea;'><td>T1005</td><td>Data from Local System</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1005_Data_from_Local_System.html" target="_blank">T1005 (Data from Local System)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1008</td><td>Fallback Channels</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1008_Fallback_Channels.html" target="_blank">T1008 (Fallback Channels)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1021.001</td><td>Remote Desktop Protocol</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1021.001_Remote_Desktop_Protocol.html" target="_blank">T1021.001 (Remote Desktop Protocol)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1021.004</td><td>SSH</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1021.004_SSH.html" target="_blank">T1021.004 (SSH)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1021.005</td><td>VNC</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1021.005_VNC.html" target="_blank">T1021.005 (VNC)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1027.010</td><td>Command Obfuscation</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1027.010_Command_Obfuscation.html" target="_blank">T1027.010 (Command Obfuscation)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1027.016</td><td>Junk Code Insertion</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1027.016_Junk_Code_Insertion.html" target="_blank">T1027.016 (Junk Code Insertion)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1033</td><td>System Owner/User Discovery</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1033_System_OwnerUser_Discovery.html" target="_blank">T1033 (System Owner/User Discovery)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1036.004</td><td>Masquerade Task or Service</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1036.004_Masquerade_Task_or_Service.html" target="_blank">T1036.004 (Masquerade Task or Service)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1036.005</td><td>Match Legitimate Resource Name or Location</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1036.005_Match_Legitimate_Resource_Name_or_Location.html" target="_blank">T1036.005 (Match Legitimate Resource Name or Location)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1047</td><td>Windows Management Instrumentation</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1047_Windows_Management_Instrumentation.html" target="_blank">T1047 (Windows Management Instrumentation)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1053.005</td><td>Scheduled Task</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1053.005_Scheduled_Task.html" target="_blank">T1053.005 (Scheduled Task)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1059</td><td>Command and Scripting Interpreter</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1059_Command_and_Scripting_Interpreter.html" target="_blank">T1059 (Command and Scripting Interpreter)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1059.001</td><td>PowerShell</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1059.001_PowerShell.html" target="_blank">T1059.001 (PowerShell)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1059.003</td><td>Windows Command Shell</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1059.003_Windows_Command_Shell.html" target="_blank">T1059.003 (Windows Command Shell)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1059.005</td><td>Visual Basic</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1059.005_Visual_Basic.html" target="_blank">T1059.005 (Visual Basic)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1059.007</td><td>JavaScript</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1059.007_JavaScript.html" target="_blank">T1059.007 (JavaScript)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1069.002</td><td>Domain Groups</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1069.002_Domain_Groups.html" target="_blank">T1069.002 (Domain Groups)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1071.004</td><td>DNS</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1071.004_DNS.html" target="_blank">T1071.004 (DNS)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1078</td><td>Valid Accounts</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1078_Valid_Accounts.html" target="_blank">T1078 (Valid Accounts)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1078.003</td><td>Local Accounts</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1078.003_Local_Accounts.html" target="_blank">T1078.003 (Local Accounts)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1091</td><td>Replication Through Removable Media</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1091_Replication_Through_Removable_Media.html" target="_blank">T1091 (Replication Through Removable Media)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1102.002</td><td>Bidirectional Communication</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1102.002_Bidirectional_Communication.html" target="_blank">T1102.002 (Bidirectional Communication)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1105</td><td>Ingress Tool Transfer</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1105_Ingress_Tool_Transfer.html" target="_blank">T1105 (Ingress Tool Transfer)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1113</td><td>Screen Capture</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1113_Screen_Capture.html" target="_blank">T1113 (Screen Capture)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1125</td><td>Video Capture</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1125_Video_Capture.html" target="_blank">T1125 (Video Capture)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1190</td><td>Exploit Public-Facing Application</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1190_Exploit_Public-Facing_Application.html" target="_blank">T1190 (Exploit Public-Facing Application)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1195.002</td><td>Compromise Software Supply Chain</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1195.002_Compromise_Software_Supply_Chain.html" target="_blank">T1195.002 (Compromise Software Supply Chain)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1204.001</td><td>Malicious Link</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1204.001_Malicious_Link.html" target="_blank">T1204.001 (Malicious Link)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1204.002</td><td>Malicious File</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1204.002_Malicious_File.html" target="_blank">T1204.002 (Malicious File)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1210</td><td>Exploitation of Remote Services</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1210_Exploitation_of_Remote_Services.html" target="_blank">T1210 (Exploitation of Remote Services)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1218.005</td><td>Mshta</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1218.005_Mshta.html" target="_blank">T1218.005 (Mshta)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1218.011</td><td>Rundll32</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1218.011_Rundll32.html" target="_blank">T1218.011 (Rundll32)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1219</td><td>Remote Access Tools</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1219_Remote_Access_Tools.html" target="_blank">T1219 (Remote Access Tools)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1486</td><td>Data Encrypted for Impact</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1486_Data_Encrypted_for_Impact.html" target="_blank">T1486 (Data Encrypted for Impact)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1497.002</td><td>User Activity Based Checks</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1497.002_User_Activity_Based_Checks.html" target="_blank">T1497.002 (User Activity Based Checks)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1543.003</td><td>Windows Service</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1543.003_Windows_Service.html" target="_blank">T1543.003 (Windows Service)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1546.011</td><td>Application Shimming</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1546.011_Application_Shimming.html" target="_blank">T1546.011 (Application Shimming)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1547.001_Registry_Run_Keys__Startup_Folder.html" target="_blank">T1547.001 (Registry Run Keys / Startup Folder)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1553.002</td><td>Code Signing</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1553.002_Code_Signing.html" target="_blank">T1553.002 (Code Signing)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1558.003</td><td>Kerberoasting</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1558.003_Kerberoasting.html" target="_blank">T1558.003 (Kerberoasting)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1559.002</td><td>Dynamic Data Exchange</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1559.002_Dynamic_Data_Exchange.html" target="_blank">T1559.002 (Dynamic Data Exchange)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1566.001</td><td>Spearphishing Attachment</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1566.001_Spearphishing_Attachment.html" target="_blank">T1566.001 (Spearphishing Attachment)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1566.002</td><td>Spearphishing Link</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1566.002_Spearphishing_Link.html" target="_blank">T1566.002 (Spearphishing Link)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1567.002</td><td>Exfiltration to Cloud Storage</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1567.002_Exfiltration_to_Cloud_Storage.html" target="_blank">T1567.002 (Exfiltration to Cloud Storage)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1571</td><td>Non-Standard Port</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1571_Non-Standard_Port.html" target="_blank">T1571 (Non-Standard Port)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1583.001</td><td>Domains</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1583.001_Domains.html" target="_blank">T1583.001 (Domains)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1583.006</td><td>Web Services</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1583.006_Web_Services.html" target="_blank">T1583.006 (Web Services)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1587.001</td><td>Malware</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1587.001_Malware.html" target="_blank">T1587.001 (Malware)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1588.002</td><td>Tool</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1588.002_Tool.html" target="_blank">T1588.002 (Tool)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1608.001</td><td>Upload Malware</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1608.001_Upload_Malware.html" target="_blank">T1608.001 (Upload Malware)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1608.004</td><td>Drive-by Target</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1608.004_Drive-by_Target.html" target="_blank">T1608.004 (Drive-by Target)</a></td><td>APT Matrix Generator</td></tr>
+<tr style='background:#ffeaea;'><td>T1674</td><td>Input Injection</td><td><span class='badge badge-Pending'>Pending</span></td><td><a href="../../alerts/FIN7/T1674_Input_Injection.html" target="_blank">T1674 (Input Injection)</a></td><td>APT Matrix Generator</td></tr>
+</table>
+</div></body></html>

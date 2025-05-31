@@ -1,5 +1,5 @@
-Technique ID,Name,Tactics,Status,Linked Rule,Author,Description,MITRE Link
-T1219,Remote Access Tools,Command-And-Control,Tested,Wyzwolona 2 razy,Global Coverage,,
-T1204.001,Malicious Link,Execution,Tested,Wyzwolona 1 razy,Global Coverage,,
-T1078.003,Local Accounts,"Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation",Tested,Wyzwolona 1 razy,Global Coverage,,
-T1059.001,PowerShell,Execution,Tested,Wyzwolona 2 razy,Global Coverage,,
+Technique ID,Name,Tactics,Status,Linked Rule,Liczba wykryć,Author,Description,MITRE Link
+T1219,Remote Access Tools,Command-And-Control,Tested,Wyzwolona 2 razy,2,Global Coverage,,
+T1204.001,Malicious Link,Execution,Tested,Wyzwolona 1 razy,1,Global Coverage,,
+T1078.003,Local Accounts,"Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation",Tested,Wyzwolona 1 razy,1,Global Coverage,,
+T1059.001,PowerShell,Execution,Tested,Wyzwolona 2 razy,2,Global Coverage,,

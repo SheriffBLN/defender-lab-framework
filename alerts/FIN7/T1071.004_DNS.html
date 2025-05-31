@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Alert: DNS</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    h1 { margin-top: 0; font-size: 2rem; }
+    .desc, .id, .link, .author { margin-bottom: 1.1em; }
+    .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
+    .section { font-size: .99em; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Alert: DNS</h1>
+  <div class="meta"><b>Technique ID:</b> T1071.004</div>
+  <div class="desc section"><b>Description:</b><br>Adversaries may communicate using the Domain Name System (DNS) application layer protocol to avoid detection/network filtering by blending in with existing traffic. Commands to the remote system, and often the results of those commands, will be embedded within the protocol traffic between the client and server.   The DNS protocol serves an administrative function in computer networking and thus may be very common in environments. DNS traffic may also be allowed even before network authentication is completed. DNS packets contain many fields and headers in which data can be concealed. Often known as DNS tunneling, adversaries may abuse DNS to communicate with systems under their control within a victim network while also mimicking normal, expected traffic.(Citation: PAN DNS Tunneling)(Citation: Medium DnsTunneling) </div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1071/004/" target="_blank">https://attack.mitre.org/techniques/T1071/004/</a></div>
+  <div class="author section"><b>Author:</b> APT Matrix Generator</div>
+</div>
+</body>
+</html>

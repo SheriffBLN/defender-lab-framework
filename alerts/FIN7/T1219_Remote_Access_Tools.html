@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Alert: Remote Access Tools</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    h1 { margin-top: 0; font-size: 2rem; }
+    .desc, .id, .link, .author { margin-bottom: 1.1em; }
+    .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
+    .section { font-size: .99em; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Alert: Remote Access Tools</h1>
+  <div class="meta"><b>Technique ID:</b> T1219</div>
+  <div class="desc section"><b>Description:</b><br>An adversary may use legitimate remote access tools to establish an interactive command and control channel within a network. Remote access tools create a session between two trusted hosts through a graphical interface, a command line interaction, a protocol tunnel via development or management software, or hardware-level access such as KVM (Keyboard, Video, Mouse) over IP solutions. Desktop support software (usually graphical interface) and remote management software (typically command line interface) allow a user to control a computer remotely as if they are a local user inheriting the user or software permissions. This software is commonly used for troubleshooting, software installation, and system management.(Citation: Symantec Living off the Land)(Citation: CrowdStrike 2015 Global Threat Report)(Citation: CrySyS Blog TeamSpy) Adversaries may similarly abuse response features included in EDR and other defensive tools that enable remote access.  Remote access tools may be installed and used post-compromise as an alternate communications channel for redundant access or to establish an interactive remote desktop session with the target system. It may also be used as a malware component to establish a reverse connection or back-connect to a service or adversary-controlled system.  Installation of many remote access tools may also include persistence (e.g., the software's installation routine creates a [Windows Service](https://attack.mitre.org/techniques/T1543/003)). Remote access modules/features may also exist as part of otherwise existing software (e.g., Google Chrome’s Remote Desktop).(Citation: Google Chrome Remote Desktop)(Citation: Chrome Remote Desktop)</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1219/" target="_blank">https://attack.mitre.org/techniques/T1219/</a></div>
+  <div class="author section"><b>Author:</b> APT Matrix Generator</div>
+</div>
+</body>
+</html>
