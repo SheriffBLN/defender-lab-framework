@@ -1,0 +1,170 @@
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; }
+.container { max-width:1200px; margin:0 auto; }
+.matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }
+.matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }
+.matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }
+.matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }
+.badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }
+a.link-alert { color:#1e50a2; text-decoration:underline; }
+.changelog-toggle { cursor:pointer; color:#1d51a8; text-decoration:underline; font-size:1.04em; }
+.changelog-content { display:none; background:#f8f9fd; border-radius:7px; margin-top:1em; padding:1em 1.6em; }
+.changelog-entry { margin-bottom: .8em; }
+.techid-label { color:#888; font-size:.98em; margin-right:10px; }
+</style>
+<script>
+function toggleChangelog() {
+var x = document.getElementById('changelog-content');
+if(x.style.display==='block') x.style.display='none';
+else x.style.display='block';
+}
+</script>
+<div class="container">
+<h1>🛡️ Macierz MITRE ATT&CK</h1>
+<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla: <b>APT-test</b></div>
+<p style="color:#557;">Wygenerowano: 2025-06-05 22:12:23</p>
+<h2>Status macierzy (Tested / Audit / Pending)</h2>
+<table class="matrix-table"><tr>
+<th>reconnaissance</th>
+<th>resource-development</th>
+<th>initial-access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege-escalation</th>
+<th>defense-evasion</th>
+<th>credential-access</th>
+<th>discovery</th>
+<th>lateral-movement</th>
+<th>collection</th>
+<th>command-and-control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ffb4b4;"><b>T1480</b><br>Execution Guardrails<br><span class="badge badge-Pending" style="background:#e53935;">Pending</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+</tr></table>
+<h2>🔥 Heatmapa wyzwolonych technik</h2>
+<table class="matrix-table"><tr>
+<th>reconnaissance</th>
+<th>resource-development</th>
+<th>initial-access</th>
+<th>execution</th>
+<th>persistence</th>
+<th>privilege-escalation</th>
+<th>defense-evasion</th>
+<th>credential-access</th>
+<th>discovery</th>
+<th>lateral-movement</th>
+<th>collection</th>
+<th>command-and-control</th>
+<th>exfiltration</th>
+<th>impact</th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;border:1.5px solid #b6b6b6;"><b>T1480</b><br>Execution Guardrails<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">–</span> <span style="font-size:1.04em;">0 alertów</span></div></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+</tr></table>
+
+        <div style="margin-top:12px; font-size:1.01em; color:#555;">
+            <b>Legenda kolorów:</b>
+            <span style="background:#fff7ae; padding:2px 8px; margin-right:8px;">1–9</span>
+            <span style="background:#ffd700; padding:2px 8px; margin-right:8px;">10–19</span>
+            <span style="background:#ff704d; padding:2px 8px; margin-right:8px;">20–49</span>
+            <span style="background:#d7263d; padding:2px 8px; margin-right:8px; color:#fff;">50–99</span>
+            <span style="background:#6f42c1; padding:2px 8px; margin-right:8px; color:#fff;">100+</span>
+            <span style="background:#ececec; padding:2px 8px; margin-left:18px;">Brak</span>
+        </div>
+        
+<h2>📊 Tabela statusów</h2>
+<table class="matrix-table"><tr><th>Tactics</th><th>Technique ID</th><th>Name</th><th>Status</th><th>Alert HTML</th><th>Alert MD</th><th>Liczba alertów</th></tr>
+<tr style='background:#ffb4b4'><td>Defense-Evasion</td><td>T1480</td><td>Execution Guardrails</td><td><span class="badge badge-Pending" style="background:#e53935;">Pending</span></td><td><a class="link-alert" href="../..\alerts\APT-test\alert.html" target="_blank">alerts\APT-test\alert.html</a></td><td><a class="link-alert" href="../..\alerts\APT-test\alert.md" target="_blank">alerts\APT-test\alert.md</a></td><td></td></tr>
+</table>
+
+    <h2 style="margin-top:3.2em">📝 <span class="changelog-toggle" onclick="toggleChangelog()">Pokaż/ukryj historię zmian (wszystkie techniki)</span></h2>
+    <div id="changelog-content" class="changelog-content">
+    
+<div class="changelog-entry"><span class="techid-label"><b>T1480</b> Execution Guardrails</span><ul style="margin:0 0 0 1.6em">
+<li>2025-06-05 22:12 &mdash; <b>UpdateBot</b></li>
+<li>2025-06-05 22:11 &mdash; <b>Krzysztof K.</b></li>
+</ul></div>
+</div>
+</div>

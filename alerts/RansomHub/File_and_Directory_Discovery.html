@@ -10,6 +10,7 @@
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
+    .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
     pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
@@ -19,11 +20,11 @@
 <div class="card">
   <h1>Alert: File and Directory Discovery</h1>
   <div class="meta"><b>Technique ID:</b> T1083</div>
-  <div class="tactic section"><b>Tactics:</b> Discovery</div>
+  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0007/" target="_blank">Discovery (TA0007)</a></div>
   <div class="status section"><b>Status:</b> Pending</div>
-  <div class="desc section"><b>Scenario / Custom Description:</b><br><p>Opis scenariusza, podatności lub techniki.</p></div>
-  <div class="desc section"><b>MITRE Description:</b><br><i>(brak)</i></div>
-  <div class="link section"><b>MITRE Link:</b> <a href="" target="_blank"></a></div>
+  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may enumerate files and directories or may search in specific locations of a host or network share for certain information within a file system. Adversaries may use the information from [File and Directory Discovery](https://attack.mitre.org/techniques/T1083) during automated discovery to shape follow-on behaviors, including whether or not the adversary fully infects the target and/or attempts specific actions.  Many command shell utilities can be used to obtain this information. Examples include <code>dir</code>, <code>tree</code>, <code>ls</code>, <code>find</code>, and <code>locate</code>.(Citation: Windows Commands JPCERT) Custom tools may also be used to gather file and directory information and interact with the [Native API](https://attack.mitre.org/techniques/T1106). Adversaries may also leverage a [Network Device CLI](https://attack.mitre.org/techniques/T1059/008) on network devices to gather file and directory information (e.g. <code>dir</code>, <code>show flash</code>, and/or <code>nvram</code>).(Citation: US-CERT-TA18-106A)  Some files and directories may require elevated or specific user permissions to access.</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1083/" target="_blank">https://attack.mitre.org/techniques/T1083/</a></div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

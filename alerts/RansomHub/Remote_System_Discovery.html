@@ -10,6 +10,7 @@
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
+    .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
     pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
@@ -19,11 +20,11 @@
 <div class="card">
   <h1>Alert: Remote System Discovery</h1>
   <div class="meta"><b>Technique ID:</b> T1018</div>
-  <div class="tactic section"><b>Tactics:</b> Discovery</div>
+  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0007/" target="_blank">Discovery (TA0007)</a></div>
   <div class="status section"><b>Status:</b> Pending</div>
-  <div class="desc section"><b>Scenario / Custom Description:</b><br><p>Opis scenariusza, podatności lub techniki.</p></div>
-  <div class="desc section"><b>MITRE Description:</b><br><i>(brak)</i></div>
-  <div class="link section"><b>MITRE Link:</b> <a href="" target="_blank"></a></div>
+  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may attempt to get a listing of other systems by IP address, hostname, or other logical identifier on a network that may be used for Lateral Movement from the current system. Functionality could exist within remote access tools to enable this, but utilities available on the operating system could also be used such as  [Ping](https://attack.mitre.org/software/S0097), <code>net view</code> using [Net](https://attack.mitre.org/software/S0039), or, on ESXi servers, `esxcli network diag ping`.  Adversaries may also analyze data from local host files (ex: <code>C:\Windows\System32\Drivers\etc\hosts</code> or <code>/etc/hosts</code>) or other passive means (such as local [Arp](https://attack.mitre.org/software/S0099) cache entries) in order to discover the presence of remote systems in an environment.  Adversaries may also target discovery of network infrastructure as well as leverage [Network Device CLI](https://attack.mitre.org/techniques/T1059/008) commands on network devices to gather detailed information about systems within a network (e.g. <code>show cdp neighbors</code>, <code>show arp</code>).(Citation: US-CERT-TA18-106A)(Citation: CISA AR21-126A FIVEHANDS May 2021)</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1018/" target="_blank">https://attack.mitre.org/techniques/T1018/</a></div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

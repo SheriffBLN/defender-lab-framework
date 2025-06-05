@@ -10,12 +10,14 @@
     .desc, .id, .link, .author { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
+    .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
   </style>
 </head>
 <body>
 <div class="card">
   <h1>Alert: Input Injection</h1>
   <div class="meta"><b>Technique ID:</b> T1674</div>
+  <div class="scenario-block"><b>Opis scenariusza:</b><br>Tutaj wpisz swój opis scenariusza lub pozostaw do uzupełnienia.</div>
   <div class="desc section"><b>Description:</b><br>Adversaries may simulate keystrokes on a victim’s computer by various means to perform any type of action on behalf of the user, such as launching the command interpreter using keyboard shortcuts,  typing an inline script to be executed, or interacting directly with a GUI-based application.  These actions can be preprogrammed into adversary tooling or executed through physical devices such as Human Interface Devices (HIDs).  For example, adversaries have used tooling that monitors the Windows message loop to detect when a user visits bank-specific URLs. If detected, the tool then simulates keystrokes to open the developer console or select the address bar, pastes malicious JavaScript from the clipboard, and executes it - enabling manipulation of content within the browser, such as replacing bank account numbers during transactions.(Citation: BleepingComputer BackSwap)(Citation: welivesecurity BackSwap)  Adversaries have also used malicious USB devices to emulate keystrokes that launch PowerShell, leading to the download and execution of malware from adversary-controlled servers.(Citation: BleepingComputer USB)</div>
   <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1674/" target="_blank">https://attack.mitre.org/techniques/T1674/</a></div>
   <div class="author section"><b>Author:</b> APT Matrix Generator</div>

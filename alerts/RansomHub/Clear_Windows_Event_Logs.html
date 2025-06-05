@@ -10,6 +10,7 @@
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
+    .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
     pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
@@ -19,11 +20,11 @@
 <div class="card">
   <h1>Alert: Clear Windows Event Logs</h1>
   <div class="meta"><b>Technique ID:</b> T1070.001</div>
-  <div class="tactic section"><b>Tactics:</b> Defense-Evasion</div>
+  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0005/" target="_blank">Defense Evasion (TA0005)</a></div>
   <div class="status section"><b>Status:</b> Pending</div>
-  <div class="desc section"><b>Scenario / Custom Description:</b><br><p>Opis scenariusza, podatności lub techniki.</p></div>
-  <div class="desc section"><b>MITRE Description:</b><br><i>(brak)</i></div>
-  <div class="link section"><b>MITRE Link:</b> <a href="" target="_blank"></a></div>
+  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may clear Windows Event Logs to hide the activity of an intrusion. Windows Event Logs are a record of a computer's alerts and notifications. There are three system-defined sources of events: System, Application, and Security, with five event types: Error, Warning, Information, Success Audit, and Failure Audit.   With administrator privileges, the event logs can be cleared with the following utility commands:  * <code>wevtutil cl system</code> * <code>wevtutil cl application</code> * <code>wevtutil cl security</code>  These logs may also be cleared through other mechanisms, such as the event viewer GUI or [PowerShell](https://attack.mitre.org/techniques/T1059/001). For example, adversaries may use the PowerShell command <code>Remove-EventLog -LogName Security</code> to delete the Security EventLog and after reboot, disable future logging.  Note: events may still be generated and logged in the .evtx file between the time the command is run and the reboot.(Citation: disable_win_evt_logging)  Adversaries may also attempt to clear logs by directly deleting the stored log files within `C:\Windows\System32\winevt\logs\`.</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1070/001/" target="_blank">https://attack.mitre.org/techniques/T1070/001/</a></div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

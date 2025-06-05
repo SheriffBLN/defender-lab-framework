@@ -10,6 +10,7 @@
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
+    .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
     pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
@@ -19,11 +20,11 @@
 <div class="card">
   <h1>Alert: Process Discovery</h1>
   <div class="meta"><b>Technique ID:</b> T1057</div>
-  <div class="tactic section"><b>Tactics:</b> Discovery</div>
+  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0007/" target="_blank">Discovery (TA0007)</a></div>
   <div class="status section"><b>Status:</b> Pending</div>
-  <div class="desc section"><b>Scenario / Custom Description:</b><br><p>Opis scenariusza, podatności lub techniki.</p></div>
-  <div class="desc section"><b>MITRE Description:</b><br><i>(brak)</i></div>
-  <div class="link section"><b>MITRE Link:</b> <a href="" target="_blank"></a></div>
+  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may attempt to get information about running processes on a system. Information obtained could be used to gain an understanding of common software/applications running on systems within the network. Administrator or otherwise elevated access may provide better process details. Adversaries may use the information from [Process Discovery](https://attack.mitre.org/techniques/T1057) during automated discovery to shape follow-on behaviors, including whether or not the adversary fully infects the target and/or attempts specific actions.  In Windows environments, adversaries could obtain details on running processes using the [Tasklist](https://attack.mitre.org/software/S0057) utility via [cmd](https://attack.mitre.org/software/S0106) or <code>Get-Process</code> via [PowerShell](https://attack.mitre.org/techniques/T1059/001). Information about processes can also be extracted from the output of [Native API](https://attack.mitre.org/techniques/T1106) calls such as <code>CreateToolhelp32Snapshot</code>. In Mac and Linux, this is accomplished with the <code>ps</code> command. Adversaries may also opt to enumerate processes via `/proc`. ESXi also supports use of the `ps` command, as well as `esxcli system process list`.(Citation: Sygnia ESXi Ransomware 2025)(Citation: Crowdstrike Hypervisor Jackpotting Pt 2 2021)  On network devices, [Network Device CLI](https://attack.mitre.org/techniques/T1059/008) commands such as `show processes` can be used to display current running processes.(Citation: US-CERT-TA18-106A)(Citation: show_processes_cisco_cmd)</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1057/" target="_blank">https://attack.mitre.org/techniques/T1057/</a></div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

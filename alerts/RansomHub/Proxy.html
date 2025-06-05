@@ -10,6 +10,7 @@
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
+    .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
     pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
@@ -19,11 +20,11 @@
 <div class="card">
   <h1>Alert: Proxy</h1>
   <div class="meta"><b>Technique ID:</b> T1090</div>
-  <div class="tactic section"><b>Tactics:</b> Command-And-Control</div>
+  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0011/" target="_blank">Command and Control (TA0011)</a></div>
   <div class="status section"><b>Status:</b> Pending</div>
-  <div class="desc section"><b>Scenario / Custom Description:</b><br><p>Opis scenariusza, podatności lub techniki.</p></div>
-  <div class="desc section"><b>MITRE Description:</b><br><i>(brak)</i></div>
-  <div class="link section"><b>MITRE Link:</b> <a href="" target="_blank"></a></div>
+  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may use a connection proxy to direct network traffic between systems or act as an intermediary for network communications to a command and control server to avoid direct connections to their infrastructure. Many tools exist that enable traffic redirection through proxies or port redirection, including [HTRAN](https://attack.mitre.org/software/S0040), ZXProxy, and ZXPortMap. (Citation: Trend Micro APT Attack Tools) Adversaries use these types of proxies to manage command and control communications, reduce the number of simultaneous outbound network connections, provide resiliency in the face of connection loss, or to ride over existing trusted communications paths between victims to avoid suspicion. Adversaries may chain together multiple proxies to further disguise the source of malicious traffic.  Adversaries can also take advantage of routing schemes in Content Delivery Networks (CDNs) to proxy command and control traffic.</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1090/" target="_blank">https://attack.mitre.org/techniques/T1090/</a></div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

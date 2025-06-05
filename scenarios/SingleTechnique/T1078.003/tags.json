@@ -1,0 +1,13 @@
+{
+    "id": "T1078.003",
+    "name": "Local Accounts",
+    "tactics": [
+        "Defense-Evasion",
+        "Initial-Access",
+        "Persistence",
+        "Privilege-Escalation"
+    ],
+    "status": "Tested",
+    "linked_rule": "alerts\\SingleTechnique\\tescik.md",
+    "author": "Krzysztof K."
+}

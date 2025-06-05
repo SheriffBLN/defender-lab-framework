@@ -10,12 +10,14 @@
     .desc, .id, .link, .author { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
+    .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
   </style>
 </head>
 <body>
 <div class="card">
   <h1>Alert: Match Legitimate Resource Name or Location</h1>
   <div class="meta"><b>Technique ID:</b> T1036.005</div>
+  <div class="scenario-block"><b>Opis scenariusza:</b><br>Tutaj wpisz swój opis scenariusza lub pozostaw do uzupełnienia.</div>
   <div class="desc section"><b>Description:</b><br>Adversaries may match or approximate the name or location of legitimate files, Registry keys, or other resources when naming/placing them. This is done for the sake of evading defenses and observation.   This may be done by placing an executable in a commonly trusted directory (ex: under System32) or giving it the name of a legitimate, trusted program (ex: `svchost.exe`). Alternatively, a Windows Registry key may be given a close approximation to a key used by a legitimate program. In containerized environments, a threat actor may create a resource in a trusted namespace or one that matches the naming convention of a container pod or cluster.(Citation: Aquasec Kubernetes Backdoor 2023)</div>
   <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1036/005/" target="_blank">https://attack.mitre.org/techniques/T1036/005/</a></div>
   <div class="author section"><b>Author:</b> APT Matrix Generator</div>

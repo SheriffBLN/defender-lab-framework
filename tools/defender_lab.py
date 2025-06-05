@@ -1,38 +1,32 @@
 import os
-import json
 import csv
-from datetime import datetime
-from collections import Counter, defaultdict
+import json
+import re
+import sys
 from pathlib import Path
+from tools.shared_utils import (
+    STATUS_BG_COLORS, BADGE_COLORS, TACTICS_ORDER, STATUS_CSV_FIELDS,
+    load_techniques_db, safe_filename, print_env_diagnostics,
+    ensure_dir, generate_matrix_html, md_to_html_basic, load_alert_counts
+)
+from datetime import datetime
 
-# --- USTAWIENIA KOLORÓW HEATMAPY ---
-HEATMAP_COLORS = [
-    (1, "#ffffb3"),
-    (2, "#ffd480"),
-    (3, "#ffa366"),
-    (4, "#ff704d"),
-    (5, "#c653ff"),
-    (10, "#6f42c1")
-]
-DEFAULT_HEATMAP_COLOR = "#e9ecef"
-
-STATUS_COLORS = {
-    "Tested": "#40c057",
-    "Audit": "#ffd43b",
-    "Pending": "#ff6b6b"
+MITRE_TACTICS = {
+    'reconnaissance': ('Reconnaissance', 'TA0043'),
+    'resource-development': ('Resource Development', 'TA0042'),
+    'initial-access': ('Initial Access', 'TA0001'),
+    'execution': ('Execution', 'TA0002'),
+    'persistence': ('Persistence', 'TA0003'),
+    'privilege-escalation': ('Privilege Escalation', 'TA0004'),
+    'defense-evasion': ('Defense Evasion', 'TA0005'),
+    'credential-access': ('Credential Access', 'TA0006'),
+    'discovery': ('Discovery', 'TA0007'),
+    'lateral-movement': ('Lateral Movement', 'TA0008'),
+    'collection': ('Collection', 'TA0009'),
+    'command-and-control': ('Command and Control', 'TA0011'),
+    'exfiltration': ('Exfiltration', 'TA0010'),
+    'impact': ('Impact', 'TA0040'),
 }
-
-STATUS_BG_COLORS = {   # Dla kafelków macierzy
-    "Tested": "#e9fbe8",
-    "Audit": "#fffbe8",
-    "Pending": "#ffeaea"
-}
-
-TACTICS_ORDER = [
-    "initial-access", "execution", "persistence", "privilege-escalation",
-    "defense-evasion", "credential-access", "discovery", "lateral-movement",
-    "collection", "command-and-control", "exfiltration", "impact"
-]
 
 def print_banner():
     banner = r'''
@@ -44,9 +38,9 @@ def print_banner():
 
 def choose_mode():
     print("=== Wybierz tryb pracy ===")
-    print("1) SingleTechnique (sumuje techniki do wspólnej matrycy)")
-    print("2) APT Group (osobna matryca dla grupy)")
-    print("3) Update (masowa aktualizacja raportów na podstawie status.csv)")
+    print("1) SingleTechnique (autonomiczny, sumuje techniki do własnej macierzy, NIE pobiera alertów globalnych)")
+    print("2) APT Group (osobna matryca dla grupy – korzysta z alertów globalnych)")
+    print("3) Update (masowa aktualizacja raportów na podstawie status.csv + auto MD→HTML)")
     while True:
         try:
             mode = int(input("Wybierz tryb (1/2/3): "))
@@ -55,18 +49,6 @@ def choose_mode():
         except ValueError:
             pass
         print("Podaj poprawną wartość (1/2/3)")
-
-def load_enterprise_techniques():
-    data = {}
-    with open("tools/enterprise_attack.csv", encoding="utf-8", newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            tid = row["ID"].strip().upper()
-            data[tid] = {
-                "name": row["Name"].strip(),
-                "tactics": [t.strip() for t in row["Tactics"].split(",") if t.strip()]
-            }
-    return data
 
 def ask_for_technique(techniques_db):
     while True:
@@ -82,16 +64,120 @@ def ask_status():
             return status
         print("Status musi być jednym z: Pending, Audit, Tested")
 
-def ask_alert_name():
-    alert_name = input("Podaj nazwę dla alertu (np. Suspicious_PS_Exec): ").strip()
-    if not alert_name:
-        alert_name = "alert"
-    return alert_name
+def ask_alert_name(alert_folder):
+    while True:
+        alert_name = input("Podaj nazwę dla alertu (np. Suspicious_PS_Exec): ").strip()
+        if not alert_name:
+            alert_name = "alert"
+        md_path = os.path.join(alert_folder, f"{alert_name}.md")
+        if os.path.exists(md_path):
+            choice = input(f"UWAGA: {alert_name}.md już istnieje w {alert_folder}! Czy chcesz nadpisać? (t/n): ").strip().lower()
+            if choice == "t":
+                return alert_name
+            else:
+                print("Podaj inną nazwę alertu.")
+        else:
+            return alert_name
 
-def generate_alert_md(technique_id, technique_name, tactics, status, author, alert_name, apt_folder):
+def extract_scenario_desc(md_path):
+    if not os.path.exists(md_path):
+        return "(brak opisu scenariusza)"
+    with open(md_path, encoding="utf-8") as f:
+        md_text = f.read()
+    scenario_match = re.search(r'#SCENARIO(.*?)#ENDSCENARIO', md_text, re.DOTALL | re.IGNORECASE)
+    if scenario_match:
+        desc = scenario_match.group(1).strip()
+        return desc if desc else "(brak opisu scenariusza)"
+    # fallback – stare podejście
+    lines = []
+    in_desc = False
+    for line in md_text.splitlines():
+        if "Opis scenariusza" in line:
+            in_desc = True
+            continue
+        if in_desc:
+            if line.strip() == "---" or line.startswith("**Technika:**"):
+                break
+            lines.append(line.strip())
+    desc = "\n".join(lines).strip()
+    return desc if desc else "(brak opisu scenariusza)"
+
+def update_change_history(old_history, user):
+    history = []
+    try:
+        history = json.loads(old_history) if old_history else []
+    except Exception:
+        history = []
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    history = ([{"user": user, "time": now}] + history)[:5]
+    return json.dumps(history, ensure_ascii=False)
+
+def format_change_history(hist_json):
+    try:
+        entries = json.loads(hist_json)
+        return "<br>".join([f"{e['time']} | {e['user']}" for e in entries[:2]])
+    except Exception:
+        return "-"
+
+def generate_alert_html(
+    technique_id, technique_name, tactics, status, author, scenario_desc, mitre_desc, mitre_link, mitre_tactics=None
+):
+    def tactic_to_link(tactic):
+        tac_key = tactic.lower().replace(" ", "-")
+        label, ta_id = MITRE_TACTICS.get(tac_key, (tactic.title(), ""))
+        if ta_id:
+            url = f'https://attack.mitre.org/tactics/{ta_id}/'
+            return f'<a href="{url}" target="_blank">{label} ({ta_id})</a>'
+        return label
+    tactics_clean = []
+    if isinstance(mitre_tactics, (list, tuple)):
+        tactics_clean = mitre_tactics
+    elif isinstance(mitre_tactics, str):
+        tactics_clean = [x.strip() for x in mitre_tactics.split(",") if x.strip()]
+    elif isinstance(tactics, str):
+        tactics_clean = [x.strip() for x in tactics.split(",") if x.strip()]
+    else:
+        tactics_clean = tactics or []
+    tactics_links = " / ".join([tactic_to_link(t) for t in tactics_clean]) if tactics_clean else "-"
+    return f"""<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Alert: {technique_name}</title>
+  <style>
+    body {{ font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }}
+    .card {{ background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }}
+    h1 {{ margin-top: 0; font-size: 2rem; }}
+    .desc, .id, .link, .author, .tactic, .status {{ margin-bottom: 1.1em; }}
+    .meta {{ font-size: .95em; color: #555; margin-bottom: .8em; }}
+    .section {{ font-size: .99em; }}
+    .scenario-block {{ background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }}
+    pre {{ background: #eee; padding: .7em 1em; border-radius: 5px; }}
+    code {{ background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }}
+    ul {{ margin-left: 1.6em; }}
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Alert: {technique_name}</h1>
+  <div class="meta"><b>Technique ID:</b> {technique_id}</div>
+  <div class="tactic section"><b>Tactics:</b> {tactics_links}</div>
+  <div class="status section"><b>Status:</b> {status}</div>
+  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>{scenario_desc or "<i>(brak opisu scenariusza)</i>"}</div>
+  <div class="desc section"><b>MITRE Description:</b><br>{mitre_desc or "<i>(brak)</i>"}</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="{mitre_link}" target="_blank">{mitre_link or ""}</a></div>
+  <div class="author section"><b>Author:</b> {author}</div>
+</div>
+</body>
+</html>
+"""
+
+def generate_alert_md_and_html(technique_id, technique_name, tactics, status, author, alert_name, apt_folder, techniques_db):
     content = f"""# Alert: {technique_name}
 
-Opis scenariusza, podatności lub techniki.
+#SCENARIO
+Tutaj wpisz opis scenariusza. Możesz używać wielu linii.
+#ENDSCENARIO
 
 ---
 
@@ -111,15 +197,27 @@ Status: {status}
 --> 
 """
     alert_folder = os.path.join("alerts", apt_folder)
-    os.makedirs(alert_folder, exist_ok=True)
+    ensure_dir(alert_folder)
     md_path = os.path.join(alert_folder, f"{alert_name}.md")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(content)
+    info = techniques_db.get(technique_id, {})
+    mitre_desc = info.get("description", "")
+    mitre_link = info.get("mitre_link", "")
+    mitre_tactics = info.get("tactics", tactics)
+    scenario_desc = extract_scenario_desc(md_path)
+    html_path = os.path.join(alert_folder, f"{alert_name}.html")
+    html_code = generate_alert_html(
+        technique_id, technique_name, tactics, status, author,
+        scenario_desc, mitre_desc, mitre_link, mitre_tactics
+    )
+    with open(html_path, "w", encoding="utf-8") as f:
+        f.write(html_code)
     return md_path
 
 def generate_scenario_md_and_tags(technique_id, technique_name, tactics, status, author, alert_md_rel, apt_folder):
     scenario_folder = os.path.join("scenarios", apt_folder, technique_id)
-    os.makedirs(scenario_folder, exist_ok=True)
+    ensure_dir(scenario_folder)
     scenario_content = f"""# Scenariusz testowy – {technique_id}
 
 ## Symulacja ataku
@@ -153,302 +251,187 @@ Technika powinna zostać wykryta w systemie M365 Defender. Taktyki: {', '.join(t
         json.dump(tag_data, f, indent=4, ensure_ascii=False)
 
 def append_or_update_status_csv(apt_folder, new_row):
-    """Dodaje (lub aktualizuje) technikę w status.csv, bez duplikatów."""
     status_path = os.path.join("mapping", apt_folder, "status.csv")
-    os.makedirs(os.path.dirname(status_path), exist_ok=True)
+    ensure_dir(os.path.dirname(status_path))
     all_rows = []
-    # Jeśli istnieje status.csv – wczytaj i usuń duplikaty po Technique ID + AlertName
     if os.path.exists(status_path):
         with open(status_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 if row["Technique ID"] == new_row["Technique ID"] and row["Linked Rule"] == new_row["Linked Rule"]:
-                    continue  # Duplikat – nadpisz poniżej
+                    continue
                 all_rows.append(row)
     all_rows.append(new_row)
+    fieldnames = STATUS_CSV_FIELDS + ["ChangeHistory"]
     with open(status_path, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["Technique ID","Name","Tactics","Status","Linked Rule","Author"])
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(all_rows)
 
-def generate_layer_json(apt_folder, techniques):
-    # ...bez zmian (jw.)
-    out = os.path.join("mapping", apt_folder, "layer.json")
-    os.makedirs(os.path.dirname(out), exist_ok=True)
+def extract_fields_from_md(md_text):
+    import re
+    meta = {}
+    meta_block = re.search(r'<!--(.*?)-->', md_text, re.DOTALL)
+    if meta_block:
+        for line in meta_block.group(1).splitlines():
+            if ":" in line:
+                key, val = line.split(":", 1)
+                meta[key.strip().lower()] = val.strip()
+    def match(pattern):
+        m = re.search(pattern, md_text)
+        return m.group(1).strip() if m else ""
+    tid = meta.get('technique id', match(r'\*\*Technika:\*\*\s*([^\n*]+)'))
+    tname = meta.get('technique name', match(r'\*\*Nazwa:\*\*\s*([^\n*]+)'))
+    tactics = meta.get('tactics', match(r'\*\*Taktyki:\*\*\s*([^\n*]+)'))
+    status = meta.get('status', match(r'\*\*Status:\*\*\s*([^\n*]+)'))
+    author = meta.get('author', match(r'\*\*Autor:\*\*\s*([^\n*]+)'))
+    mitre_link = meta.get('mitre link', match(r'(https://attack\.mitre\.org/techniques/[^\s\)]+)'))
+    scenario = ""
+    scenario_match = re.search(r'#SCENARIO(.*?)#ENDSCENARIO', md_text, re.DOTALL | re.IGNORECASE)
+    if scenario_match:
+        scenario = scenario_match.group(1).strip()
+    if not scenario:
+        m = re.search(r'Alert:[^\n]*\n(.*?)(?:---|\Z)', md_text, re.DOTALL)
+        if m:
+            scenario = m.group(1).strip()
+    return tid, tname, tactics, status, author, mitre_link, scenario
 
-    # Załaduj heatmapę (count alertów na technikę)
-    heatmap_counts = {}
-    path = "tools/helpers/last30days_alerts.csv"
-    if os.path.exists(path):
-        with open(path, encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                tid = row.get("Technique ID") or row.get("technique_id") or row.get("AttackTechniques") or ""
-                if tid:
-                    heatmap_counts[tid.strip().upper()] = int(row.get("Count", 1))
+def refresh_md_to_html(alerts_folder, enterprise_csv="tools/enterprise_attack.csv"):
+    print(f"Ładuję mapping technik z {enterprise_csv}...")
+    techniques_db = load_techniques_db(enterprise_csv)
+    count = 0
+    for root, dirs, files in os.walk(alerts_folder):
+        for filename in files:
+            if filename.endswith(".md"):
+                md_path = os.path.join(root, filename)
+                html_path = md_path.replace(".md", ".html")
+                with open(md_path, "r", encoding="utf-8") as f:
+                    md_text = f.read()
+                tid, tname, tactics, status, author, mitre_link, scenario = extract_fields_from_md(md_text)
+                info = techniques_db.get(tid.strip().upper(), {})
+                mitre_desc = info.get("description", "")
+                if not tactics:
+                    tactics = ", ".join(info.get("tactics", []))
+                if not tname:
+                    tname = info.get("name", "")
+                if not mitre_link:
+                    mitre_link = info.get("mitre_link", "")
+                html_code = generate_alert_html(
+                    tid, tname, tactics, status, author, scenario, mitre_desc, mitre_link, info.get("tactics", [])
+                )
+                with open(html_path, "w", encoding="utf-8") as f:
+                    f.write(html_code)
+                count += 1
+    print(f"[✓] Wszystkie alerty .md przekonwertowane na zgodny HTML ({count} szt.).")
 
-    def score_color(score):
-        if score >= 10:
-            return "#6f42c1"    # fiolet
-        elif score >= 5:
-            return "#c653ff"    # mocny fiolet
-        elif score >= 4:
-            return "#ff704d"    # mocny pomarańcz
-        elif score >= 3:
-            return "#ffa366"    # pomarańcz
-        elif score >= 2:
-            return "#ffd480"    # żółty
-        elif score >= 1:
-            return "#ffffb3"    # jasnożółty
-        else:
-            return "#e0e0e0"    # szary
-
-    layer_techniques = []
-    for t in techniques:
-        tid = t["Technique ID"].strip().upper()
-        count = heatmap_counts.get(tid, 0)
-        score = float(count) if count else 0.1
-        entry = {
-            "techniqueID": tid,
-            "score": score,
-            "color": score_color(score),
-            "comment": f"Liczba alertów: {count}" if count else "Brak alertów w ostatnich 30 dniach"
-        }
-        layer_techniques.append(entry)
-
-    layer = {
-        "name": f"{apt_folder} – Lab Coverage + Heatmap",
-        "version": "4.6",
-        "domain": "enterprise-attack",
-        "description": "Score = liczba alertów (heatmapa, ostatnie 30 dni). Im ciemniej, tym więcej wykrytych alertów. 0.1 = technika obecna, ale cicha.",
-        "techniques": layer_techniques,
-        "gradient": {
-            "colors": [
-                "#e0e0e0", "#ffffb3", "#ffd480", "#ffa366", "#ff704d", "#c653ff", "#6f42c1"
-            ],
-            "minValue": 0,
-            "maxValue": max([t["score"] for t in layer_techniques]) if layer_techniques else 10
-        },
-        "legendItems": [
-            {"label": "Brak alertów", "color": "#e0e0e0"},
-            {"label": "1 alert", "color": "#ffffb3"},
-            {"label": "2 alerty", "color": "#ffd480"},
-            {"label": "3 alerty", "color": "#ffa366"},
-            {"label": "4 alerty", "color": "#ff704d"},
-            {"label": "5+ alertów", "color": "#c653ff"},
-            {"label": "10+ alertów", "color": "#6f42c1"},
-        ]
-    }
-    with open(out, "w", encoding="utf-8") as f:
-        json.dump(layer, f, indent=4)
-
-def parse_heatmap_data():
-    path = "tools/helpers/last30days_alerts.csv"
-    if not os.path.exists(path):
-        return {}
-    counts = Counter()
-    with open(path, encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            tid = row.get("Technique ID") or row.get("technique_id") or row.get("AttackTechniques") or ""
-            if tid:
-                counts[tid.strip().upper()] += int(row.get("Count", 1))
-    return counts
-
-def heatmap_color_for_count(cnt):
-    for limit, color in HEATMAP_COLORS:
-        if cnt <= limit:
-            return color
-    return HEATMAP_COLORS[-1][1]
-
-def render_heatmap_section_for_matrix(matrix, apt_folder, only_techniques=None):
-    heatmap_counts = parse_heatmap_data()
-    if not heatmap_counts:
-        return "<p><i>Brak danych do wygenerowania heatmapy – plik last30days_alerts.csv nie został znaleziony lub pusty.</i></p>"
-    html = [
-        f'<h2>🔥 Heatmapa wyzwolonych technik dla grupy <b>{apt_folder}</b></h2>',
-        '<table class="matrix-table"><tr>'
-    ]
-    for tactic in TACTICS_ORDER:
-        html.append(f"<th>{tactic}</th>")
-    html.append("</tr><tr>")
-    for tactic in TACTICS_ORDER:
-        html.append("<td>")
-        found = False
-        for row in matrix.get(tactic, []):
-            tid = row["Technique ID"]
-            if only_techniques is not None and tid not in only_techniques:
-                continue
-            cnt = heatmap_counts.get(tid, 0)
-            color = heatmap_color_for_count(cnt) if cnt else DEFAULT_HEATMAP_COLOR
-            html.append(
-                f'<div class="matrix-technique" style="background:{color};border:1.5px solid #b6b6b6;">'
-                f'<b>{tid}</b>'
-                f'<div style="margin-top:5px;">'
-                f'<span style="font-size:1.09em;'
-                f'font-weight:600;'
-                f'color:#d7263d;">{"🔥" if cnt else "–"}</span> '
-                f'<span style="font-size:1.04em;">{cnt} alertów</span>'
-                '</div></div>'
-            )
-            found = True
-        if not found:
-            html.append('<div class="matrix-technique" style="background:#ececec;">–</div>')
-        html.append("</td>")
-    html.append("</tr></table>")
-    return "\n".join(html)
-
-def generate_matrix_html(apt_folder, report_path, apt_mode=True):
-    status_path = os.path.join("mapping", apt_folder, "status.csv")
-    if not os.path.exists(status_path):
-        print(f"(!) Brak pliku {status_path}")
-        return
-    rows = list(csv.DictReader(open(status_path, encoding="utf-8")))
-    matrix = defaultdict(list)
-    for r in rows:
-        for t in r["Tactics"].split(","):
-            key = t.strip().lower()
-            if key in TACTICS_ORDER:
-                matrix[key].append(r)
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    html = [
-        '<!DOCTYPE html>',
-        '<html>',
-        '<head>',
-        '<meta charset="UTF-8">',
-        f'<title>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</title>',
-        '<style>',
-        "body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7fafd; color: #23293b; margin: 0; padding: 0; }",
-        ".container { max-width: 1400px; margin: 0 auto; padding: 30px; }",
-        "h1 { color: #14247a; margin-top: 0; }",
-        ".matrix-table { width: 100%; border-collapse: collapse; background: #f5f8ff; font-size: 1.05em; }",
-        ".matrix-table th, .matrix-table td { border: 1px solid #dde3ef; padding: 11px 7px; text-align: left; min-width: 140px; }",
-        ".matrix-table th { background: #eaf0fa; color: #222b44; font-size: 1.09em; font-weight: 600; letter-spacing: 0.01em; position: sticky; top: 49px; z-index: 2; }",
-        ".matrix-table td { background: #f9fbfd; vertical-align: top; min-width: 140px; }",
-        ".matrix-technique { margin-bottom: 10px; padding: 10px 8px 10px 14px; border-radius: 7px; border: 1.2px solid #e5e9f2; background: #fff; box-shadow: 0 1.5px 7px #dde3ef33; position: relative; transition: box-shadow 0.13s; }",
-        ".matrix-technique:hover { box-shadow: 0 2px 13px #8cc2ff33; border-color: #b3d3ff; }",
-        ".matrix-technique b { font-size: 1.01em; color: #14247a; letter-spacing: 0.3px; }",
-        ".badge { display: inline-block; padding: 3px 11px; border-radius: 6px; font-size: 0.93em; color: #fff; font-weight: 500; margin-right: 3px; margin-top: 2px; margin-bottom: 3px; }",
-        ".badge-Tested { background: #40c057; }",
-        ".badge-Audit { background: #ffd43b; color: #222; }",
-        ".badge-Pending { background: #ff6b6b; }",
-        "</style>",
-        # Chart.js CDN
-        '<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>',
-        '</head>',
-        '<body>',
-        '<div class="container">',
-        f'<h1>🛡️ Defender Lab Framework – macierz MITRE ATT&CK</h1>',
-        f'<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla grupy: <b>{apt_folder}</b></div>',
-        f'<p style="color:#557;">Wygenerowano: {now}</p>',
-        '<table class="matrix-table"><tr>'
-    ]
-    for tactic in TACTICS_ORDER:
-        html.append(f"<th>{tactic}</th>")
-    html.append("</tr><tr>")
-    for tactic in TACTICS_ORDER:
-        html.append("<td>")
-        for row in matrix.get(tactic, []):
-            status = row["Status"]
-            bg = STATUS_BG_COLORS.get(status, "#fff")
-            html.append(
-                f'<div class="matrix-technique" style="background:{bg};">'
-                f'<b>{row["Technique ID"]}</b><br>{row["Name"]}'
-                f'<br><span class="badge badge-{status}">{status}</span>'
-                '</div>'
-            )
-        html.append("</td>")
-    html.append("</tr></table>")
-    html.append(render_heatmap_section_for_matrix(
-        matrix, apt_folder,
-        only_techniques=[row["Technique ID"] for row in rows] if apt_mode else None
-    ))
-    # --- Tabela statusów tylko jeśli nie global_coverage ---
-    if apt_folder != "global_coverage":
-        html.append('<h2>📊 Tabela statusów</h2>')
-        html.append('<table class="matrix-table"><tr>')
-        html.append('<th>Technique ID</th><th>Name</th><th>Status</th><th>Linked Rule</th><th>Author</th></tr>')
-        for row in rows:
-            status = row["Status"]
-            bg = STATUS_BG_COLORS.get(status, "#fff")
-            html.append(
-                f"<tr style='background:{bg};'>"
-                f"<td>{row['Technique ID']}</td>"
-                f"<td>{row['Name']}</td>"
-                f"<td><span class='badge badge-{status}'>{status}</span></td>"
-                f"<td>{row['Linked Rule']}</td>"
-                f"<td>{row.get('Author','')}</td>"
-                "</tr>"
-            )
-        html.append("</table>")
-    html.append("</div></body></html>")
-    os.makedirs(os.path.dirname(report_path), exist_ok=True)
-    with open(report_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(html))
-    print(f"[✓] Raport HTML wygenerowany do: {report_path}")
 def main():
+    print_env_diagnostics([
+        "tools/enterprise_attack.csv",
+        "tools/helpers/last30days_alerts.csv"
+    ])
     print_banner()
     mode = choose_mode()
-    techniques_db = load_enterprise_techniques()
-    author = input("Podaj imię i nazwisko autora: ").strip() or "Anon"
-    if mode == 1:  # SingleTechnique
+    techniques_db = load_techniques_db("tools/enterprise_attack.csv")
+
+    if mode == 1 or mode == 2:
+        author = input("Podaj imię lub alias autora: ").strip() or "Anon"
+    if mode == 1:
         apt_folder = "SingleTechnique"
+        alert_folder = os.path.join("alerts", apt_folder)
         while True:
             tid = ask_for_technique(techniques_db)
             technique = techniques_db[tid]
             status = ask_status()
-            alert_name = ask_alert_name()
-            alert_md_path = generate_alert_md(tid, technique["name"], technique["tactics"], status, author, alert_name, apt_folder)
+            alert_name = ask_alert_name(alert_folder)
+            alert_md_path = generate_alert_md_and_html(
+                tid, technique["name"], technique["tactics"], status, author, alert_name, apt_folder, techniques_db
+            )
             alert_md_rel = os.path.relpath(alert_md_path, ".")
-            generate_scenario_md_and_tags(tid, technique["name"], technique["tactics"], status, author, alert_md_rel, apt_folder)
+            changehistory = update_change_history("", author)
             append_or_update_status_csv(apt_folder, {
                 "Technique ID": tid,
                 "Name": technique["name"],
                 "Tactics": ", ".join(technique["tactics"]),
                 "Status": status,
                 "Linked Rule": alert_md_rel,
-                "Author": author
+                "Liczba wykryć": "",
+                "Author": author,
+                "Description": technique.get("description", ""),
+                "MITRE Link": technique.get("mitre_link", ""),
+                "ChangeHistory": changehistory
             })
+            generate_scenario_md_and_tags(tid, technique["name"], technique["tactics"], status, author, alert_md_rel, apt_folder)
             more = input("Dodać kolejną technikę? (t/n): ").strip().lower()
             if more != "t":
                 break
-        # Warstwa do Navigatora + raport HTML
         techniques = list(csv.DictReader(open(os.path.join("mapping", apt_folder, "status.csv"), encoding="utf-8")))
-        generate_layer_json(apt_folder, techniques)
-        generate_matrix_html(apt_folder, os.path.join("report", apt_folder, "index.html"), apt_mode=False)
+        alert_counts = load_alert_counts("tools/helpers/last30days_alerts.csv")
+        def with_changehistory(row):
+            row = dict(row)
+            row["Historia zmian"] = format_change_history(row.get("ChangeHistory", ""))
+            return row
+        html = generate_matrix_html(
+            [with_changehistory(r) for r in techniques],
+            "🛡️ Macierz MITRE ATT&CK", 
+            apt_folder, 
+            alert_counts=alert_counts
+        )
+        ensure_dir(os.path.join("report", apt_folder))
+        with open(os.path.join("report", apt_folder, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
+        print(f"[✓] Raport HTML wygenerowany do: report/{apt_folder}/index.html")
 
-    elif mode == 2:  # APT Group
+    elif mode == 2:
         all_folders = sorted([f for f in os.listdir("mapping") if os.path.isdir(os.path.join("mapping", f)) and f not in ("SingleTechnique",)])
         if all_folders:
             print("Dostępne foldery APT:", ", ".join(all_folders))
         apt_folder = input("Podaj nazwę grupy APT: ").strip()
         if not apt_folder:
             apt_folder = "APT"
+        alert_folder = os.path.join("alerts", apt_folder)
         while True:
             tid = ask_for_technique(techniques_db)
             technique = techniques_db[tid]
             status = ask_status()
-            alert_name = ask_alert_name()
-            alert_md_path = generate_alert_md(tid, technique["name"], technique["tactics"], status, author, alert_name, apt_folder)
+            alert_name = ask_alert_name(alert_folder)
+            alert_md_path = generate_alert_md_and_html(
+                tid, technique["name"], technique["tactics"], status, author, alert_name, apt_folder, techniques_db
+            )
             alert_md_rel = os.path.relpath(alert_md_path, ".")
-            generate_scenario_md_and_tags(tid, technique["name"], technique["tactics"], status, author, alert_md_rel, apt_folder)
+            changehistory = update_change_history("", author)
             append_or_update_status_csv(apt_folder, {
                 "Technique ID": tid,
                 "Name": technique["name"],
                 "Tactics": ", ".join(technique["tactics"]),
                 "Status": status,
                 "Linked Rule": alert_md_rel,
-                "Author": author
+                "Liczba wykryć": "",
+                "Author": author,
+                "Description": technique.get("description", ""),
+                "MITRE Link": technique.get("mitre_link", ""),
+                "ChangeHistory": changehistory
             })
+            generate_scenario_md_and_tags(tid, technique["name"], technique["tactics"], status, author, alert_md_rel, apt_folder)
             more = input("Dodać kolejną technikę? (t/n): ").strip().lower()
             if more != "t":
                 break
-        # Warstwa do Navigatora + raport HTML
         techniques = list(csv.DictReader(open(os.path.join("mapping", apt_folder, "status.csv"), encoding="utf-8")))
-        generate_layer_json(apt_folder, techniques)
-        generate_matrix_html(apt_folder, os.path.join("report", apt_folder, "index.html"), apt_mode=True)
+        alert_counts = load_alert_counts("tools/helpers/last30days_alerts.csv")
+        def with_changehistory(row):
+            row = dict(row)
+            row["Historia zmian"] = format_change_history(row.get("ChangeHistory", ""))
+            return row
+        html = generate_matrix_html(
+            [with_changehistory(r) for r in techniques],
+            "🛡️ Macierz MITRE ATT&CK", apt_folder, alert_counts=alert_counts
+        )
+        ensure_dir(os.path.join("report", apt_folder))
+        with open(os.path.join("report", apt_folder, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
+        print(f"[✓] Raport HTML wygenerowany do: report/{apt_folder}/index.html")
 
-    elif mode == 3:  # Update (automatyczny dla wszystkich status.csv)
+    elif mode == 3:
+        update_user = input("Podaj alias osoby wykonującej masowy update (np. UpdateBot): ").strip() or "UpdateBot"
         print("--- Tryb UPDATE ---")
         print("Wyszukiwanie wszystkich plików status.csv w mapping/ ...")
         mapping_dir = "mapping"
@@ -463,17 +446,40 @@ def main():
             return
         print(f"Znaleziono {len(status_files)} plików status.csv. Aktualizuję wszystkie raporty i warstwy ...\n")
         for apt_folder, status_path in status_files:
-            # apt_folder może być '.' dla głównego mapping/
+            updated_rows = []
+            with open(status_path, encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    row["ChangeHistory"] = update_change_history(row.get("ChangeHistory", ""), update_user)
+                    updated_rows.append(row)
+            with open(status_path, "w", encoding="utf-8", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=STATUS_CSV_FIELDS + ["ChangeHistory"])
+                writer.writeheader()
+                writer.writerows(updated_rows)
             folder_name = apt_folder if apt_folder != '.' else ''
             try:
                 print(f"⏳ Aktualizuję: mapping/{folder_name}/status.csv")
-                techniques = list(csv.DictReader(open(status_path, encoding="utf-8")))
-                generate_layer_json(folder_name, techniques)
-                report_path = os.path.join("report", folder_name, "index.html")
-                generate_matrix_html(folder_name, report_path, apt_mode=(folder_name!="SingleTechnique"))
+                techniques = updated_rows
+                alert_counts = load_alert_counts("tools/helpers/last30days_alerts.csv")
+                def with_changehistory(row):
+                    row = dict(row)
+                    row["Historia zmian"] = format_change_history(row.get("ChangeHistory", ""))
+                    return row
+                html = generate_matrix_html(
+                    [with_changehistory(r) for r in techniques],
+                    "🛡️ Macierz MITRE ATT&CK", folder_name, alert_counts=alert_counts
+                )
+                ensure_dir(os.path.join("report", folder_name))
+                with open(os.path.join("report", folder_name, "index.html"), "w", encoding="utf-8") as f:
+                    f.write(html)
+                print(f"[✓] Raport HTML wygenerowany do: report/{folder_name}/index.html")
             except Exception as e:
                 print(f"(!) Błąd przy aktualizacji {status_path}: {e}")
-        print("\n[✓] Masowa aktualizacja raportów zakończona.")
+
+        print("\n[✓] Wszystkie raporty index.html zaktualizowane.")
+        print("[INFO] Odświeżam automatycznie wszystkie alerty .md → .html...")
+        refresh_md_to_html("alerts")
+        print("[✓] Automatyczne odświeżenie HTML alertów z .md zakończone.\n")
 
 if __name__ == "__main__":
     main()

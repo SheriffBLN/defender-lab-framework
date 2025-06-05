@@ -1,0 +1,10 @@
+{
+    "id": "T1059.001",
+    "name": "PowerShell",
+    "tactics": [
+        "Execution"
+    ],
+    "status": "Tested",
+    "linked_rule": "alerts\\SingleTechnique\\alert.md",
+    "author": "Krzysztof K."
+}

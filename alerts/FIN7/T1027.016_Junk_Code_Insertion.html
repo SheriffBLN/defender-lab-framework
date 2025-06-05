@@ -10,12 +10,14 @@
     .desc, .id, .link, .author { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
+    .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
   </style>
 </head>
 <body>
 <div class="card">
   <h1>Alert: Junk Code Insertion</h1>
   <div class="meta"><b>Technique ID:</b> T1027.016</div>
+  <div class="scenario-block"><b>Opis scenariusza:</b><br>Tutaj wpisz swój opis scenariusza lub pozostaw do uzupełnienia.</div>
   <div class="desc section"><b>Description:</b><br>Adversaries may use junk code / dead code to obfuscate a malware’s functionality. Junk code is code that either does not execute, or if it does execute, does not change the functionality of the code. Junk code makes analysis more difficult and time-consuming, as the analyst steps through non-functional code instead of analyzing the main code. It also may hinder detections that rely on static code analysis due to the use of benign functionality, especially when combined with [Compression](https://attack.mitre.org/techniques/T1027/015) or [Software Packing](https://attack.mitre.org/techniques/T1027/002).(Citation: ReasonLabs)(Citation: ReasonLabs Cyberpedia Junk Code)  No-Operation (NOP) instructions are an example of dead code commonly used in x86 assembly language. They are commonly used as the 0x90 opcode. When NOPs are added to malware, the disassembler may show the NOP instructions, leading to the analyst needing to step through them.(Citation: ReasonLabs)  The use of junk / dead code insertion is distinct from [Binary Padding](https://attack.mitre.org/techniques/T1027/001) because the purpose is to obfuscate the functionality of the code, rather than simply to change the malware’s signature.   </div>
   <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1027/016/" target="_blank">https://attack.mitre.org/techniques/T1027/016/</a></div>
   <div class="author section"><b>Author:</b> APT Matrix Generator</div>

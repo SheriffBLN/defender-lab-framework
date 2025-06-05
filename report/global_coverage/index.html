@@ -1,22 +1,28 @@
 <style>
 body { font-family: Segoe UI, Arial, sans-serif; }
-.container { max-width:1180px; margin:0 auto; }
+.container { max-width:1200px; margin:0 auto; }
 .matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }
 .matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }
 .matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }
 .matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }
 .badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }
-.badge-Tested { background:#43a047; }
-.badge-Audit { background:#ffb300; color:#333 !important; }
-.badge-Pending { background:#e53935; }
-.badge-Disabled { background:#757575; color:#222 !important; }
-.badge-Suppressed { background:#bdbdbd; color:#222 !important; }
+a.link-alert { color:#1e50a2; text-decoration:underline; }
+.changelog-toggle { cursor:pointer; color:#1d51a8; text-decoration:underline; font-size:1.04em; }
+.changelog-content { display:none; background:#f8f9fd; border-radius:7px; margin-top:1em; padding:1em 1.6em; }
+.changelog-entry { margin-bottom: .8em; }
+.techid-label { color:#888; font-size:.98em; margin-right:10px; }
 </style>
-<body style='font-family:Segoe UI,Arial,sans-serif;'>
+<script>
+function toggleChangelog() {
+var x = document.getElementById('changelog-content');
+if(x.style.display==='block') x.style.display='none';
+else x.style.display='block';
+}
+</script>
 <div class="container">
-<h1>🛡️ Global Coverage Matrix</h1>
-<div style="margin:10px 0 18px 0; font-size:1.18em;">Macierz MITRE ATT&CK – globalna pokrycie detekcji</div>
-<p style="color:#557;">Wygenerowano: 2025-05-31 23:48:37</p>
+<h1>🛡️ Globalna macierz MITRE ATT&CK — tylko techniki wyzwolone w Defenderze (ostatnie 30 dni)</h1>
+<div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla: <b>global_coverage</b></div>
+<p style="color:#557;">Wygenerowano: 2025-06-05 22:14:28</p>
 <h2>Status macierzy (Tested / Audit / Pending)</h2>
 <table class="matrix-table"><tr>
 <th>reconnaissance</th>
@@ -35,39 +41,47 @@ body { font-family: Segoe UI, Arial, sans-serif; }
 <th>impact</th>
 </tr><tr>
 <td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Wyzwolona 1 razy</span></div>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested" style="background:#43a047;">Tested</span></div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#a3e4a1;"><b>T1204.001</b><br>Malicious Link<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Wyzwolona 1 razy</span></div>
-<div class="matrix-technique" style="background:#a3e4a1;"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Wyzwolona 2 razy</span></div>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-Tested" style="background:#43a047;">Tested</span></div>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1204.001</b><br>Malicious Link<br><span class="badge badge-Tested" style="background:#43a047;">Tested</span></div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Wyzwolona 1 razy</span></div>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested" style="background:#43a047;">Tested</span></div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Wyzwolona 1 razy</span></div>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested" style="background:#43a047;">Tested</span></div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Wyzwolona 1 razy</span></div>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-Tested" style="background:#43a047;">Tested</span></div>
 </td>
 <td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#a3e4a1;"><b>T1219</b><br>Remote Access Tools<br><span class="badge badge-Tested">Tested</span><br><span style="font-size:0.95em; color:#565;">Wyzwolona 2 razy</span></div>
+<div class="matrix-technique" style="background:#a3e4a1;"><b>T1219</b><br>Remote Access Tools<br><span class="badge badge-Tested" style="background:#43a047;">Tested</span></div>
 </td>
 <td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
+<div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 </tr></table>
 <h2>🔥 Heatmapa wyzwolonych technik</h2>
@@ -94,23 +108,20 @@ body { font-family: Segoe UI, Arial, sans-serif; }
 <div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><br>Local Accounts<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#fff7ae;border:1.5px solid #b6b6b6;"><b>T1078.003</b><br>Local Accounts<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1204.001</b><br>Malicious Link<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
-<div class="matrix-technique" style="background:#ffd480;border:1.5px solid #b6b6b6;"><b>T1059.001</b><br>PowerShell<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+<div class="matrix-technique" style="background:#fff7ae;border:1.5px solid #b6b6b6;"><b>T1059.001</b><br>PowerShell<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+<div class="matrix-technique" style="background:#fff7ae;border:1.5px solid #b6b6b6;"><b>T1204.001</b><br>Malicious Link<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><br>Local Accounts<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#fff7ae;border:1.5px solid #b6b6b6;"><b>T1078.003</b><br>Local Accounts<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><br>Local Accounts<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
+<div class="matrix-technique" style="background:#fff7ae;border:1.5px solid #b6b6b6;"><b>T1078.003</b><br>Local Accounts<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#ffffb3;border:1.5px solid #b6b6b6;"><b>T1078.003</b><br>Local Accounts<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
-</td>
-<td>
-<div class="matrix-technique" style="background:#ececec;">–</div>
+<div class="matrix-technique" style="background:#fff7ae;border:1.5px solid #b6b6b6;"><b>T1078.003</b><br>Local Accounts<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">1 alertów</span></div></div>
 </td>
 <td>
 <div class="matrix-technique" style="background:#ececec;">–</div>
@@ -122,7 +133,10 @@ body { font-family: Segoe UI, Arial, sans-serif; }
 <div class="matrix-technique" style="background:#ececec;">–</div>
 </td>
 <td>
-<div class="matrix-technique" style="background:#ffd480;border:1.5px solid #b6b6b6;"><b>T1219</b><br>Remote Access Tools<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
+<div class="matrix-technique" style="background:#ececec;">–</div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#fff7ae;border:1.5px solid #b6b6b6;"><b>T1219</b><br>Remote Access Tools<div style="margin-top:5px;"><span style="font-size:1.09em;font-weight:600;color:#d7263d;">🔥</span> <span style="font-size:1.04em;">2 alertów</span></div></div>
 </td>
 <td>
 <div class="matrix-technique" style="background:#ececec;">–</div>
@@ -132,81 +146,26 @@ body { font-family: Segoe UI, Arial, sans-serif; }
 </td>
 </tr></table>
 
-    <div style="margin-top:12px; font-size:1.01em; color:#555;">
-        <b>Legenda kolorów:</b>
-        <span style="background:#ffffb3; padding:2px 8px; margin-right:8px;">1</span>
-        <span style="background:#ffd480; padding:2px 8px; margin-right:8px;">2</span>
-        <span style="background:#ffa366; padding:2px 8px; margin-right:8px;">3</span>
-        <span style="background:#ff704d; padding:2px 8px; margin-right:8px;">4</span>
-        <span style="background:#c653ff; padding:2px 8px; margin-right:8px;">5+</span>
-        <span style="background:#6f42c1; padding:2px 8px; margin-right:8px;">10+</span>
-    </div>
-    
-
-    <div class="panel" style="background:#fff; border-radius:12px; box-shadow:0 2px 13px #dde3ef66; padding:28px 32px; margin-top:44px;">
-    <ul class="stat-list" style="font-size:1.09em; margin-bottom:20px;">
-    <li><b>Technik z co najmniej 1 alertem:</b> 4 / 4 (100.0%)</li>
-    <li><b>Najczęściej wykrywane techniki (Top 5):</b> T1219 (Remote Access Tools, 2 razy), T1059.001 (PowerShell, 2 razy), T1204.001 (Malicious Link, 1 razy), T1078.003 (Local Accounts, 1 razy)</li>
-    <li><b>Techniki bez żadnej detekcji:</b> Brak</li>
-    <li><b>Średnia liczba alertów na technikę:</b> 1.50</li>
-    </ul>
-    <div class="disclaimer" style="color:#888; font-size:.99em; margin-top:15px;">To jest widok statystyczny. Liczba wykryć = suma alertów dla danej techniki, nie konkretna reguła.<br>
-    Aby zobaczyć szczegóły (np. scenariusze czy reguły), przejdź do widoku APT lub pojedynczej techniki.</div>
-    </div>
-    <div class="chart-box" style="margin:38px 0 20px 0; background:#f7fafd; padding:22px; border-radius:13px;">
-    <h2 style="margin-top:0;">🔝 Top 5 najczęściej wykrywanych technik</h2>
-    <canvas id="top5Chart" width="600" height="260"></canvas>
-    </div>
-    <table class="mini-table" style="margin-top:30px; border-collapse:collapse; width:80%; font-size:1.02em; background:#fff;">
-    <tr><th>Technique ID</th><th>Name</th><th>Liczba detekcji</th><th>MITRE</th></tr>
-    <tr><td>T1219</td><td>Remote Access Tools</td><td>2</td><td></td></tr>
-<tr><td>T1059.001</td><td>PowerShell</td><td>2</td><td></td></tr>
-<tr><td>T1204.001</td><td>Malicious Link</td><td>1</td><td></td></tr>
-<tr><td>T1078.003</td><td>Local Accounts</td><td>1</td><td></td></tr>
-    </table>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var ctx = document.getElementById('top5Chart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ["T1219 (Remote Access Tools)", "T1059.001 (PowerShell)", "T1204.001 (Malicious Link)", "T1078.003 (Local Accounts)"],
-                datasets: [{
-                    label: 'Liczba wykryć',
-                    data: [2, 2, 1, 1],
-                    backgroundColor: [
-                        'rgba(64, 192, 87, 0.85)',
-                        'rgba(72, 123, 255, 0.85)',
-                        'rgba(255, 212, 67, 0.85)',
-                        'rgba(255, 107, 107, 0.85)',
-                        'rgba(198, 83, 255, 0.85)'
-                    ],
-                    borderRadius: 10,
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: false,
-                plugins: {
-                    legend: { display: false },
-                    title: { display: false }
-                },
-                scales: {
-                    x: { beginAtZero: true, ticks: { precision:0 } },
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    });
-    </script>
-    
+        <div style="margin-top:12px; font-size:1.01em; color:#555;">
+            <b>Legenda kolorów:</b>
+            <span style="background:#fff7ae; padding:2px 8px; margin-right:8px;">1–9</span>
+            <span style="background:#ffd700; padding:2px 8px; margin-right:8px;">10–19</span>
+            <span style="background:#ff704d; padding:2px 8px; margin-right:8px;">20–49</span>
+            <span style="background:#d7263d; padding:2px 8px; margin-right:8px; color:#fff;">50–99</span>
+            <span style="background:#6f42c1; padding:2px 8px; margin-right:8px; color:#fff;">100+</span>
+            <span style="background:#ececec; padding:2px 8px; margin-left:18px;">Brak</span>
+        </div>
+        
 <h2>📊 Tabela statusów</h2>
-<table class="matrix-table"><tr><th>Technique ID</th><th>Name</th><th>Tactics</th><th>Status</th><th>Linked Rule</th><th>Liczba wykryć</th><th>Author</th><th>Description</th><th>MITRE Link</th></tr>
-<tr style='background:#fff;'><td>T1219</td><td>Remote Access Tools</td><td>Command-And-Control</td><td>Tested</td><td>Wyzwolona 2 razy</td><td>2</td><td>Global Coverage</td><td></td><td></td></tr>
-<tr style='background:#fff;'><td>T1204.001</td><td>Malicious Link</td><td>Execution</td><td>Tested</td><td>Wyzwolona 1 razy</td><td>1</td><td>Global Coverage</td><td></td><td></td></tr>
-<tr style='background:#fff;'><td>T1078.003</td><td>Local Accounts</td><td>Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation</td><td>Tested</td><td>Wyzwolona 1 razy</td><td>1</td><td>Global Coverage</td><td></td><td></td></tr>
-<tr style='background:#fff;'><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td>Tested</td><td>Wyzwolona 2 razy</td><td>2</td><td>Global Coverage</td><td></td><td></td></tr>
+<table class="matrix-table"><tr><th>Tactics</th><th>Technique ID</th><th>Name</th><th>Status</th><th>Alert HTML</th><th>Alert MD</th><th>Liczba alertów</th></tr>
+<tr style='background:#a3e4a1'><td>Execution</td><td>T1059.001</td><td>PowerShell</td><td><span class="badge badge-Tested" style="background:#43a047;">Tested</span></td><td>-</td><td>-</td><td>2</td></tr>
+<tr style='background:#a3e4a1'><td>Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation</td><td>T1078.003</td><td>Local Accounts</td><td><span class="badge badge-Tested" style="background:#43a047;">Tested</span></td><td>-</td><td>-</td><td>1</td></tr>
+<tr style='background:#a3e4a1'><td>Execution</td><td>T1204.001</td><td>Malicious Link</td><td><span class="badge badge-Tested" style="background:#43a047;">Tested</span></td><td>-</td><td>-</td><td>1</td></tr>
+<tr style='background:#a3e4a1'><td>Command-And-Control</td><td>T1219</td><td>Remote Access Tools</td><td><span class="badge badge-Tested" style="background:#43a047;">Tested</span></td><td>-</td><td>-</td><td>2</td></tr>
 </table>
-</div></body></html>
+
+    <h2 style="margin-top:3.2em">📝 <span class="changelog-toggle" onclick="toggleChangelog()">Pokaż/ukryj historię zmian (wszystkie techniki)</span></h2>
+    <div id="changelog-content" class="changelog-content">
+    
+</div>
+</div>

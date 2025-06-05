@@ -1,0 +1,13 @@
+{
+    "name": "APT-test",
+    "domain": "mitre-enterprise",
+    "techniques": [
+        {
+            "techniqueID": "T1480",
+            "score": 0.5,
+            "color": "#b0b0b0"
+        }
+    ],
+    "version": "4.6",
+    "description": "Layer wygenerowany automatycznie na podstawie mapping\\APT-test\\status.csv + last30days_alerts.csv"
+}
