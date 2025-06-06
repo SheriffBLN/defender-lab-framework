@@ -1,3 +1,5 @@
+[Read this documentation in English (README_ENG.md)](README_ENG.md)
+
 # 🛡️ Defender Lab Framework
 
 **Defender Lab Framework** to modularne środowisko do **budowania, testowania, mapowania i automatycznego raportowania scenariuszy detekcyjnych** na bazie Microsoft Defender for Endpoint (MDE). Pozwala generować dokumentację techniczną, raporty HTML, warstwy do MITRE ATT&CK® Navigator oraz śledzić efektywność detekcji zarówno dla pojedynczych technik, jak i całych grup APT.
