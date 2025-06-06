@@ -46,16 +46,24 @@
 
 ## 🏃‍♂️ Szybki start
 
-1. **Wybierz tryb pracy:**
-   - **SingleTechnique** – pojedyncze techniki, sumowane do wspólnej matrycy
-   - **APT Group** – tworzenie osobnej matrycy dla grupy APT (np. FIN7, APT29)
-   - **Update** – masowa aktualizacja na podstawie status.csv
+1. **Uruchom skrypt** (przykład):
+   ```bash
+   python tools/main.py
+   ```
 
-2. **Podążaj za kreatorem:**
+2. **Wybierz tryb pracy z menu:**
+   - **SingleTechnique** – pojedyncze techniki sumowane do wspólnej matrycy
+   - **APT Group** – tworzenie osobnej matrycy dla wskazanej grupy APT
+   - **Update** – masowa aktualizacja na podstawie `status.csv`
+   - **APT Matrix z STIX** – automatyczne generowanie alertów i `status.csv` dla grupy APT (wyniki w `mapping/<APT>` oraz `report/<APT>`)
+   - **Global Coverage** – macierz z technik wyzwolonych w ostatnich 30 dniach (`mapping/global_coverage`, `report/global_coverage`)
+   - **AlertEvidence Matrix** – raporty na podstawie `tools/helpers/AlertEvidence.csv` (katalog `alert_evidence_reports`)
+   - **Full Navigator Export** – tworzy `layer.json` w każdym katalogu `mapping/*`
+
+3. **Podążaj za kreatorem:**
    Framework poprowadzi Cię przez proces (dodawanie technik, nazw, statusów itp.)
 
-3. **Otwórz wygenerowane raporty:**
-   - Raporty HTML znajdziesz w `/report/`
+4. **Otwórz wygenerowane raporty:**   - Raporty HTML znajdziesz w `/report/`
    - Matryce i mappingi w `/mapping/`
    - Alerty w `/alerts/`
    - Scenariusze w `/scenarios/`
