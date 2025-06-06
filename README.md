@@ -100,6 +100,11 @@ Szczegóły: [docs/Instrukcja update.md](docs/Instrukcja%20update.md)
 
 ---
 
+## 📄 Licencja
+
+Projekt dostępny jest na licencji **MIT**. Możesz z niego swobodnie korzystać, rozwijać go i dzielić się nim (forkować, modyfikować) zgodnie z warunkami licencji. Szanuj jednak wkład innych – zachowaj informację o autorach projektu.
+
+---
 ## 📣 Kontakt i rozwój
 
 Masz pomysły na rozbudowę, znalazłeś błąd lub chcesz dodać własny pipeline/scenariusz? Otwórz Issue na GitHub lub skontaktuj się z autorem.
