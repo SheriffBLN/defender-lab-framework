@@ -1,3 +1,5 @@
+[Read this guide in English (Quickstart_ENG.md)](Quickstart_ENG.md)
+
  # ⚡ Quickstart – Defender Lab Framework
  
  Chcesz szybko zacząć? Oto instrukcja krok po kroku:
