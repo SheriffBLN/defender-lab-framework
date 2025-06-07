@@ -1,3 +1,5 @@
+[Read this guide in English (Instrukcja update_ENG.md)](Instrukcja%20update_ENG.md)
+
 # 🔄 Instrukcja Update
 
 1. Otwórz plik `/mapping/NAZWA/status.csv`
