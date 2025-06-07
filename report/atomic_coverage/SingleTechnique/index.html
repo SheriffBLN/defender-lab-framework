@@ -1,0 +1,172 @@
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; }
+.container { max-width:1200px; margin:0 auto; }
+.matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }
+.matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }
+.matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }
+.matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }
+.badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }
+.badge-ART-exist { background:#3fa4fa; }
+.badge-no-ART { background:#aaa; }
+</style>
+<div class="container">
+<h2 style="margin-bottom:12px;">Atomic Coverage Matrix</h2>
+<div style="font-size:0.99em;color:#888;margin-bottom:10px;">Generowano: 2025-06-07 23:11:08 | Mapping: <code>SingleTechnique</code></div>
+<table class='matrix-table'><tr class='header-row'>
+<th>Reconnaissance<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Resource-Development<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Initial-Access<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Execution<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Persistence<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Privilege-Escalation<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Defense-Evasion<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Credential-Access<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Discovery<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Lateral-Movement<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Collection<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Command-And-Control<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Exfiltration<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Impact<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+</tr><tr>
+<td>
+</td>
+<td>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="4 test(ów) Atomic Red Team"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-ART-exist">ART-exist (4)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="22 test(ów) Atomic Red Team"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-ART-exist">ART-exist (22)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="4 test(ów) Atomic Red Team"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-ART-exist">ART-exist (4)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="4 test(ów) Atomic Red Team"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-ART-exist">ART-exist (4)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="4 test(ów) Atomic Red Team"><b>T1078.003</b><br>Local Accounts<br><span class="badge badge-ART-exist">ART-exist (4)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="38 test(ów) Atomic Red Team"><b>T1562.001</b><br>Disable or Modify Tools<br><span class="badge badge-ART-exist">ART-exist (38)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="38 test(ów) Atomic Red Team"><b>T1562.001</b><br>Disable or Modify Tools<br><span class="badge badge-ART-exist">ART-exist (38)</span></div>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr></table>
+<h3>Lista testów Atomic Red Team (osobne wiersze dla każdego testu)</h3>
+<table class="matrix-table"><tr><th>Technique ID</th><th>Nazwa</th><th>Taktyki</th><th>Status</th><th>Tytuł testu</th><th>Typ(y) skryptów</th></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mimikatz</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Run BloodHound from local disk</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Run Bloodhound from Memory using Download Cradle</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mimikatz - Cradlecraft PsSendKeys</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke-AppPathBypass</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell MsXml COM object - with prompt</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell XML requests</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell invoke mshta.exe download</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell Invoke-DownloadCradle</td><td></td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Fileless Script Execution</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>NTFS Alternate Data Stream Access</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Session Creation and Use</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ATHPowerShellCommandLineParameter -Command parameter variations</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ATHPowerShellCommandLineParameter -Command parameter variations with encoded arguments</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ATHPowerShellCommandLineParameter -EncodedCommand parameter variations</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ATHPowerShellCommandLineParameter -EncodedCommand parameter variations with encoded arguments</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Command Execution</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Invoke Known Malicious Cmdlets</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerUp Invoke-AllChecks</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Abuse Nslookup with DNS Records</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>SOAPHound - Dump BloodHound Data</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>SOAPHound - Build Cache</td><td>powershell</td></tr>
+<tr><td>T1078.003</td><td>Local Accounts</td><td>Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create local account with admin privileges</td><td>cmd</td></tr>
+<tr><td>T1078.003</td><td>Local Accounts</td><td>Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Loot local Credentials - powerhell kittie</td><td>powershell</td></tr>
+<tr><td>T1078.003</td><td>Local Accounts</td><td>Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Loot local Credentials - Safetykatz</td><td>powershell</td></tr>
+<tr><td>T1078.003</td><td>Local Accounts</td><td>Defense-Evasion, Initial-Access, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Use PsExec to elevate to NT Authority\SYSTEM account</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Unload Sysmon Filter Driver</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Uninstall Sysmon</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - AMSI InitFailed</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Remove AMSI Provider Reg Key</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Arbitrary Security Windows Service</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender ATP PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Command Prompt</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Microsoft Office Security Features</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Remove Windows Defender Definition Files</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Stop and Remove Arbitrary Security Windows Service</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Uninstall Crowdstrike Falcon on Windows</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Folder</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Extension</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Process</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Windows Defender with DISM</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Defender Using NirSoft AdvancedRun</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Kill antimalware protected processes using Backstab</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Kill the event log services for stealth</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender ATP using Aliases - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Disable Privacy Settings Experience Using Registry -cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Use Registry Editor to turn on automatic logon -cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Disable Privacy Settings Experience Using Registry -Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lockbit Black - Use Registry Editor to turn on automatic logon -Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Windows Defender with PwSh Disable-WindowsOptionalFeature</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMIC Tamper with Windows Defender Evade Scanning Folder</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Windows Defender Scheduled Tasks</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Hypervisor-Enforced Code Integrity (HVCI)</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Override AMSI via COM</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry - Reg.exe</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry - Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Microsoft Defender ASR Rules - InTune</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Microsoft Defender ASR Rules - GPO</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Create AMSIEnable Reg Key</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application Auto Logger Session Via Registry - Cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application Auto Logger Session Via Registry - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application ETW Provider Via Registry - Cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application ETW Provider Via Registry - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Unload Sysmon Filter Driver</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Uninstall Sysmon</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - AMSI InitFailed</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Remove AMSI Provider Reg Key</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Arbitrary Security Windows Service</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender ATP PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Command Prompt</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Microsoft Office Security Features</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Remove Windows Defender Definition Files</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Stop and Remove Arbitrary Security Windows Service</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Uninstall Crowdstrike Falcon on Windows</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Folder</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Extension</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Process</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Windows Defender with DISM</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Defender Using NirSoft AdvancedRun</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Kill antimalware protected processes using Backstab</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Kill the event log services for stealth</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender ATP using Aliases - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Disable Privacy Settings Experience Using Registry -cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Use Registry Editor to turn on automatic logon -cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Disable Privacy Settings Experience Using Registry -Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lockbit Black - Use Registry Editor to turn on automatic logon -Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Windows Defender with PwSh Disable-WindowsOptionalFeature</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMIC Tamper with Windows Defender Evade Scanning Folder</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Windows Defender Scheduled Tasks</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Hypervisor-Enforced Code Integrity (HVCI)</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Override AMSI via COM</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry - Reg.exe</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry - Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Microsoft Defender ASR Rules - InTune</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Microsoft Defender ASR Rules - GPO</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Create AMSIEnable Reg Key</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application Auto Logger Session Via Registry - Cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application Auto Logger Session Via Registry - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application ETW Provider Via Registry - Cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application ETW Provider Via Registry - PowerShell</td><td>powershell</td></tr>
+</table>
+</div>

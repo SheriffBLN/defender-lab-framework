@@ -19,7 +19,13 @@
 <body>
 <div class="card">
   <h1>Alert: Deobfuscate/Decode Files or Information</h1>
-  <div class="meta"><b>Technique ID:</b> T1140</div>
+  <div class="meta"><b>Technique ID:</b> T1140<div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'><b>Atomic Red Team – dostępne testy dla tej techniki:</b><ul><li><b>Deobfuscate/Decode Files Or Information</b><br><b>Polecenia testowe (cmd):</b><pre>certutil -encode #{executable} %temp%\T1140_calc.txt
+certutil -decode %temp%\T1140_calc.txt %temp%\T1140_calc_decoded.exe</pre><a href='../../scenarios/atomic_tests\T1140\Deobfuscate_Decode_Files_Or_Information/test_1.cmd'>Pobierz test_1.cmd</a><br><b>Polecenia cleanup (cmd):</b><pre>del %temp%\T1140_calc.txt >nul 2>&1
+del %temp%\T1140_calc_decoded.exe >nul 2>&1</pre><a href='../../scenarios/atomic_tests\T1140\Deobfuscate_Decode_Files_Or_Information/cleanup_1.cmd'>Pobierz cleanup_1.cmd</a><br></li><li><b>Certutil Rename and Decode</b><br><b>Polecenia testowe (cmd):</b><pre>copy %windir%\system32\certutil.exe %temp%\tcm.tmp
+%temp%\tcm.tmp -encode #{executable} %temp%\T1140_calc2.txt
+%temp%\tcm.tmp -decode %temp%\T1140_calc2.txt %temp%\T1140_calc2_decoded.exe</pre><a href='../../scenarios/atomic_tests\T1140\Certutil_Rename_and_Decode/test_1.cmd'>Pobierz test_1.cmd</a><br><b>Polecenia cleanup (cmd):</b><pre>del %temp%\tcm.tmp >nul 2>&1
+del %temp%\T1140_calc2.txt >nul 2>&1
+del %temp%\T1140_calc2_decoded.exe >nul 2>&1</pre><a href='../../scenarios/atomic_tests\T1140\Certutil_Rename_and_Decode/cleanup_1.cmd'>Pobierz cleanup_1.cmd</a><br></li></ul><a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1140' target='_blank'>Zobacz wszystkie testy na GitHubie</a></div></div>
   <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0005/" target="_blank">Defense Evasion (TA0005)</a></div>
   <div class="status section"><b>Status:</b> Pending</div>
   <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>

@@ -389,5 +389,3 @@ def parse_additional_fields(field):
         return out
     except Exception:
         return {}
-
-

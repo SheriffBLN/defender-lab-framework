@@ -1,0 +1,136 @@
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; }
+.container { max-width:1200px; margin:0 auto; }
+.matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }
+.matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }
+.matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }
+.matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }
+.badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }
+.badge-ART-exist { background:#3fa4fa; }
+.badge-no-ART { background:#aaa; }
+</style>
+<div class="container">
+<h2 style="margin-bottom:12px;">Atomic Coverage Matrix</h2>
+<div style="font-size:0.99em;color:#888;margin-bottom:10px;">Generowano: 2025-06-07 23:09:05 | Mapping: <code>Whitefly</code></div>
+<table class='matrix-table'><tr class='header-row'>
+<th>Reconnaissance<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Resource-Development<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Initial-Access<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Execution<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Persistence<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Privilege-Escalation<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Defense-Evasion<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Credential-Access<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Discovery<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Lateral-Movement<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Collection<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Command-And-Control<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Exfiltration<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Impact<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+</tr><tr>
+<td>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1588.002</b><br>Tool<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+<td>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1059</b><br>Command and Scripting Interpreter<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="11 test(ów) Atomic Red Team"><b>T1204.002</b><br>Malicious File<br><span class="badge badge-ART-exist">ART-exist (11)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1574.001</b><br>DLL<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1068</b><br>Exploitation for Privilege Escalation<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1574.001</b><br>DLL<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1027.013</b><br>Encrypted/Encoded File<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1036.005</b><br>Match Legitimate Resource Name or Location<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1574.001</b><br>DLL<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="14 test(ów) Atomic Red Team"><b>T1003.001</b><br>LSASS Memory<br><span class="badge badge-ART-exist">ART-exist (14)</span></div>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="29 test(ów) Atomic Red Team"><b>T1105</b><br>Ingress Tool Transfer<br><span class="badge badge-ART-exist">ART-exist (29)</span></div>
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr></table>
+<h3>Lista testów Atomic Red Team (osobne wiersze dla każdego testu)</h3>
+<table class="matrix-table"><tr><th>Technique ID</th><th>Nazwa</th><th>Taktyki</th><th>Status</th><th>Tytuł testu</th><th>Typ(y) skryptów</th></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe Memory using ProcDump</td><td>cmd</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe Memory using comsvcs.dll</td><td>powershell</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe Memory using direct system calls and API unhooking</td><td>cmd</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe Memory using NanoDump</td><td>cmd</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe Memory using Windows Task Manager</td><td></td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Offline Credential Theft With Mimikatz</td><td>cmd</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LSASS read with pypykatz</td><td>cmd</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe Memory using Out-Minidump.ps1</td><td>powershell</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create Mini Dump of LSASS.exe using ProcDump</td><td>cmd</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell Mimikatz</td><td>powershell</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS with createdump.exe from .Net v5</td><td>powershell</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe using imported Microsoft DLLs</td><td>powershell</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe using lolbin rdrleakdiag.exe</td><td>powershell</td></tr>
+<tr><td>T1003.001</td><td>LSASS Memory</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dump LSASS.exe Memory through Silent Process Exit</td><td>cmd</td></tr>
+<tr><td>T1036.005</td><td>Match Legitimate Resource Name or Location</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Masquerade as a built-in system executable</td><td>powershell</td></tr>
+<tr><td>T1059</td><td>Command and Scripting Interpreter</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AutoIt Script Execution</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>certutil download (urlcache)</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>certutil download (verifyctl)</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - BITSAdmin BITS Download</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - PowerShell Download</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>OSTAP Worming Activity</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>svchost writing a file to a UNC path</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a File with Windows Defender MpCmdRun.exe</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>File Download via PowerShell</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>File download with finger.exe on Windows</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a file with IMEWDBLD.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Curl Download File</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Curl Upload File</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a file with Microsoft Connection Manager Auto-Download</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>MAZE Propagation Script</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Printer Migration Command-Line Tool UNC share folder into a zip file</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lolbas replace.exe use to copy file</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lolbas replace.exe use to copy UNC file</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>certreq download</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a file using wscript</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Nimgrab - Transfer Files</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>iwr or Invoke Web-Request download</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Arbitrary file download using the Notepad++ GUP.exe binary</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>File Download with Sqlcmd.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Remote File Copy using PSCP</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows push file using scp.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows pull file using scp.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows push file using sftp.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows pull file using sftp.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a file with OneDrive Standalone Updater</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>OSTap Style Macro Execution</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>OSTap Payload Download</td><td>cmd</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Maldoc choice flags command execution</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>OSTAP JS version</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Office launching .bat file from AppData</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Excel 4 Macro</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Headless Chrome code execution via VBA</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Potentially Unwanted Applications (PUA)</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Office Generic Payload Download</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LNK Payload Download</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mirror Blast Emulation</td><td>powershell</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DLL Search Order Hijacking - amsi.dll</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Phantom Dll Hijacking - WinAppXRT.dll</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Phantom Dll Hijacking - ualapi.dll</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DLL Side-Loading using the Notepad++ GUP.exe binary</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DLL Side-Loading using the dotnet startup hook environment variable</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DLL Search Order Hijacking,DLL Sideloading Of KeyScramblerIE.DLL Via KeyScrambler.EXE</td><td>powershell</td></tr>
+</table>
+</div>

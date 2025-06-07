@@ -19,7 +19,7 @@
 <body>
 <div class="card">
   <h1>Alert: Safe Mode Boot</h1>
-  <div class="meta"><b>Technique ID:</b> T1562.009</div>
+  <div class="meta"><b>Technique ID:</b> T1562.009<div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'><b>Atomic Red Team – dostępne testy dla tej techniki:</b><ul><li><b>Safe Mode Boot</b><br><b>Polecenia testowe (cmd):</b><pre>bcdedit /set safeboot network</pre><a href='../../scenarios/atomic_tests\T1562.009\Safe_Mode_Boot/test_1.cmd'>Pobierz test_1.cmd</a><br><b>Polecenia cleanup (cmd):</b><pre>bcdedit /deletevalue {current} safeboot</pre><a href='../../scenarios/atomic_tests\T1562.009\Safe_Mode_Boot/cleanup_1.cmd'>Pobierz cleanup_1.cmd</a><br></li></ul><a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1562.009' target='_blank'>Zobacz wszystkie testy na GitHubie</a></div></div>
   <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0005/" target="_blank">Defense Evasion (TA0005)</a></div>
   <div class="status section"><b>Status:</b> Pending</div>
   <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>

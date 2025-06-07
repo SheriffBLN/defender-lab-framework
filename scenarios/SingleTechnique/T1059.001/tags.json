@@ -5,6 +5,6 @@
         "Execution"
     ],
     "status": "Tested",
-    "linked_rule": "alerts\\SingleTechnique\\alert.md",
-    "author": "Krzysztof K."
+    "linked_rule": "alerts\\SingleTechnique\\a1.md",
+    "author": "KRzysztof K."
 }

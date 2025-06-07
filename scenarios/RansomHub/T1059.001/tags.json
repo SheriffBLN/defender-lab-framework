@@ -4,7 +4,7 @@
     "tactics": [
         "Execution"
     ],
-    "status": "Pending",
-    "linked_rule": "alerts\\RansomHub\\Command and Scripting Interpreter.md",
-    "author": "Krzysztof K."
+    "status": "Tested",
+    "linked_rule": "alerts\\RansomHub\\alert.md",
+    "author": "Krzysztof krzymowski"
 }

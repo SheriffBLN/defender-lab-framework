@@ -5,6 +5,7 @@ from tools.generate_matrix_from_apt import main as apt_matrix_main
 from tools.generate_global_coverage import main as global_coverage_main
 from tools.generate_matrix_from_alert_evidence import main as alert_evidence_main
 from tools.generate_full_navigator import main as full_navigator_main  # <--- NOWE
+from tools.generate_atomic_coverage import main as atomic_coverage_main  # <--- DOPISANE
 
 def print_banner():
     banner = r'''
@@ -22,15 +23,16 @@ def main_menu():
     print("3) Global Coverage (ostatnie 30 dni, MITRE Layer + markdown)")
     print("4) AlertEvidence Matrix (per RemoteIP/Host/User/Application)")
     print("5) Zbiorczy eksport do MITRE NAVIGATOR (dla wszystkich status.csv)")
+    print("6) Atomic Coverage (Atomic Red Team)")   # <--- NOWY TRYB
     print("0) Wyjście")
     while True:
         try:
-            mode = int(input("Wybierz tryb (1/2/3/4/5/0): "))
-            if mode in [0,1,2,3,4,5]:
+            mode = int(input("Wybierz tryb (1/2/3/4/5/6/0): "))
+            if mode in [0,1,2,3,4,5,6]:
                 return mode
         except ValueError:
             pass
-        print("Podaj poprawną wartość (0/1/2/3/4/5)")
+        print("Podaj poprawną wartość (0/1/2/3/4/5/6)")
 
 def main():
     while True:
@@ -45,6 +47,8 @@ def main():
             alert_evidence_main()
         elif mode == 5:
             full_navigator_main()
+        elif mode == 6:
+            atomic_coverage_main()   # <--- TUTAJ NOWY TRYB
         elif mode == 0:
             print("Do zobaczenia!")
             sys.exit(0)
