@@ -1,3 +1,5 @@
+[Read this document in English (Pipeline_ENG.md)](Pipeline_ENG.md)
+
 # 🏗️ Pipeline – Defender Lab Framework
 
 ## Jak działa pipeline?
