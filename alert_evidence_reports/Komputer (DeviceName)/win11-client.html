@@ -1,6 +1,6 @@
 <html><head><meta charset='utf-8'><title>Host: Win11-client</title></head><body style='font-family:Segoe UI,Arial,sans-serif;'>
 <h1>Raport AlertEvidence: Host = Win11-client</h1>
-<p>Data generowania: 2025-06-05 22:15:14</p>
+<p>Data generowania: 2025-06-07 15:27:00</p>
 <p>Liczba zdarzeń: <b>1</b></p>
 <p><b>Liczba unikalnych taktyk MITRE:</b> <span style='color: #1976d2;'>1</span></p>
 <style>
@@ -20,7 +20,7 @@ body { font-family: Segoe UI, Arial, sans-serif; }
 <div class="container">
 <h1>🛡️ Macierz MITRE ATT&CK</h1>
 <div style="margin:10px 0 18px 0; font-size:1.18em;">Matryca wygenerowana dla: <b>Host=Win11-client</b></div>
-<p style="color:#557;">Wygenerowano: 2025-06-05 22:15:14</p>
+<p style="color:#557;">Wygenerowano: 2025-06-07 15:27:00</p>
 <h2>Status macierzy (Tested / Audit / Pending)</h2>
 <table class="matrix-table"><tr>
 <th>reconnaissance</th>
@@ -140,7 +140,9 @@ body { font-family: Segoe UI, Arial, sans-serif; }
     </div>
     
 
-<h2>Oś czasu aktywności (timeline)</h2>
+<div class="accordion">
+  <button class="accordion-btn" onclick="toggleAccordion('timelineAccordion')">🕒 Pokaż/ukryj oś czasu (timeline)</button>
+  <div class="accordion-content" id="timelineAccordion">
 <div class="timeline-container">
   <div class="timeline-line"></div>
 
@@ -183,22 +185,94 @@ body { font-family: Segoe UI, Arial, sans-serif; }
     z-index:1;
 }
 </style>
+</div>
+</div>
+<style>
+.accordion-btn {
+  background: #f1f5fb;
+  color: #1976d2;
+  cursor: pointer;
+  padding: 12px 20px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.12em;
+  border-radius: 7px;
+  margin-top: 18px;
+  margin-bottom: 0;
+  box-shadow: 0 1px 4px #e6e6e6;
+  transition: background 0.2s;
+}
+.accordion-btn:hover { background: #e3eaf4; }
+.accordion-content {
+  display: none;
+  padding: 0.5em 1.1em 1.2em 1.1em;
+  background: #fafbff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0 0 7px 7px;
+  margin-bottom: 2em;
+  margin-top: 0;
+}
+</style>
+<script>
+function toggleAccordion(id) {
+  var x = document.getElementById(id);
+  if (x.style.display === "block") x.style.display = "none";
+  else x.style.display = "block";
+}
+</script>
 
 <h2>📊 Tabela statusów</h2>
 <table class="matrix-table"><tr><th>Technique ID</th><th>Name</th><th>Tactics</th><th>Status</th><th>Liczba wystąpień</th><th>Author</th></tr>
 <tr style='background:#a3e4a1;'><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td>Tested</td><td>1</td><td>AlertEvidence Matrix</td></tr>
 </table>
-<h2>Pełna lista zdarzeń (bez pustych kolumn)</h2>
 
-<label for="eventsTableSearch" style="font-size:1.12em;">🔍 Filtrowanie zdarzeń: </label>
-<span style="color: #888; font-size: 1em;">(Możesz wpisać coś w kilka kolumn naraz)</span>
-<div style='overflow-x:auto; max-width:95vw;'>
+<div class="accordion">
+  <button class="accordion-btn" onclick="toggleAccordion('eventsAccordion')">📋 Pokaż/ukryj pełną listę zdarzeń</button>
+  <div class="accordion-content" id="eventsAccordion"><div style='overflow-x:auto; max-width:95vw;'>
 <table id='eventsTable' border='1' style='border-collapse:collapse; background:#f7fafd; font-size:1em;'>
-<tr><th onclick='sortEventsTable(0)'>AttackTechniques</th><th onclick='sortEventsTable(1)'>AlertId</th><th onclick='sortEventsTable(2)'>DeviceId</th><th onclick='sortEventsTable(3)'>LocalIP</th><th onclick='sortEventsTable(4)'>Title</th><th onclick='sortEventsTable(5)'>Categories</th><th onclick='sortEventsTable(6)'>﻿Timestamp</th><th onclick='sortEventsTable(7)'>EntityType</th><th onclick='sortEventsTable(8)'>ServiceSource</th><th onclick='sortEventsTable(9)'>DeviceName</th><th onclick='sortEventsTable(10)'>Severity</th><th onclick='sortEventsTable(11)'>DetectionSource</th><th onclick='sortEventsTable(12)'>EvidenceRole</th></tr>
+<tr><th onclick='sortEventsTable(0)'>﻿Timestamp</th><th onclick='sortEventsTable(1)'>DeviceName</th><th onclick='sortEventsTable(2)'>Title</th><th onclick='sortEventsTable(3)'>AttackTechniques</th><th onclick='sortEventsTable(4)'>DeviceId</th><th onclick='sortEventsTable(5)'>ServiceSource</th><th onclick='sortEventsTable(6)'>LocalIP</th><th onclick='sortEventsTable(7)'>Severity</th><th onclick='sortEventsTable(8)'>AlertId</th><th onclick='sortEventsTable(9)'>EvidenceRole</th><th onclick='sortEventsTable(10)'>EntityType</th><th onclick='sortEventsTable(11)'>Categories</th><th onclick='sortEventsTable(12)'>DetectionSource</th></tr>
 <tr><td><input type='text' onkeyup='filterEventsTable(0)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(1)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(2)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(3)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(4)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(5)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(6)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(7)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(8)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(9)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(10)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(11)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td><td><input type='text' onkeyup='filterEventsTable(12)' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td></tr>
+<tr><td>May 13, 2025 9:31:00 PM</td><td>Win11-client</td><td>Suspicious PowerShell command line</td><td>["PowerShell (T1059.001)"]</td><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>Microsoft Defender for Endpoint</td><td>192.168.100.20</td><td>Medium</td><td><a href='https://security.microsoft.com/alerts/daef0462ed-587d-4aeb-9bad-ddc7c60439ff_1' style='color:#1976d2; font-weight:bold;' target='_blank' title='Otwórz alert w Microsoft 365 Defender'>daef0462ed-587d-4aeb-9bad-ddc7c60439ff_1</a></td><td>Impacted</td><td>Machine</td><td>["Execution"]</td><td>EDR</td></tr>
+</table></div></div>
+</div>
+<style>
+.accordion-btn {
+  background: #f1f5fb;
+  color: #1976d2;
+  cursor: pointer;
+  padding: 12px 20px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.12em;
+  border-radius: 7px;
+  margin-top: 18px;
+  margin-bottom: 0;
+  box-shadow: 0 1px 4px #e6e6e6;
+  transition: background 0.2s;
+}
+.accordion-btn:hover { background: #e3eaf4; }
+.accordion-content {
+  display: none;
+  padding: 0.5em 1.1em 1.2em 1.1em;
+  background: #fafbff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0 0 7px 7px;
+  margin-bottom: 2em;
+  margin-top: 0;
+}
+</style>
+<script>
+function toggleAccordion(id) {
+  var x = document.getElementById(id);
+  if (x.style.display === "block") x.style.display = "none";
+  else x.style.display = "block";
+}
+</script>
 
-<tr><td>["PowerShell (T1059.001)"]</td><td><a href='https://security.microsoft.com/alerts/daef0462ed-587d-4aeb-9bad-ddc7c60439ff_1' style='color:#1976d2; font-weight:bold;' target='_blank' title='Otwórz alert w Microsoft 365 Defender'>daef0462ed-587d-4aeb-9bad-ddc7c60439ff_1</a></td><td>ec4433a99356e516a508c2144602457a1737dec8</td><td>192.168.100.20</td><td>Suspicious PowerShell command line</td><td>["Execution"]</td><td>May 13, 2025 9:31:00 PM</td><td>Machine</td><td>Microsoft Defender for Endpoint</td><td>Win11-client</td><td>Medium</td><td>EDR</td><td>Impacted</td></tr>
-</table></div>
 
 <script>
 function filterEventsTable(colIdx) {

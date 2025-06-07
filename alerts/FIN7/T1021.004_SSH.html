@@ -7,20 +7,25 @@
     body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
     .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
     h1 { margin-top: 0; font-size: 2rem; }
-    .desc, .id, .link, .author { margin-bottom: 1.1em; }
+    .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
     .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
+    pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
+    code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
+    ul { margin-left: 1.6em; }
   </style>
 </head>
 <body>
 <div class="card">
   <h1>Alert: SSH</h1>
   <div class="meta"><b>Technique ID:</b> T1021.004</div>
-  <div class="scenario-block"><b>Opis scenariusza:</b><br>Tutaj wpisz swój opis scenariusza lub pozostaw do uzupełnienia.</div>
-  <div class="desc section"><b>Description:</b><br>Adversaries may use [Valid Accounts](https://attack.mitre.org/techniques/T1078) to log into remote machines using Secure Shell (SSH). The adversary may then perform actions as the logged-on user.  SSH is a protocol that allows authorized users to open remote shells on other computers. Many Linux and macOS versions come with SSH installed by default, although typically disabled until the user enables it. On ESXi, SSH can be enabled either directly on the host (e.g., via `vim-cmd hostsvc/enable_ssh`) or via vCenter.(Citation: Sygnia ESXi Ransomware 2025)(Citation: TrendMicro ESXI Ransomware)(Citation: Sygnia Abyss Locker 2025) The SSH server can be configured to use standard password authentication or public-private keypairs in lieu of or in addition to a password. In this authentication scenario, the user’s public key must be in a special file on the computer running the server that lists which keypairs are allowed to login as that user (i.e., [SSH Authorized Keys](https://attack.mitre.org/techniques/T1098/004)).</div>
-  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1021/004/" target="_blank">https://attack.mitre.org/techniques/T1021/004/</a></div>
-  <div class="author section"><b>Author:</b> APT Matrix Generator</div>
+  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0008/" target="_blank">Lateral Movement (TA0008)</a></div>
+  <div class="status section"><b>Status:</b> Pending</div>
+  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Tutaj wpisz swój opis scenariusza lub pozostaw do uzupełnienia.</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may use [Valid Accounts](https://attack.mitre.org/techniques/T1078) to log into remote machines using Secure Shell (SSH). The adversary may then perform actions as the logged-on user.  SSH is a protocol that allows authorized users to open remote shells on other computers. Many Linux and macOS versions come with SSH installed by default, although typically disabled until the user enables it. On ESXi, SSH can be enabled either directly on the host (e.g., via `vim-cmd hostsvc/enable_ssh`) or via vCenter.(Citation: Sygnia ESXi Ransomware 2025)(Citation: TrendMicro ESXI Ransomware)(Citation: Sygnia Abyss Locker 2025) The SSH server can be configured to use standard password authentication or public-private keypairs in lieu of or in addition to a password. In this authentication scenario, the user’s public key must be in a special file on the computer running the server that lists which keypairs are allowed to login as that user (i.e., [SSH Authorized Keys](https://attack.mitre.org/techniques/T1098/004)).</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1078" target="_blank">https://attack.mitre.org/techniques/T1078</a></div>
+  <div class="author section"><b>Author:</b> </div>
 </div>
 </body>
 </html>

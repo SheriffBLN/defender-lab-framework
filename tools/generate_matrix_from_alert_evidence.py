@@ -28,22 +28,22 @@ BADGE_COLORS = {
     "Suppressed": "#bdbdbd"
 }
 
-# --- PATCH: 2x MATRIX --- # Heatmap color logic (zgodna z defender_lab.py)
 def heatmap_color(count):
-    if count >= 10:
-        return "#6f42c1"
-    elif count >= 5:
-        return "#c653ff"
-    elif count >= 4:
-        return "#ff704d"
-    elif count >= 3:
-        return "#ffa366"
-    elif count >= 2:
-        return "#ffd480"
-    elif count >= 1:
-        return "#ffffb3"
-    else:
+    if count <= 0:
         return "#e0e0e0"
+    ranges = [10, 19, 29, 39, 49]
+    colors = [
+        "#ffffb3",  # 1-10
+        "#ffd480",  # 11-19
+        "#ffa366",  # 20-29
+        "#ff704d",  # 30-39
+        "#c653ff",  # 40-49
+        "#6f42c1",  # 50+
+    ]
+    for limit, col in zip(ranges, colors):
+        if count <= limit:
+            return col
+    return colors[-1]
 
 ALERT_EVIDENCE_CSV = "tools/helpers/AlertEvidence.csv"
 ENTERPRISE_CSV = "tools/enterprise_attack.csv"
@@ -61,7 +61,7 @@ FIELD_TO_CSV = {
     "Host": "DeviceName",
     "Application": "FileName"
 }
-TIMELINE_GROUPS = {"RemoteIP", "User", "Host"}  # tylko dla tych będzie timeline
+TIMELINE_GROUPS = {"RemoteIP", "User", "Host"}
 
 def check_files_exist():
     print("\n[DIAGNOSTYKA] Sprawdzam środowisko:")
@@ -113,7 +113,7 @@ def run_demo_mode():
     sys.exit(0)
 
 def safe_filename(value):
-    return re.sub(r'[\\/:"*?<>| ]', '_', value)
+    return re.sub(r'[\\/:\"*?<>| ]', '_', value)
 
 def extract_technique_id(val):
     if not val:
@@ -176,31 +176,70 @@ def generate_status_rows(rows, group_field, value, techniques_db):
     return status_rows
 
 def highlight_alertid(val):
-    # Zwraca HTML linku do security.microsoft.com jeśli AlertId istnieje
     if not val or not val.strip():
         return ""
     url = f"https://security.microsoft.com/alerts/{val.strip()}"
     return f"<a href='{url}' style='color:#1976d2; font-weight:bold;' target='_blank' title='Otwórz alert w Microsoft 365 Defender'>{val}</a>"
 
+# --- ACCORDION: zwijane/rozwijane sekcje ---
+def accordion_block(title, content, block_id):
+    return f"""
+<div class="accordion">
+  <button class="accordion-btn" onclick="toggleAccordion('{block_id}')">{title}</button>
+  <div class="accordion-content" id="{block_id}">{content}</div>
+</div>
+<style>
+.accordion-btn {{
+  background: #f1f5fb;
+  color: #1976d2;
+  cursor: pointer;
+  padding: 12px 20px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.12em;
+  border-radius: 7px;
+  margin-top: 18px;
+  margin-bottom: 0;
+  box-shadow: 0 1px 4px #e6e6e6;
+  transition: background 0.2s;
+}}
+.accordion-btn:hover {{ background: #e3eaf4; }}
+.accordion-content {{
+  display: none;
+  padding: 0.5em 1.1em 1.2em 1.1em;
+  background: #fafbff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0 0 7px 7px;
+  margin-bottom: 2em;
+  margin-top: 0;
+}}
+</style>
+<script>
+function toggleAccordion(id) {{
+  var x = document.getElementById(id);
+  if (x.style.display === "block") x.style.display = "none";
+  else x.style.display = "block";
+}}
+</script>
+"""
+
 def generate_timeline(events, techniques_db):
-    # Posortuj po czasie
     def parse_dt(r):
         for fld in ["Timestamp", "DetectionTimeUtc", "CreationTimeUtc"]:
             v = r.get(fld)
             if v:
                 try:
-                    return datetime.fromisoformat(v.replace("Z",""))
+                    return datetime.fromisoformat(v.replace("Z", ""))
                 except Exception:
                     continue
-        return None
-
-    events_sorted = sorted(events, key=lambda x: parse_dt(x[0]) or datetime.min)
-    out = []
-    out.append("""
-<h2>Oś czasu aktywności (timeline)</h2>
+        return datetime.min
+    events_sorted = sorted(events, key=lambda x: parse_dt(x[0]))
+    out = ['''
 <div class="timeline-container">
   <div class="timeline-line"></div>
-""")
+''']
     for r, addf in events_sorted:
         dt = r.get("Timestamp") or r.get("DetectionTimeUtc") or r.get("CreationTimeUtc") or ""
         tid = extract_technique_id(r.get("AttackTechniques") or "")
@@ -208,10 +247,9 @@ def generate_timeline(events, techniques_db):
         tdata = techniques_db.get(technique, {})
         tname = tdata.get("name", technique)
         tactics = ", ".join(tdata.get("tactics", []))
-        status = "Tested"  # zakładamy tested, możesz rozwinąć logikę jeśli masz inne statusy
+        status = "Tested"
         cmd = addf.get("CommandLine") or addf.get("ImageFile") or ""
         alertid = r.get("AlertId")
-        # Spróbuj zbudować pełny link (jeśli AlertId już zawiera ?tid=... to nie doklejaj .com/alerts/)
         if alertid and ("?" in alertid or alertid.startswith("https://")):
             alert_link = f"<a href='{alertid}' target='_blank' style='color:#1976d2;font-weight:bold;' title='Otwórz alert'>{alertid}</a>"
         elif alertid:
@@ -228,7 +266,6 @@ def generate_timeline(events, techniques_db):
   </div>
 """)
     out.append("</div>")
-    # styl
     out.append("""
 <style>
 .timeline-container { position:relative; margin:30px 0 60px 0; padding-left:42px; }
@@ -261,7 +298,6 @@ def generate_timeline(events, techniques_db):
 """)
     return "\n".join(out)
 
-# --- KLUCZOWA FUNKCJA: matryca MITRE (status) ---
 def generate_matrix_html(status_rows, title, apt_folder):
     matrix = defaultdict(list)
     for r in status_rows:
@@ -277,7 +313,7 @@ def generate_matrix_html(status_rows, title, apt_folder):
         ".matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }",
         ".matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }",
         ".matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }",
-        ".matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }",
+        ".matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6;margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }",
         ".badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }",
         ".badge-Tested { background:%s; }" % BADGE_COLORS["Tested"],
         ".badge-Audit { background:%s; color:#333 !important; }" % BADGE_COLORS["Audit"],
@@ -311,7 +347,6 @@ def generate_matrix_html(status_rows, title, apt_folder):
     html.append("</tr></table>")
     return "\n".join(html)
 
-# --- PATCH: 2x MATRIX --- # Dodajemy heatmapę na bazie tych samych status_rows
 def generate_heatmap_matrix_html(status_rows, title, apt_folder):
     tech_counts = {row["Technique ID"]: int(row.get("Liczba wystąpień", 0)) for row in status_rows}
     matrix = defaultdict(list)
@@ -345,16 +380,15 @@ def generate_heatmap_matrix_html(status_rows, title, apt_folder):
             html.append('<div class="matrix-technique" style="background:#ececec;">–</div>')
         html.append("</td>")
     html.append("</tr></table>")
-    # Legenda
     html.append("""
     <div style="margin-top:12px; font-size:1.01em; color:#555;">
         <b>Legenda kolorów:</b>
-        <span style="background:#ffffb3; padding:2px 8px; margin-right:8px;">1</span>
-        <span style="background:#ffd480; padding:2px 8px; margin-right:8px;">2</span>
-        <span style="background:#ffa366; padding:2px 8px; margin-right:8px;">3</span>
-        <span style="background:#ff704d; padding:2px 8px; margin-right:8px;">4</span>
-        <span style="background:#c653ff; padding:2px 8px; margin-right:8px;">5+</span>
-        <span style="background:#6f42c1; padding:2px 8px; margin-right:8px;">10+</span>
+        <span style="background:#ffffb3; padding:2px 8px; margin-right:8px;">1-10</span>
+        <span style="background:#ffd480; padding:2px 8px; margin-right:8px;">11-19</span>
+        <span style="background:#ffa366; padding:2px 8px; margin-right:8px;">20-29</span>
+        <span style="background:#ff704d; padding:2px 8px; margin-right:8px;">30-39</span>
+        <span style="background:#c653ff; padding:2px 8px; margin-right:8px;">40-49</span>
+        <span style="background:#6f42c1; padding:2px 8px; margin-right:8px;">50+</span>
     </div>
     """)
     return "\n".join(html)
@@ -396,23 +430,35 @@ def main():
     with open(ALERT_EVIDENCE_CSV, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         by_group = defaultdict(list)
+        canonical = {}
         for row in reader:
             key = row.get(csv_field, "").strip()
             if key:
-                by_group[key].append(row)
+                key_lower = key.lower()
+                by_group[key_lower].append(row)
+                canonical.setdefault(key_lower, key)
 
     print(f"\n[✓] Znaleziono {len(by_group)} unikalnych wartości pola '{group_field}'.\n")
 
+    value_filter = input("Podaj konkretną wartość (lub kilka oddzielonych przecinkiem), \naby wygenerować tylko dla niej/nich (ENTER = wszystkie): ").strip()
+    selected_values = {v.strip().lower() for v in value_filter.split(',') if v.strip()} if value_filter else None
+
     skipped = []
     total_generated = 0
-    for value, rows in by_group.items():
+    for key_lower, rows in by_group.items():
+        if selected_values and key_lower not in selected_values:
+            continue
+        value = canonical[key_lower]
         dir_name = GROUP_FIELDS[group_field]
         outdir = os.path.join(OUTDIR, dir_name)
         os.makedirs(outdir, exist_ok=True)
-        safe_val = safe_filename(str(value))[:40]
-        outpath = os.path.join(outdir, f"{safe_val}.html")
+        base_name = safe_filename(str(value))[:40]
+        outpath = os.path.join(outdir, f"{base_name}.html")
+        counter = 1
+        while os.path.exists(outpath):
+            outpath = os.path.join(outdir, f"{base_name}_{counter}.html")
+            counter += 1
 
-        # Wyciągnij unikalne techniki i taktyki dla heatmapy/statystyk
         all_tactics = set()
         for r in rows:
             tids = extract_technique_id(r.get("AttackTechniques") or "")
@@ -426,9 +472,8 @@ def main():
 
         status_rows = generate_status_rows(rows, group_field, value, techniques_db)
         matrix_html = generate_matrix_html(status_rows, title="🛡️ Macierz MITRE ATT&CK", apt_folder=f"{group_field}={value}")
-        heatmap_html = generate_heatmap_matrix_html(status_rows, title="🔥 Heatmapa MITRE", apt_folder=f"{group_field}={value}")  # --- PATCH: 2x MATRIX ---
+        heatmap_html = generate_heatmap_matrix_html(status_rows, title="🔥 Heatmapa MITRE", apt_folder=f"{group_field}={value}")
 
-        # --- Parsowanie eventów i generowanie sekcji zdarzeń ---
         events = []
         all_fields = set(rows[0].keys())
         add_keys = set()
@@ -456,12 +501,12 @@ def main():
             f"<p>Liczba zdarzeń: <b>{len(rows)}</b></p>",
             f"<p><b>Liczba unikalnych taktyk MITRE:</b> <span style='color: #1976d2;'>{len(all_tactics)}</span></p>",
             matrix_html,
-            heatmap_html,   # --- PATCH: 2x MATRIX ---
+            heatmap_html,
         ]
 
-        # ---- TIMELINE tylko dla Host, RemoteIP, User ----
         if group_field in TIMELINE_GROUPS:
-            html.append(generate_timeline(events, techniques_db))
+            timeline_html = generate_timeline(events, techniques_db)
+            html.append(accordion_block("🕒 Pokaż/ukryj oś czasu (timeline)", timeline_html, "timelineAccordion"))
 
         html.append("<h2>📊 Tabela statusów</h2>")
         html.append('<table class="matrix-table"><tr><th>Technique ID</th><th>Name</th><th>Tactics</th><th>Status</th><th>Liczba wystąpień</th><th>Author</th></tr>')
@@ -474,24 +519,20 @@ def main():
             )
         html.append("</table>")
 
-        html.append("<h2>Pełna lista zdarzeń (bez pustych kolumn)</h2>")
-        inputs_row = "".join(
+        events_table_html = []
+        events_table_html.append("<div style='overflow-x:auto; max-width:95vw;'>")
+        events_table_html.append(f"<table id='eventsTable' border='1' style='border-collapse:collapse; background:#f7fafd; font-size:1em;'>")
+        events_table_html.append("<tr>"+''.join(f"<th onclick='sortEventsTable({i})'>{c}</th>" for i, c in enumerate(used_cols))+"</tr>")
+        events_table_html.append("<tr>"+ "".join(
             f"<td><input type='text' onkeyup='filterEventsTable({i})' placeholder='Szukaj...' style='width:98%; font-size:1em; padding:3px; border-radius:5px; border:1px solid #bbb;'></td>"
             for i in range(len(used_cols))
-        )
-        html.append(f"""
-<label for="eventsTableSearch" style="font-size:1.12em;">🔍 Filtrowanie zdarzeń: </label>
-<span style="color: #888; font-size: 1em;">(Możesz wpisać coś w kilka kolumn naraz)</span>
-<div style='overflow-x:auto; max-width:95vw;'>
-<table id='eventsTable' border='1' style='border-collapse:collapse; background:#f7fafd; font-size:1em;'>
-<tr>{''.join(f"<th onclick='sortEventsTable({i})'>{c}</th>" for i, c in enumerate(used_cols))}</tr>
-<tr>{inputs_row}</tr>
-""")
+        )+"</tr>")
         for r, addf in events:
-            html.append("<tr>" + "".join(
+            events_table_html.append("<tr>" + "".join(
                 f"<td>{highlight_alertid(addf.get(c, r.get(c,''))) if c=='AlertId' else addf.get(c, r.get(c,''))}</td>" for c in used_cols
             ) + "</tr>")
-        html.append("</table></div>")
+        events_table_html.append("</table></div>")
+        html.append(accordion_block("📋 Pokaż/ukryj pełną listę zdarzeń", "\n".join(events_table_html), "eventsAccordion"))
 
         html.append(r"""
 <script>
@@ -542,8 +583,8 @@ function sortEventsTable(col) {
             var y = rows[i + 1].getElementsByTagName("TD")[col];
             var xVal = x ? x.textContent || x.innerText : '';
             var yVal = y ? y.textContent || y.innerText : '';
-            var xNum = parseFloat(xVal.replace(/[^0-9\.\-]/g, ''));
-            var yNum = parseFloat(yVal.replace(/[^0-9\.\-]/g, ''));
+            var xNum = parseFloat(xVal.replace(/[^0-9\\.\\-]/g, ''));
+            var yNum = parseFloat(yVal.replace(/[^0-9\\.\\-]/g, ''));
             if (!isNaN(xNum) && !isNaN(yNum)) {
                 if (dir == "asc" ? xNum > yNum : xNum < yNum) { shouldSwitch = true; break; }
             } else {

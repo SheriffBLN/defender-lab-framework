@@ -7,20 +7,25 @@
     body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
     .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
     h1 { margin-top: 0; font-size: 2rem; }
-    .desc, .id, .link, .author { margin-bottom: 1.1em; }
+    .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
     .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
+    pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
+    code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
+    ul { margin-left: 1.6em; }
   </style>
 </head>
 <body>
 <div class="card">
   <h1>Alert: VNC</h1>
   <div class="meta"><b>Technique ID:</b> T1021.005</div>
-  <div class="scenario-block"><b>Opis scenariusza:</b><br>Tutaj wpisz swój opis scenariusza lub pozostaw do uzupełnienia.</div>
-  <div class="desc section"><b>Description:</b><br>Adversaries may use [Valid Accounts](https://attack.mitre.org/techniques/T1078) to remotely control machines using Virtual Network Computing (VNC).  VNC is a platform-independent desktop sharing system that uses the RFB (“remote framebuffer”) protocol to enable users to remotely control another computer’s display by relaying the screen, mouse, and keyboard inputs over the network.(Citation: The Remote Framebuffer Protocol)  VNC differs from [Remote Desktop Protocol](https://attack.mitre.org/techniques/T1021/001) as VNC is screen-sharing software rather than resource-sharing software. By default, VNC uses the system's authentication, but it can be configured to use credentials specific to VNC.(Citation: MacOS VNC software for Remote Desktop)(Citation: VNC Authentication)  Adversaries may abuse VNC to perform malicious actions as the logged-on user such as opening documents, downloading files, and running arbitrary commands. An adversary could use VNC to remotely control and monitor a system to collect data and information to pivot to other systems within the network. Specific VNC libraries/implementations have also been susceptible to brute force attacks and memory usage exploitation.(Citation: Hijacking VNC)(Citation: macOS root VNC login without authentication)(Citation: VNC Vulnerabilities)(Citation: Offensive Security VNC Authentication Check)(Citation: Attacking VNC Servers PentestLab)(Citation: Havana authentication bug)</div>
-  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1021/005/" target="_blank">https://attack.mitre.org/techniques/T1021/005/</a></div>
-  <div class="author section"><b>Author:</b> APT Matrix Generator</div>
+  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0008/" target="_blank">Lateral Movement (TA0008)</a></div>
+  <div class="status section"><b>Status:</b> Pending</div>
+  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Tutaj wpisz swój opis scenariusza lub pozostaw do uzupełnienia.</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may use [Valid Accounts](https://attack.mitre.org/techniques/T1078) to remotely control machines using Virtual Network Computing (VNC).  VNC is a platform-independent desktop sharing system that uses the RFB (“remote framebuffer”) protocol to enable users to remotely control another computer’s display by relaying the screen, mouse, and keyboard inputs over the network.(Citation: The Remote Framebuffer Protocol)  VNC differs from [Remote Desktop Protocol](https://attack.mitre.org/techniques/T1021/001) as VNC is screen-sharing software rather than resource-sharing software. By default, VNC uses the system's authentication, but it can be configured to use credentials specific to VNC.(Citation: MacOS VNC software for Remote Desktop)(Citation: VNC Authentication)  Adversaries may abuse VNC to perform malicious actions as the logged-on user such as opening documents, downloading files, and running arbitrary commands. An adversary could use VNC to remotely control and monitor a system to collect data and information to pivot to other systems within the network. Specific VNC libraries/implementations have also been susceptible to brute force attacks and memory usage exploitation.(Citation: Hijacking VNC)(Citation: macOS root VNC login without authentication)(Citation: VNC Vulnerabilities)(Citation: Offensive Security VNC Authentication Check)(Citation: Attacking VNC Servers PentestLab)(Citation: Havana authentication bug)</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1078" target="_blank">https://attack.mitre.org/techniques/T1078</a></div>
+  <div class="author section"><b>Author:</b> </div>
 </div>
 </body>
 </html>
