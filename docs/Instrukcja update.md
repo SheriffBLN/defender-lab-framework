@@ -1,4 +1,4 @@
-[Read this guide in English (Instrukcja update_ENG.md)](Instrukcja%20update_ENG.md)
+[Read this guide in English (Instrukcja update_ENG.md)](Update%20instruction_ENG.md)
 
 # 🔄 Instrukcja Update
 
