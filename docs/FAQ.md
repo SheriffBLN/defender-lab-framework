@@ -1,3 +1,5 @@
+[Read this FAQ in English (FAQ_ENG.md)](FAQ_ENG.md)
+
 # ❓ FAQ – Defender Lab Framework
 
 ### Jak działa tryb Update?
