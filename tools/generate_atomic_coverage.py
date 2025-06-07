@@ -175,7 +175,7 @@ def merge_pro():
         html_path = md_path.replace(".md", ".html")
         with open(md_path, encoding="utf-8") as f:
             content = f.read()
-        tid_match = re.search(r'\*\*Technika:\*\*\s*([^\s\n]+)', content)
+        tid_match = re.search(r'\*\*(?:Technika|Technique ID):\*\*\s*([^\s\n]+)', content, re.IGNORECASE)
         if not tid_match:
             continue
         tid = tid_match.group(1).strip().upper()
