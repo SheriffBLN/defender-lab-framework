@@ -2,26 +2,9 @@ import os
 import csv
 import re
 from datetime import datetime
-
-# Jeśli masz swoje utils/shared_utils, użyj importu poniżej
-try:
-    from tools.shared_utils import (
-        TACTICS_ORDER, MITRE_TACTICS, format_datetime, ensure_dir, safe_filename
-    )
-except ImportError:
-    # Minimal fallback
-    TACTICS_ORDER = [
-        'initial-access', 'execution', 'persistence', 'privilege-escalation',
-        'defense-evasion', 'credential-access', 'discovery', 'lateral-movement',
-        'collection', 'command-and-control', 'exfiltration', 'impact'
-    ]
-    MITRE_TACTICS = {k: (k.replace("-", " ").title(), "") for k in TACTICS_ORDER}
-    def format_datetime():
-        return datetime.now().strftime("%Y-%m-%d %H:%M")
-    def ensure_dir(path):
-        os.makedirs(path, exist_ok=True)
-    def safe_filename(s):
-        return re.sub(r'[^a-zA-Z0-9_\-]', '_', s)
+from tools.shared_utils import (
+    TACTICS_ORDER, MITRE_TACTICS, format_datetime, generate_matrix_html, ensure_dir, safe_filename
+)
 
 MAPPING_DIR = "mapping"
 ART_REPO_DIR = "atomic_red_team_repo/atomics"
@@ -82,129 +65,8 @@ def art_badge(stype):
     else:
         return f'<span class="badge badge-total">{escape(stype)}</span>'
 
-def parse_md(content):
-    # English/Polish field support
-    tid_match = re.search(r'\*\*(?:Technique ID|Technika):\*\*\s*([^\s\n]+)', content)
-    tname_match = re.search(r'\*\*(?:Name|Nazwa):\*\*\s*([^\n*]+)', content)
-    tactics_match = re.search(r'\*\*(?:Tactics|Taktyki):\*\*\s*([^\n*]+)', content)
-    mitre_desc_match = re.search(
-        r'\*\*(?:Description|MITRE Description):\*\*\s*([\s\S]+?)(\*\*(?:MITRE Link|Link)|Autor:|\n#|$)', content)
-    mitre_link_match = re.search(r'\*\*(?:MITRE Link|Link):\*\*\s*(https://attack\.mitre\.org/techniques/[^\s\)]+)', content)
-    author_match = re.search(r'(?:\*\*Autor:\*\*|Autor:)\s*([^\n*]+)', content)
-    tid = tid_match.group(1).strip().upper() if tid_match else "UNKNOWN"
-    tname = tname_match.group(1).strip() if tname_match else "(brak nazwy techniki)"
-    tactics = tactics_match.group(1).strip() if tactics_match else "(brak danych)"
-    mitre_desc = mitre_desc_match.group(1).strip() if mitre_desc_match else "(brak opisu)"
-    mitre_link = mitre_link_match.group(1).strip() if mitre_link_match else "(brak linku)"
-    author = author_match.group(1).strip() if author_match else "Anon"
-    return tid, tname, tactics, mitre_desc, mitre_link, author
-
-# --- MATRIX (tryb 1) ---
-def atomic_coverage_matrix():
-    mapping, status_csv = wybierz_status_csv()
-    now = format_datetime()
-    with open(status_csv, encoding="utf-8") as f:
-        status_rows = list(csv.DictReader(f))
-
-    matrix_status = []
-    test_status = []
-
-    for row in status_rows:
-        tid = row["Technique ID"].strip().upper()
-        tactics = [t.strip() for t in row["Tactics"].split(",") if t.strip()]
-        tests = get_atomic_tests_for_tid(tid)
-        if tests:
-            badge = f"ART-exist ({len(tests)})"
-            matrix_status.append({
-                "Technique ID": tid,
-                "Name": row["Name"],
-                "Tactics": ", ".join(tactics),
-                "Status": badge,
-                "Tooltip": f"{len(tests)} test(ów) Atomic Red Team"
-            })
-            for t in tests:
-                test_status.append({
-                    "Technique ID": tid,
-                    "Name": row["Name"],
-                    "Tactics": ", ".join(tactics),
-                    "Status": "ART-exist",
-                    "Test Title": t["title"],
-                    "Scripts": "; ".join([stype for stype, _ in t["scripts"]]),
-                })
-        else:
-            matrix_status.append({
-                "Technique ID": tid,
-                "Name": row["Name"],
-                "Tactics": ", ".join(tactics),
-                "Status": "no-ART",
-                "Tooltip": "Brak testów Atomic Red Team"
-            })
-
-    html = [
-        "<style>",
-        "body { font-family: Segoe UI, Arial, sans-serif; }",
-        ".container { max-width:1200px; margin:0 auto; }",
-        ".matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }",
-        ".matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }",
-        ".matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }",
-        ".matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }",
-        ".badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }",
-        ".badge-ART-exist { background:#3fa4fa; }",
-        ".badge-no-ART { background:#aaa; }",
-        "</style>",
-        '<div class="container">',
-        f'<h2 style="margin-bottom:12px;">Atomic Coverage Matrix</h2>',
-        f'<div style="font-size:0.99em;color:#888;margin-bottom:10px;">Generowano: {now} | Mapping: <code>{mapping}</code></div>',
-        "<table class='matrix-table'><tr class='header-row'>"
-    ]
-    for t in TACTICS_ORDER:
-        label, ta_id = MITRE_TACTICS.get(t, (t.title(), ""))
-        html.append(f'<th>{label}<br/><span style="font-size:0.84em;color:#9bb;">{ta_id}</span></th>')
-    html.append("</tr><tr>")
-    for tactic in TACTICS_ORDER:
-        html.append("<td>")
-        for row in matrix_status:
-            tactics = [t.strip().lower().replace(" ", "-") for t in row["Tactics"].split(",") if t.strip()]
-            if tactic in tactics:
-                status = row["Status"]
-                tid = row["Technique ID"]
-                name = row["Name"]
-                tooltip = row.get("Tooltip") or ""
-                if status.startswith("ART-exist"):
-                    bg = "#eaf4ff"
-                    badge = f'<span class="badge badge-ART-exist">{status}</span>'
-                elif status.startswith("no-ART"):
-                    bg = "#ececec"
-                    badge = f'<span class="badge badge-no-ART">{status}</span>'
-                else:
-                    bg = "#fff"
-                    badge = f'<span class="badge">{status}</span>'
-                html.append(
-                    f'<div class="matrix-technique" style="background:{bg};" title="{tooltip}">'
-                    f'<b>{tid}</b><br>{name}'
-                    f'<br>{badge}'
-                    '</div>'
-                )
-        html.append("</td>")
-    html.append("</tr></table>")
-
-    html.append('<h3>Lista testów Atomic Red Team (osobne wiersze dla każdego testu)</h3>')
-    html.append('<table class="matrix-table"><tr><th>Technique ID</th><th>Nazwa</th><th>Taktyki</th><th>Status</th><th>Tytuł testu</th><th>Typ(y) skryptów</th></tr>')
-    for row in test_status:
-        html.append(f"<tr><td>{row['Technique ID']}</td><td>{row['Name']}</td><td>{row['Tactics']}</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>{row['Test Title']}</td><td>{row['Scripts']}</td></tr>")
-    html.append("</table>")
-
-    html.append("</div>")
-
-    raport_folder = os.path.join(REPORT_DIR, mapping)
-    ensure_dir(raport_folder)
-    raport_path = os.path.join(raport_folder, "index.html")
-
-    with open(raport_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(html))
-
-    print(f"\n[✓] Wygenerowano raport: {raport_path}\n")
 def generate_art_html(tid, technique_name, tactic_str, atomic_tests, mitre_desc, mitre_link, author=""):
+    # Liczenie typów testów
     ps, cmd, total = 0, 0, len(atomic_tests)
     for t in atomic_tests:
         for stype, _ in t["scripts"]:
@@ -213,20 +75,21 @@ def generate_art_html(tid, technique_name, tactic_str, atomic_tests, mitre_desc,
             elif stype.lower() in ["cmd", "bat"]:
                 cmd += 1
     now = format_datetime()
+    # Szablon HTML
     html = f"""<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Alert: {escape(technique_name)} – Atomic Red Team</title>
+  <title>Alert: {technique_name} – Atomic Red Team</title>
   <style>
     body {{ font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }}
-    .card {{ background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 800px; margin: auto; }}
+    .card {{ background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 760px; margin: auto; }}
     h1 {{ margin-top: 0; font-size: 2rem; }}
     .desc, .id, .link, .author, .tactic, .status {{ margin-bottom: 1.1em; }}
     .meta {{ font-size: .95em; color: #555; margin-bottom: .8em; }}
     .section {{ font-size: .99em; }}
     .scenario-block {{ background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }}
-    pre {{ background: #eee; padding: .7em 1em; border-radius: 5px; white-space: pre-wrap; word-break: break-all; overflow-x: auto; max-width: 100%; }}
+    pre {{ background: #eee; padding: .7em 1em; border-radius: 5px; }}
     code {{ background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }}
     ul {{ margin-left: 1.6em; }}
     textarea {{ width:100%; border-radius:8px; border:1.5px solid #d6d6d6; font-size:1.08em; margin-top:8px; padding:8px; background:#faf8ed;}}
@@ -245,8 +108,6 @@ def generate_art_html(tid, technique_name, tactic_str, atomic_tests, mitre_desc,
     .art-checklist input[type=checkbox] {{ transform: scale(1.2); margin-right:8px; }}
     .art-copy-btn {{ background:#fff; border:1px solid #bdbdbd; color:#1976d2; border-radius:6px; padding:3px 11px; margin-left:8px; font-size:0.97em; cursor:pointer;}}
     .art-copy-btn:active {{ background:#eaf4ff;}}
-    .eksport-btn {{ background:#c5e1a5; color:#1b4b2b; border-radius:7px; border:none; padding:9px 17px; margin:11px 0 5px 0; font-weight:600; cursor:pointer; }}
-    .eksport-btn:hover {{ background:#b2dfdb; }}
   </style>
   <script>
     function toggleArtAccordion(btn) {{
@@ -259,14 +120,13 @@ def generate_art_html(tid, technique_name, tactic_str, atomic_tests, mitre_desc,
       btn.textContent = "Skopiowano!";
       setTimeout(()=>btn.textContent="Kopiuj", 1100);
     }}
-    function saveChecklist(tid, id, scenarioBlockId, testLabel) {{
-      var uniqueId = tid + '-' + id;
-      var div = document.getElementById('checklist-' + uniqueId);
+    function saveChecklist(id, scenarioBlockId, testLabel) {{
+      var div = document.getElementById('checklist-' + id);
       var chks = div.querySelectorAll('input[type=checkbox]');
       var states = Array.from(chks).map(x => x.checked);
-      localStorage.setItem('art-checklist-' + uniqueId, JSON.stringify(states));
+      localStorage.setItem('art-checklist-' + id, JSON.stringify(states));
       var allChecked = states.every(x=>x);
-      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      document.getElementById('tested-badge-' + id).style.display = allChecked ? 'inline-block' : 'none';
       if(allChecked && scenarioBlockId && testLabel) {{
         var now = new Date().toLocaleString("pl-PL");
         var msg = `✅ [${{now}}] Przetestowano: ${{testLabel}} – utworzono alert w Defenderze`;
@@ -276,15 +136,14 @@ def generate_art_html(tid, technique_name, tactic_str, atomic_tests, mitre_desc,
         }}
       }}
     }}
-    function loadChecklist(tid, id, scenarioBlockId, testLabel) {{
-      var uniqueId = tid + '-' + id;
-      var div = document.getElementById('checklist-' + uniqueId);
+    function loadChecklist(id, scenarioBlockId, testLabel) {{
+      var div = document.getElementById('checklist-' + id);
       if (!div) return;
       var chks = div.querySelectorAll('input[type=checkbox]');
-      var states = JSON.parse(localStorage.getItem('art-checklist-' + uniqueId) || '[]');
+      var states = JSON.parse(localStorage.getItem('art-checklist-' + id) || '[]');
       chks.forEach((chk, i) => {{ chk.checked = !!states[i]; }});
       var allChecked = states.length && states.every(x=>x);
-      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      document.getElementById('tested-badge-' + id).style.display = allChecked ? 'inline-block' : 'none';
       if(allChecked && scenarioBlockId && testLabel) {{
         var now = new Date().toLocaleString("pl-PL");
         var msg = `✅ [${{now}}] Przetestowano: ${{testLabel}} – utworzono alert w Defenderze`;
@@ -294,65 +153,35 @@ def generate_art_html(tid, technique_name, tactic_str, atomic_tests, mitre_desc,
         }}
       }}
     }}
-    function resetChecklist(tid, id, scenarioBlockId, testLabel) {{
-      var uniqueId = tid + '-' + id;
-      localStorage.removeItem('art-checklist-' + uniqueId);
-      loadChecklist(tid, id, scenarioBlockId, testLabel);
-    }}
-    function eksportujProgres(tid, total_tests) {{
-      let out = [];
-      for(let i=1; i<=total_tests; i++) {{
-        let id = 'art' + String(i).padStart(2,'0');
-        let uniqueId = tid + '-' + id;
-        let div = document.getElementById('checklist-' + uniqueId);
-        if(!div) continue;
-        let label = div.getAttribute('data-label') || ("Atomic Test " + i);
-        let chks = div.querySelectorAll('input[type=checkbox]');
-        let states = Array.from(chks).map(x => x.checked);
-        if(states.every(x=>x)) {{
-          let now = new Date().toLocaleString("pl-PL");
-          out.push(`✅ [${{now}}] Przetestowano: ${{label}} – utworzono alert w Defenderze`);
-        }}
-      }}
-      let box = document.getElementById('eksportChecklist');
-      box.style.display = 'block';
-      box.value = out.join("\\n");
-      box.select();
-      document.execCommand('copy');
+    function resetChecklist(id, scenarioBlockId, testLabel) {{
+      localStorage.removeItem('art-checklist-' + id);
+      loadChecklist(id, scenarioBlockId, testLabel);
     }}
     window.addEventListener('DOMContentLoaded', function() {{
-      var tid = document.body.getAttribute('data-tid');
-      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
-      for(let i=1; i<=total_tests; i++) {{
-        let id = 'art' + String(i).padStart(2,'0');
-        let div = document.getElementById('checklist-' + tid + '-' + id);
-        if(!div) continue;
-        let scenarioBlockId = div.getAttribute('data-scenario');
-        let testLabel = div.getAttribute('data-label');
-        loadChecklist(tid, id, scenarioBlockId, testLabel);
+      document.querySelectorAll('.art-checklist').forEach(function(div) {{
+        var id = div.id.replace('checklist-','');
+        var scenarioBlockId = div.getAttribute('data-scenario');
+        var testLabel = div.getAttribute('data-label');
+        loadChecklist(id, scenarioBlockId, testLabel);
         div.querySelectorAll('input[type=checkbox]').forEach(function(chk) {{
-          chk.onchange = function() {{ saveChecklist(tid, id, scenarioBlockId, testLabel); }};
+          chk.onchange = function() {{ saveChecklist(id, scenarioBlockId, testLabel); }};
         }});
-      }}
+      }});
     }});
   </script>
 </head>
-<body data-tid="{escape(tid)}" data-total-tests="{total}">
+<body>
 <div class="card">
   <h1>Alert: {escape(technique_name)}</h1>
   <div class="meta"><b>Technique ID:</b> {escape(tid)}</div>
   <div class="tactic section"><b>Tactics:</b> {escape(tactic_str)}</div>
   <div class="status section"><b>Status:</b> ART / do walidacji</div>
-  <div class="desc section"><b>MITRE Description:</b><br>{escape(mitre_desc) or '<i>(brak)</i>'}</div>
-  <div class="link section"><b>MITRE Link:</b> <a href="{escape(mitre_link)}" target="_blank">{escape(mitre_link)}</a></div>
   <div class="scenario-block">
     <b>Twój opis scenariusza:</b><br>
     <textarea id="scenarioBlock" rows="7" readonly>
-Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
+Tutaj wpisz opis scenariusza lub uzupełnij po testach.
     </textarea>
   </div>
-  <button onclick="eksportujProgres('{escape(tid)}',{total})" class="eksport-btn">Eksportuj progres (do MD)</button>
-  <textarea id="eksportChecklist" rows="4" style="width:100%;margin-top:10px;display:none;"></textarea>
   <div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'>
     <b>Atomic Red Team – dostępne testy dla tej techniki:</b>
     <div style="margin-bottom:10px;">
@@ -362,16 +191,17 @@ Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
       <a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/{escape(tid)}' target='_blank' style="float:right;">Zobacz na GitHubie</a>
     </div>
 """
+
+    # Dodaj testy jako accordion
     for idx, t in enumerate(atomic_tests, 1):
         uid = f"art{idx:02d}"
-        unique_id = f"{tid}-{uid}"
-        test_label = f"Atomic Test {idx}: {escape(t['title'])}"
+        test_label = escape(t["title"])
         html += f"""
     <div class="art-accordion">
       <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
         {art_badge(t["scripts"][0][0]) if t["scripts"] else ''}
-        <b>{test_label}</b>
-        <span id="tested-badge-{unique_id}" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+        <b>{escape(t['title'])}</b>
+        <span id="tested-badge-{uid}" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
       </button>
       <div class="art-accordion-content">
         <div class="test-desc"><b>Opis:</b> {escape(t['desc'])}</div>
@@ -388,6 +218,7 @@ Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
             fname = f"test_{sidx}.{ 'ps1' if stype == 'powershell' else 'cmd' if stype in ['cmd','bat'] else stype }"
             relpath = os.path.relpath(os.path.join(scen_path, fname), REPORT_DIR)
             html += f"""<a href="{relpath}" download>Pobierz {fname}</a><br>"""
+        # Cleanup
         if t["cleanup"]:
             for cidx, (stype, code) in enumerate(t["cleanup"], 1):
                 html += f"""
@@ -400,19 +231,22 @@ Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
                 fname = f"cleanup_{cidx}.{ 'ps1' if stype == 'powershell' else 'cmd' if stype in ['cmd','bat'] else stype }"
                 relpath = os.path.relpath(os.path.join(scen_path, fname), REPORT_DIR)
                 html += f"""<a href="{relpath}" download>Pobierz {fname}</a><br>"""
+        # Checklist
         html += f"""
-        <div class="art-checklist" id="checklist-{unique_id}" data-scenario="scenarioBlock" data-label="{test_label}">
+        <div class="art-checklist" id="checklist-{uid}" data-scenario="scenarioBlock" data-label="{test_label}">
           <label><input type="checkbox"> Uruchomiono test</label><br>
           <label><input type="checkbox"> Wykonano cleanup</label><br>
           <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
           <label><input type="checkbox"> Utworzono alert</label><br>
-          <button onclick="resetChecklist('{tid}','{uid}','scenarioBlock','{test_label}')">Resetuj</button>
+          <button onclick="resetChecklist('{uid}','scenarioBlock','{test_label}')">Resetuj</button>
         </div>
       </div>
     </div>
 """
     html += f"""
   </div>
+  <div class="desc section"><b>MITRE Description:</b><br>{escape(mitre_desc) or '<i>(brak)</i>'}</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="{escape(mitre_link)}" target="_blank">{escape(mitre_link)}</a></div>
   <div class="author section"><b>Author:</b> {escape(author)}</div>
 </div>
 </body>
@@ -436,14 +270,22 @@ def merge_pro():
         html_path = md_path.replace(".md", ".html")
         with open(md_path, encoding="utf-8") as f:
             content = f.read()
-        tid, tname, tactics, mitre_desc, mitre_link, author = parse_md(content)
-        if tid == "UNKNOWN":
-            print(f"UWAGA: Plik {alert_md} ma niepełne dane! Pomijam.")
-            continue
+        tid_match = re.search(r'\*\*(?:Technika|Technique ID):\*\*\s*([^\s\n]+)', content, re.IGNORECASE)
+        tname_match = re.search(r'\*\*(?:Nazwa|Name):\*\*\s*([^\n*]+)', content, re.IGNORECASE)
+        tactics_match = re.search(r'\*\*Taktyki:\*\*\s*([^\n*]+)', content, re.IGNORECASE)
+        author_match = re.search(r'\*\*Autor:\*\*\s*([^\n*]+)', content, re.IGNORECASE)
+        mitre_desc_match = re.search(r'\*\*MITRE Description:\*\*\s*([\s\S]*?)(?:\*\*|$)', content, re.IGNORECASE)
+        mitre_link_match = re.search(r'(https://attack\.mitre\.org/techniques/[^\s\)]+)', content)
+        tid = tid_match.group(1).strip().upper() if tid_match else "UNKNOWN"
+        tname = tname_match.group(1).strip() if tname_match else "UNKNOWN"
+        tactics = tactics_match.group(1).strip() if tactics_match else ""
+        author = author_match.group(1).strip() if author_match else "Anon"
+        mitre_desc = mitre_desc_match.group(1).strip() if mitre_desc_match else ""
+        mitre_link = mitre_link_match.group(1).strip() if mitre_link_match else ""
         atomic_tests = get_atomic_tests_for_tid(tid)
         if not atomic_tests:
-            print(f" - Brak testów ART dla techniki {tid}. Pomijam {alert_md}.")
             continue
+        # Tworzenie folderów/scenariuszy jak wcześniej
         for t in atomic_tests:
             scen_path = os.path.join(ATOMIC_SCEN_DIR, tid, safe_filename(t['title']))
             ensure_dir(scen_path)
@@ -462,6 +304,7 @@ def merge_pro():
                 for stype, code in t["cleanup"]:
                     f.write(f"## Polecenia cleanup ({stype}):\n```\n{code}\n```\n")
                 f.write(f"\n---\nOryginalny test:\n\n```\n{t['raw']}\n```\n")
+        # Nadpisz HTML pod nowy styl
         html_code = generate_art_html(
             tid, tname, tactics, atomic_tests, mitre_desc, mitre_link, author=author
         )
@@ -475,7 +318,7 @@ def merge_pro():
 def main():
     print("\n=== Mode 6: Atomic Coverage (Atomic Red Team) ===\n")
     print("1) Generuj macierz pokrycia (Atomic Coverage Matrix)")
-    print("2) Merge PRO – generuj foldery/skrypty i czytelny raport HTML (PL) + eksport progresu do MD")
+    print("2) Merge PRO – generuj foldery/skrypty i czytelny raport HTML (PL)")
     wyb = input("Wybierz tryb (1/2): ").strip()
     if wyb == "1":
         atomic_coverage_matrix()

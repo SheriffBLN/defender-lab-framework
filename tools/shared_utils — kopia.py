@@ -61,7 +61,7 @@ def heatmap_color(count):
         return "#ececec"  # brak
 
 def safe_filename(value):
-    return re.sub(r'[\\/:\"*?<>| ]', '_', str(value))[:40]
+    return re.sub(r'[\\/:"*?<>| ]', '_', str(value))[:40]
 
 def format_datetime(dt=None):
     return (dt or datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
@@ -139,24 +139,20 @@ def load_alert_counts(csv_path="tools/helpers/last30days_alerts.csv"):
 def badge_html(status):
     color = BADGE_COLORS.get(status, "#aaa")
     return f'<span class="badge badge-{status}" style="background:{color};">{status}</span>'
-
 def generate_matrix_html(
-    status_rows, title, apt_folder,
-    tactics_order=TACTICS_ORDER,
-    show_counts=False, show_linked_rule=False,
+    status_rows, title, apt_folder, 
+    tactics_order=TACTICS_ORDER, 
+    show_counts=False, show_linked_rule=False, 
     show_heatmap=True, alert_counts=None
 ):
     from collections import defaultdict
     import json
     matrix = defaultdict(list)
-    seen_pairs = set()
     for r in status_rows:
-        tid = r["Technique ID"].strip().upper()
         tactics = [t.strip().lower().replace(" ", "-") for t in r["Tactics"].split(",") if t.strip()]
         for t in tactics:
-            if t in tactics_order and (t, tid) not in seen_pairs:
+            if t in tactics_order:
                 matrix[t].append(r)
-                seen_pairs.add((t, tid))
     now = format_datetime()
     html = [
         "<style>",
@@ -165,7 +161,7 @@ def generate_matrix_html(
         ".matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }",
         ".matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }",
         ".matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }",
-        ".matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6;margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }",
+        ".matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }",
         ".badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }",
         "a.link-alert { color:#1e50a2; text-decoration:underline; }",
         ".changelog-toggle { cursor:pointer; color:#1d51a8; text-decoration:underline; font-size:1.04em; }",
@@ -301,7 +297,6 @@ def generate_matrix_html(
     html.append("</div>")
     html.append("</div>")
     return "\n".join(html)
-
 def generate_alert_html(
     technique_id, technique_name, tactics, status, author, scenario_desc, mitre_desc, mitre_link, mitre_tactics=None
 ):
@@ -354,7 +349,6 @@ def generate_alert_html(
 </body>
 </html>
 """
-
 def md_to_html_basic(md_text):
     html_lines = []
     for line in md_text.splitlines():
