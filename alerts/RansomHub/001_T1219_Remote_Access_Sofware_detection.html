@@ -2,69 +2,662 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Alert: Remote Access Tools</title>
+  <title>Alert: Remote Access Tools – Atomic Red Team</title>
   <style>
     body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
-    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 800px; margin: auto; }
     h1 { margin-top: 0; font-size: 2rem; }
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
     .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
-    pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
+    pre { background: #eee; padding: .7em 1em; border-radius: 5px; white-space: pre-wrap; word-break: break-all; overflow-x: auto; max-width: 100%; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
+    textarea { width:100%; border-radius:8px; border:1.5px solid #d6d6d6; font-size:1.08em; margin-top:8px; padding:8px; background:#faf8ed;}
+    .badge-ok { background: #43a047; color: #fff; }
+    .art-accordion { margin-bottom:10px; }
+    .art-accordion-btn { background:#eaf4ff; color:#1d3557; cursor:pointer; padding:9px 18px; width:100%; text-align:left; border:none; border-radius:7px; font-size:1.1em; font-weight:600; margin-bottom:2px; transition:background 0.18s;}
+    .art-accordion-btn:hover { background:#ddefff; }
+    .art-accordion-content { display:none; background:#f7fafd; border:1px solid #e3e3e3; border-radius:0 0 7px 7px; padding:13px 18px; margin-bottom:2px; }
+    .test-cleanup { background:#fffde7; border-left:4px solid #ffd700; margin-top:11px; padding:7px 12px; border-radius:5px; }
+    .badge { display:inline-block; border-radius:8px; padding:2px 10px; font-size:.94em; color:#fff; margin-right:7px; }
+    .badge-ps { background:#1976d2; }
+    .badge-cmd { background:#29b300; }
+    .badge-total { background:#888; }
+    .art-checklist { background: #f7fff7; border-radius:6px; margin-top:10px; padding:7px 15px; }
+    .art-checklist label { font-size:1.02em; margin-right:20px; }
+    .art-checklist input[type=checkbox] { transform: scale(1.2); margin-right:8px; }
+    .art-copy-btn { background:#fff; border:1px solid #bdbdbd; color:#1976d2; border-radius:6px; padding:3px 11px; margin-left:8px; font-size:0.97em; cursor:pointer;}
+    .art-copy-btn:active { background:#eaf4ff;}
+    .eksport-btn { background:#c5e1a5; color:#1b4b2b; border-radius:7px; border:none; padding:9px 17px; margin:11px 0 5px 0; font-weight:600; cursor:pointer; }
+    .eksport-btn:hover { background:#b2dfdb; }
+    .import-btn { background:#bbdefb; color:#1a237e; border-radius:7px; border:none; padding:8px 15px; margin-left:8px; font-weight:600; cursor:pointer; }
+    .import-btn:hover { background:#90caf9; }
   </style>
+  <script>
+    function toggleArtAccordion(btn) {
+      var content = btn.nextElementSibling;
+      content.style.display = (content.style.display === "block") ? "none" : "block";
+    }
+    function copyArtCode(btn) {
+      var code = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(code);
+      btn.textContent = "Skopiowano!";
+      setTimeout(()=>btn.textContent="Kopiuj", 1100);
+    }
+    function saveChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = Array.from(chks).map(x => x.checked);
+      localStorage.setItem('art-checklist-' + uniqueId, JSON.stringify(states));
+      var allChecked = states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function loadChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      if (!div) return;
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = JSON.parse(localStorage.getItem('art-checklist-' + uniqueId) || '[]');
+      chks.forEach((chk, i) => { chk.checked = !!states[i]; });
+      var allChecked = states.length && states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function resetChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      localStorage.removeItem('art-checklist-' + uniqueId);
+      loadChecklist(tid, id, scenarioBlockId, testLabel);
+    }
+    function eksportujProgres(tid, total_tests) {
+      let out = [];
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let uniqueId = tid + '-' + id;
+        let div = document.getElementById('checklist-' + uniqueId);
+        if(!div) continue;
+        let label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let chks = div.querySelectorAll('input[type=checkbox]');
+        let states = Array.from(chks).map(x => x.checked);
+        if(states.every(x=>x)) {
+          let now = new Date().toLocaleString("pl-PL");
+          out.push(`✅ [${now}] Przetestowano: ${label} – utworzono alert w Defenderze`);
+        }
+      }
+      let box = document.getElementById('eksportChecklist');
+      box.style.display = 'block';
+      box.value = out.join("\n");
+      box.select();
+      document.execCommand('copy');
+    }
+    function pokazImport() {
+      var el = document.getElementById('importBox');
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+    function importujProgres() {
+      var lines = document.getElementById('importProgress').value.split('\n');
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let label = "";
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let ok = lines.some(line => line.includes(label));
+        if(ok) {
+          let chks = div.querySelectorAll('input[type=checkbox]');
+          let states = Array(chks.length).fill(true);
+          chks.forEach((chk, idx) => { chk.checked = true; });
+          localStorage.setItem('art-checklist-' + tid + '-' + id, JSON.stringify(states));
+          document.getElementById('tested-badge-' + tid + '-' + id).style.display = 'inline-block';
+        }
+      }
+      alert('Przywrócono progres!');
+      location.reload();
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        let scenarioBlockId = div.getAttribute('data-scenario');
+        let testLabel = div.getAttribute('data-label');
+        loadChecklist(tid, id, scenarioBlockId, testLabel);
+        div.querySelectorAll('input[type=checkbox]').forEach(function(chk) {
+          chk.onchange = function() { saveChecklist(tid, id, scenarioBlockId, testLabel); };
+        });
+      }
+    });
+  </script>
 </head>
-<body>
+<body data-tid="T1219" data-total-tests="15">
 <div class="card">
   <h1>Alert: Remote Access Tools</h1>
-  <div class="meta"><b>Technique ID:</b> T1219<div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'><b>Atomic Red Team – dostępne testy dla tej techniki:</b><ul><li><b>TeamViewer Files Detected Test on Windows</b><br><b>Polecenia testowe (powershell):</b><pre>Invoke-WebRequest -OutFile C:\Users\$env:username\Desktop\TeamViewer_Setup.exe https://download.teamviewer.com/download/TeamViewer_Setup.exe
-$file1 = "C:\Users\" + $env:username + "\Desktop\TeamViewer_Setup.exe"
-Start-Process -Wait $file1 /S; 
-Start-Process 'C:\Program Files (x86)\TeamViewer\TeamViewer.exe'</pre><a href='../../scenarios/atomic_tests\T1219\TeamViewer_Files_Detected_Test_on_Window/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>$file = 'C:\Program Files (x86)\TeamViewer\uninstall.exe'
-if(Test-Path $file){ Start-Process $file "/S" -ErrorAction Ignore | Out-Null }
-$file1 = "C:\Users\" + $env:username + "\Desktop\TeamViewer_Setup.exe"
-Remove-Item $file1 -ErrorAction Ignore | Out-Null</pre><a href='../../scenarios/atomic_tests\T1219\TeamViewer_Files_Detected_Test_on_Window/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>AnyDesk Files Detected Test on Windows</b><br><b>Polecenia testowe (powershell):</b><pre>Invoke-WebRequest -OutFile C:\Users\$env:username\Desktop\AnyDesk.exe https://download.anydesk.com/AnyDesk.exe
-$file1 = "C:\Users\" + $env:username + "\Desktop\AnyDesk.exe"
-Start-Process $file1 /S;</pre><a href='../../scenarios/atomic_tests\T1219\AnyDesk_Files_Detected_Test_on_Windows/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>$file1 = "C:\Users\" + $env:username + "\Desktop\AnyDesk.exe"
-Remove-Item $file1 -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1219\AnyDesk_Files_Detected_Test_on_Windows/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>LogMeIn Files Detected Test on Windows</b><br><b>Polecenia testowe (powershell):</b><pre>Invoke-WebRequest -OutFile C:\Users\$env:username\Desktop\LogMeInIgnition.msi https://secure.logmein.com/LogMeInIgnition.msi
-$file1 = "C:\Users\" + $env:username + "\Desktop\LogMeInIgnition.msi"
-Start-Process -Wait $file1 /quiet;
-Start-Process 'C:\Program Files (x86)\LogMeIn Ignition\LMIIgnition.exe' "/S"</pre><a href='../../scenarios/atomic_tests\T1219\LogMeIn_Files_Detected_Test_on_Windows/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>get-package *'LogMeIn Client'* -ErrorAction Ignore | uninstall-package 
-$file1 = "C:\Users\" + $env:username + "\Desktop\LogMeInIgnition.msi"
-Remove-Item $file1 -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1219\LogMeIn_Files_Detected_Test_on_Windows/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>GoToAssist Files Detected Test on Windows</b><br><b>Polecenia testowe (powershell):</b><pre>Invoke-WebRequest -OutFile C:\Users\$env:username\Downloads\GoToAssist.exe "https://launch.getgo.com/launcher2/helper?token=e0-FaCddxmtMoX8_cY4czssnTeGvy83ihp8CLREfvwQshiBW0_RcbdoaEp8IA-Qn8wpbKlpGIflS-39gW6RuWRM-XHwtkRVMLBsp5RSKp-a3PBM-Pb1Fliy73EDgoaxr-q83WtXbLKqD7-u3cfDl9gKsymmhdkTGsXcDXir90NqKj92LsN_KpyYwV06lIxsdRekhNZjNwhkWrBa_hG8RQJqWSGk6tkZLVMuMufmn37eC2Cqqiwq5bCGnH5dYiSUUsklSedRLjh4N46qPYT1bAU0qD25ZPr-Kvf4Kzu9bT02q3Yntj02ZA99TxL2-SKzgryizoopBPg4Ilfo5t78UxKTYeEwo4etQECfkCRvenkTRlIHmowdbd88zz7NiccXnbHJZehgs6_-JSVjQIdPTXZbF9T5z44mi4BQYMtZAS3DE86F0C3D4Tcd7fa5F6Ve8rQWt7pvqFCYyiJAailslxOw0LsGyFokoy65tMF980ReP8zhVcTKYP8s8mhGXihUQJQPNk20Sw&downloadTrigger=restart&renameFile=1"
-$file1 = "C:\Users\" + $env:username + "\Downloads\GoToAssist.exe"
-Start-Process $file1 /S;</pre><a href='../../scenarios/atomic_tests\T1219\GoToAssist_Files_Detected_Test_on_Window/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>try{"$PathToAtomicsFolder/T1219/bin/GoToCleanup.ps1"} catch{}</pre><a href='../../scenarios/atomic_tests\T1219\GoToAssist_Files_Detected_Test_on_Window/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>ScreenConnect Application Download and Install on Windows</b><br><b>Polecenia testowe (powershell):</b><pre>$installer = "C:\Users\$env:username\Downloads\ScreenConnect.msi"
-Invoke-WebRequest -OutFile $installer "https://d1kuyuqowve5id.cloudfront.net/ScreenConnect_25.1.10.9197_Release.msi"
-msiexec /i $installer /qn</pre><a href='../../scenarios/atomic_tests\T1219\ScreenConnect_Application_Download_and_I/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>$installer = "C:\Users\$env:username\Downloads\ScreenConnect.msi"
-msiexec /x $installer /qn</pre><a href='../../scenarios/atomic_tests\T1219\ScreenConnect_Application_Download_and_I/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>Ammyy Admin Software Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process "#{Ammyy_Admin_Path}"</pre><a href='../../scenarios/atomic_tests\T1219\Ammyy_Admin_Software_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Stop-Process -Name "Ammyy" -force -erroraction silentlycontinue</pre><a href='../../scenarios/atomic_tests\T1219\Ammyy_Admin_Software_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>RemotePC Software Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process "#{RemotePC_Path}"</pre><a href='../../scenarios/atomic_tests\T1219\RemotePC_Software_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Unregister-ScheduledTask -TaskName "RemotePC" -Confirm:$False -ErrorAction SilentlyContinue
-Unregister-ScheduledTask -TaskName "RPCServiceHealthCheck" -Confirm:$False -ErrorAction SilentlyContinue
-Unregister-ScheduledTask -TaskName "ServiceMonitor" -Confirm:$False -ErrorAction SilentlyContinue
-Unregister-ScheduledTask -TaskName "StartRPCService" -Confirm:$False -ErrorAction SilentlyContinue      
-Stop-Process -Name "RemotePCPerformance" -force -erroraction silentlycontinue
-Stop-Process -Name "RPCPerformanceService" -force -erroraction silentlycontinue
-Stop-Process -Name "RemotePCUIU" -force -erroraction silentlycontinue
-Stop-Process -Name "RPCDownloader" -force -erroraction silentlycontinue
-Stop-Process -Name "RemotePCService" -force -erroraction silentlycontinue
-Stop-Process -Name "RPCService" -force -erroraction silentlycontinue</pre><a href='../../scenarios/atomic_tests\T1219\RemotePC_Software_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>NetSupport - RAT Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process "#{NetSupport_Path}" -ArgumentList "/S /v/qn"</pre><a href='../../scenarios/atomic_tests\T1219\NetSupport_-_RAT_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Stop-Process -Name "client32" -force -erroraction silentlycontinue</pre><a href='../../scenarios/atomic_tests\T1219\NetSupport_-_RAT_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>UltraViewer - RAT Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process -Wait -FilePath "#{UltraViewer_Path}" -Argument "/silent" -PassThru
-Start-Process 'C:\Program Files (x86)\UltraViewer\UltraViewer_Desktop.exe'</pre><a href='../../scenarios/atomic_tests\T1219\UltraViewer_-_RAT_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Stop-Process -Name "UltraViewer_Desktop" -Force -ErrorAction SilentlyContinue</pre><a href='../../scenarios/atomic_tests\T1219\UltraViewer_-_RAT_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>UltraVNC Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process #{UltraVNC_Viewer_Path}</pre><a href='../../scenarios/atomic_tests\T1219\UltraVNC_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Stop-Process -Name "vncviewer" -force -erroraction silentlycontinue</pre><a href='../../scenarios/atomic_tests\T1219\UltraVNC_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>MSP360 Connect Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process #{MSP360_Connect_Path}</pre><a href='../../scenarios/atomic_tests\T1219\MSP360_Connect_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Stop-Process -Name "Connect" -force -erroraction silentlycontinue</pre><a href='../../scenarios/atomic_tests\T1219\MSP360_Connect_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>RustDesk Files Detected Test on Windows</b><br><b>Polecenia testowe (powershell):</b><pre>$file = Join-Path $env:USERPROFILE "Desktop\rustdesk-1.2.3-1-x86_64.exe"
-Invoke-WebRequest  -OutFile $file https://github.com/rustdesk/rustdesk/releases/download/1.2.3-1/rustdesk-1.2.3-1-x86_64.exe
-Start-Process -FilePath $file "/S"</pre><a href='../../scenarios/atomic_tests\T1219\RustDesk_Files_Detected_Test_on_Windows/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>$file = Join-Path $env:USERPROFILE "Desktop\rustdesk-1.2.3-1-x86_64.exe"
-Remove-Item $file1 -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1219\RustDesk_Files_Detected_Test_on_Windows/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>Splashtop Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process "#{Splashtop_Path}"</pre><a href='../../scenarios/atomic_tests\T1219\Splashtop_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Stop-Process -Name "strwinclt" -force -erroraction silentlycontinue</pre><a href='../../scenarios/atomic_tests\T1219\Splashtop_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>Splashtop Streamer Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process -FilePath "C:Program Files (x86)\Splashtop\Splashtop Remote\Server\#{srserver_exe}"</pre><a href='../../scenarios/atomic_tests\T1219\Splashtop_Streamer_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Microsoft App Quick Assist Execution</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process "shell:AppsFolder\MicrosoftCorporationII.QuickAssist_8wekyb3d8bbwe!App"</pre><a href='../../scenarios/atomic_tests\T1219\Microsoft_App_Quick_Assist_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Stop-Process -Name quickassist</pre><a href='../../scenarios/atomic_tests\T1219\Microsoft_App_Quick_Assist_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li></ul><a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1219' target='_blank'>Zobacz wszystkie testy na GitHubie</a></div></div>
-  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0011/" target="_blank">Command and Control (TA0011)</a></div>
-  <div class="status section"><b>Status:</b> Tested</div>
-  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Ten scenariusz detekcji służy do wykrywania legalnych narzędzi zdalnego dostępu (Remote Access Tools, np. TeamViewer, AnyDesk, Ammyy Admin, UltraVNC, itp.), które są często wykorzystywane przez grupy ransomware/RaaS – w tym RansomHub – do uzyskania zdalnej kontroli nad stacjami roboczymi ofiary.
-
-Technika ta pozwala atakującemu na utrzymanie się w środowisku, zdalne sterowanie, eksfiltrację danych lub koordynację kolejnych etapów ataku, nie budząc podejrzeń (narzędzia te są powszechnie wykorzystywane w legalnych celach).
-
-## Opis scenariusza:
-
-- Adwersarz wdraża i uruchamia oryginalne, podpisane narzędzia RMM na stacji ofiary.
-- W środowiskach objętych atakiem RansomHub, detekcja takich zdarzeń (w szczególności na serwerach, maszynach uprzywilejowanych lub terminalach użytkowników nietechnicznych) może wskazywać na przejęcie hosta i zdalne sterowanie.
-- Detekcja obejmuje zarówno instalki, wersje portable, jak i egzotyczne buildy narzędzi RMM.</div>
+  <div class="meta"><b>Technique ID:</b> T1219</div>
+  <div class="tactic section"><b>Tactics:</b> Command-And-Control</div>
+  <div class="status section"><b>Status:</b> ART / do walidacji</div>
   <div class="desc section"><b>MITRE Description:</b><br>An adversary may use legitimate remote access tools to establish an interactive command and control channel within a network. Remote access tools create a session between two trusted hosts through a graphical interface, a command line interaction, a protocol tunnel via development or management software, or hardware-level access such as KVM (Keyboard, Video, Mouse) over IP solutions. Desktop support software (usually graphical interface) and remote management software (typically command line interface) allow a user to control a computer remotely as if they are a local user inheriting the user or software permissions. This software is commonly used for troubleshooting, software installation, and system management.(Citation: Symantec Living off the Land)(Citation: CrowdStrike 2015 Global Threat Report)(Citation: CrySyS Blog TeamSpy) Adversaries may similarly abuse response features included in EDR and other defensive tools that enable remote access.  Remote access tools may be installed and used post-compromise as an alternate communications channel for redundant access or to establish an interactive remote desktop session with the target system. It may also be used as a malware component to establish a reverse connection or back-connect to a service or adversary-controlled system.  Installation of many remote access tools may also include persistence (e.g., the software's installation routine creates a [Windows Service](https://attack.mitre.org/techniques/T1543/003)). Remote access modules/features may also exist as part of otherwise existing software (e.g., Google Chrome’s Remote Desktop).(Citation: Google Chrome Remote Desktop)(Citation: Chrome Remote Desktop)</div>
   <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1219/" target="_blank">https://attack.mitre.org/techniques/T1219/</a></div>
+  <div class="scenario-block">
+    <b>Twój opis scenariusza:</b><br>
+    <textarea id="scenarioBlock" rows="7" readonly>
+Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
+    </textarea>
+  </div>
+  <button onclick="eksportujProgres('T1219',15)" class="eksport-btn">Eksportuj progres (do MD)</button>
+  <button onclick="pokazImport()" class="import-btn">Załaduj progres z .md</button>
+  <div id="importBox" style="display:none;margin-top:8px;">
+    <textarea id="importProgress" rows="4" style="width:99%;"></textarea>
+    <button onclick="importujProgres()" class="import-btn">Zastosuj progres</button>
+  </div>
+  <textarea id="eksportChecklist" rows="4" style="width:100%;margin-top:10px;display:none;"></textarea>
+  <div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'>
+    <b>Atomic Red Team – dostępne testy dla tej techniki:</b>
+    <div style="margin-bottom:10px;">
+      <span class="badge badge-total">15 testów</span>
+      <span class="badge badge-ps">15 PowerShell</span>
+      <span class="badge badge-cmd">0 CMD</span>
+      <a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1219' target='_blank' style="float:right;">Zobacz na GitHubie</a>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 1: TeamViewer Files Detected Test on Windows</b>
+        <span id="tested-badge-T1219-art01" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Invoke-WebRequest -OutFile C:\Users\$env:username\Desktop\TeamViewer_Setup.exe https://download.teamviewer.com/download/TeamViewer_Setup.exe
+$file1 = &quot;C:\Users\&quot; + $env:username + &quot;\Desktop\TeamViewer_Setup.exe&quot;
+Start-Process -Wait $file1 /S; 
+Start-Process 'C:\Program Files (x86)\TeamViewer\TeamViewer.exe'</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\TeamViewer_Files_Detected_Test_on_Window\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>$file = 'C:\Program Files (x86)\TeamViewer\uninstall.exe'
+if(Test-Path $file){ Start-Process $file &quot;/S&quot; -ErrorAction Ignore | Out-Null }
+$file1 = &quot;C:\Users\&quot; + $env:username + &quot;\Desktop\TeamViewer_Setup.exe&quot;
+Remove-Item $file1 -ErrorAction Ignore | Out-Null</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\TeamViewer_Files_Detected_Test_on_Window\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art01" data-scenario="scenarioBlock" data-label="Atomic Test 1: TeamViewer Files Detected Test on Windows">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art01','scenarioBlock','Atomic Test 1: TeamViewer Files Detected Test on Windows')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 2: AnyDesk Files Detected Test on Windows</b>
+        <span id="tested-badge-T1219-art02" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Invoke-WebRequest -OutFile C:\Users\$env:username\Desktop\AnyDesk.exe https://download.anydesk.com/AnyDesk.exe
+$file1 = &quot;C:\Users\&quot; + $env:username + &quot;\Desktop\AnyDesk.exe&quot;
+Start-Process $file1 /S;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\AnyDesk_Files_Detected_Test_on_Windows\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>$file1 = &quot;C:\Users\&quot; + $env:username + &quot;\Desktop\AnyDesk.exe&quot;
+Remove-Item $file1 -ErrorAction Ignore</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\AnyDesk_Files_Detected_Test_on_Windows\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art02" data-scenario="scenarioBlock" data-label="Atomic Test 2: AnyDesk Files Detected Test on Windows">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art02','scenarioBlock','Atomic Test 2: AnyDesk Files Detected Test on Windows')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 3: LogMeIn Files Detected Test on Windows</b>
+        <span id="tested-badge-T1219-art03" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Invoke-WebRequest -OutFile C:\Users\$env:username\Desktop\LogMeInIgnition.msi https://secure.logmein.com/LogMeInIgnition.msi
+$file1 = &quot;C:\Users\&quot; + $env:username + &quot;\Desktop\LogMeInIgnition.msi&quot;
+Start-Process -Wait $file1 /quiet;
+Start-Process 'C:\Program Files (x86)\LogMeIn Ignition\LMIIgnition.exe' &quot;/S&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\LogMeIn_Files_Detected_Test_on_Windows\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>get-package *'LogMeIn Client'* -ErrorAction Ignore | uninstall-package 
+$file1 = &quot;C:\Users\&quot; + $env:username + &quot;\Desktop\LogMeInIgnition.msi&quot;
+Remove-Item $file1 -ErrorAction Ignore</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\LogMeIn_Files_Detected_Test_on_Windows\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art03" data-scenario="scenarioBlock" data-label="Atomic Test 3: LogMeIn Files Detected Test on Windows">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art03','scenarioBlock','Atomic Test 3: LogMeIn Files Detected Test on Windows')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 4: GoToAssist Files Detected Test on Windows</b>
+        <span id="tested-badge-T1219-art04" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Invoke-WebRequest -OutFile C:\Users\$env:username\Downloads\GoToAssist.exe &quot;https://launch.getgo.com/launcher2/helper?token=e0-FaCddxmtMoX8_cY4czssnTeGvy83ihp8CLREfvwQshiBW0_RcbdoaEp8IA-Qn8wpbKlpGIflS-39gW6RuWRM-XHwtkRVMLBsp5RSKp-a3PBM-Pb1Fliy73EDgoaxr-q83WtXbLKqD7-u3cfDl9gKsymmhdkTGsXcDXir90NqKj92LsN_KpyYwV06lIxsdRekhNZjNwhkWrBa_hG8RQJqWSGk6tkZLVMuMufmn37eC2Cqqiwq5bCGnH5dYiSUUsklSedRLjh4N46qPYT1bAU0qD25ZPr-Kvf4Kzu9bT02q3Yntj02ZA99TxL2-SKzgryizoopBPg4Ilfo5t78UxKTYeEwo4etQECfkCRvenkTRlIHmowdbd88zz7NiccXnbHJZehgs6_-JSVjQIdPTXZbF9T5z44mi4BQYMtZAS3DE86F0C3D4Tcd7fa5F6Ve8rQWt7pvqFCYyiJAailslxOw0LsGyFokoy65tMF980ReP8zhVcTKYP8s8mhGXihUQJQPNk20Sw&downloadTrigger=restart&renameFile=1&quot;
+$file1 = &quot;C:\Users\&quot; + $env:username + &quot;\Downloads\GoToAssist.exe&quot;
+Start-Process $file1 /S;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\GoToAssist_Files_Detected_Test_on_Window\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>try{&quot;$PathToAtomicsFolder/T1219/bin/GoToCleanup.ps1&quot;} catch{}</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\GoToAssist_Files_Detected_Test_on_Window\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art04" data-scenario="scenarioBlock" data-label="Atomic Test 4: GoToAssist Files Detected Test on Windows">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art04','scenarioBlock','Atomic Test 4: GoToAssist Files Detected Test on Windows')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 5: ScreenConnect Application Download and Install on Windows</b>
+        <span id="tested-badge-T1219-art05" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>$installer = &quot;C:\Users\$env:username\Downloads\ScreenConnect.msi&quot;
+Invoke-WebRequest -OutFile $installer &quot;https://d1kuyuqowve5id.cloudfront.net/ScreenConnect_25.1.10.9197_Release.msi&quot;
+msiexec /i $installer /qn</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\ScreenConnect_Application_Download_and_I\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>$installer = &quot;C:\Users\$env:username\Downloads\ScreenConnect.msi&quot;
+msiexec /x $installer /qn</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\ScreenConnect_Application_Download_and_I\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art05" data-scenario="scenarioBlock" data-label="Atomic Test 5: ScreenConnect Application Download and Install on Windows">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art05','scenarioBlock','Atomic Test 5: ScreenConnect Application Download and Install on Windows')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 6: Ammyy Admin Software Execution</b>
+        <span id="tested-badge-T1219-art06" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process &quot;#{Ammyy_Admin_Path}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\Ammyy_Admin_Software_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Stop-Process -Name &quot;Ammyy&quot; -force -erroraction silentlycontinue</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\Ammyy_Admin_Software_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art06" data-scenario="scenarioBlock" data-label="Atomic Test 6: Ammyy Admin Software Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art06','scenarioBlock','Atomic Test 6: Ammyy Admin Software Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 7: RemotePC Software Execution</b>
+        <span id="tested-badge-T1219-art07" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process &quot;#{RemotePC_Path}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\RemotePC_Software_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Unregister-ScheduledTask -TaskName &quot;RemotePC&quot; -Confirm:$False -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName &quot;RPCServiceHealthCheck&quot; -Confirm:$False -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName &quot;ServiceMonitor&quot; -Confirm:$False -ErrorAction SilentlyContinue
+Unregister-ScheduledTask -TaskName &quot;StartRPCService&quot; -Confirm:$False -ErrorAction SilentlyContinue      
+Stop-Process -Name &quot;RemotePCPerformance&quot; -force -erroraction silentlycontinue
+Stop-Process -Name &quot;RPCPerformanceService&quot; -force -erroraction silentlycontinue
+Stop-Process -Name &quot;RemotePCUIU&quot; -force -erroraction silentlycontinue
+Stop-Process -Name &quot;RPCDownloader&quot; -force -erroraction silentlycontinue
+Stop-Process -Name &quot;RemotePCService&quot; -force -erroraction silentlycontinue
+Stop-Process -Name &quot;RPCService&quot; -force -erroraction silentlycontinue</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\RemotePC_Software_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art07" data-scenario="scenarioBlock" data-label="Atomic Test 7: RemotePC Software Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art07','scenarioBlock','Atomic Test 7: RemotePC Software Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 8: NetSupport - RAT Execution</b>
+        <span id="tested-badge-T1219-art08" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process &quot;#{NetSupport_Path}&quot; -ArgumentList &quot;/S /v/qn&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\NetSupport_-_RAT_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Stop-Process -Name &quot;client32&quot; -force -erroraction silentlycontinue</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\NetSupport_-_RAT_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art08" data-scenario="scenarioBlock" data-label="Atomic Test 8: NetSupport - RAT Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art08','scenarioBlock','Atomic Test 8: NetSupport - RAT Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 9: UltraViewer - RAT Execution</b>
+        <span id="tested-badge-T1219-art09" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process -Wait -FilePath &quot;#{UltraViewer_Path}&quot; -Argument &quot;/silent&quot; -PassThru
+Start-Process 'C:\Program Files (x86)\UltraViewer\UltraViewer_Desktop.exe'</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\UltraViewer_-_RAT_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Stop-Process -Name &quot;UltraViewer_Desktop&quot; -Force -ErrorAction SilentlyContinue</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\UltraViewer_-_RAT_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art09" data-scenario="scenarioBlock" data-label="Atomic Test 9: UltraViewer - RAT Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art09','scenarioBlock','Atomic Test 9: UltraViewer - RAT Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 10: UltraVNC Execution</b>
+        <span id="tested-badge-T1219-art10" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process #{UltraVNC_Viewer_Path}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\UltraVNC_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Stop-Process -Name &quot;vncviewer&quot; -force -erroraction silentlycontinue</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\UltraVNC_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art10" data-scenario="scenarioBlock" data-label="Atomic Test 10: UltraVNC Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art10','scenarioBlock','Atomic Test 10: UltraVNC Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 11: MSP360 Connect Execution</b>
+        <span id="tested-badge-T1219-art11" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process #{MSP360_Connect_Path}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\MSP360_Connect_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Stop-Process -Name &quot;Connect&quot; -force -erroraction silentlycontinue</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\MSP360_Connect_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art11" data-scenario="scenarioBlock" data-label="Atomic Test 11: MSP360 Connect Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art11','scenarioBlock','Atomic Test 11: MSP360 Connect Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 12: RustDesk Files Detected Test on Windows</b>
+        <span id="tested-badge-T1219-art12" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>$file = Join-Path $env:USERPROFILE &quot;Desktop\rustdesk-1.2.3-1-x86_64.exe&quot;
+Invoke-WebRequest  -OutFile $file https://github.com/rustdesk/rustdesk/releases/download/1.2.3-1/rustdesk-1.2.3-1-x86_64.exe
+Start-Process -FilePath $file &quot;/S&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\RustDesk_Files_Detected_Test_on_Windows\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>$file = Join-Path $env:USERPROFILE &quot;Desktop\rustdesk-1.2.3-1-x86_64.exe&quot;
+Remove-Item $file1 -ErrorAction Ignore</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\RustDesk_Files_Detected_Test_on_Windows\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art12" data-scenario="scenarioBlock" data-label="Atomic Test 12: RustDesk Files Detected Test on Windows">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art12','scenarioBlock','Atomic Test 12: RustDesk Files Detected Test on Windows')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 13: Splashtop Execution</b>
+        <span id="tested-badge-T1219-art13" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process &quot;#{Splashtop_Path}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\Splashtop_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Stop-Process -Name &quot;strwinclt&quot; -force -erroraction silentlycontinue</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\Splashtop_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art13" data-scenario="scenarioBlock" data-label="Atomic Test 13: Splashtop Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art13','scenarioBlock','Atomic Test 13: Splashtop Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 14: Splashtop Streamer Execution</b>
+        <span id="tested-badge-T1219-art14" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process -FilePath &quot;C:Program Files (x86)\Splashtop\Splashtop Remote\Server\#{srserver_exe}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\Splashtop_Streamer_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art14" data-scenario="scenarioBlock" data-label="Atomic Test 14: Splashtop Streamer Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art14','scenarioBlock','Atomic Test 14: Splashtop Streamer Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 15: Microsoft App Quick Assist Execution</b>
+        <span id="tested-badge-T1219-art15" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process &quot;shell:AppsFolder\MicrosoftCorporationII.QuickAssist_8wekyb3d8bbwe!App&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\Microsoft_App_Quick_Assist_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Stop-Process -Name quickassist</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1219\Microsoft_App_Quick_Assist_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1219-art15" data-scenario="scenarioBlock" data-label="Atomic Test 15: Microsoft App Quick Assist Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1219','art15','scenarioBlock','Atomic Test 15: Microsoft App Quick Assist Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
   <div class="author section"><b>Author:</b> Krzysztof Krzymowski</div>
 </div>
 </body>

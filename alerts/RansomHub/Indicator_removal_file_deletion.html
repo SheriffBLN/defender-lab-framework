@@ -2,30 +2,361 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Alert: File Deletion</title>
+  <title>Alert: File Deletion – Atomic Red Team</title>
   <style>
     body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
-    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 800px; margin: auto; }
     h1 { margin-top: 0; font-size: 2rem; }
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
     .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
-    pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
+    pre { background: #eee; padding: .7em 1em; border-radius: 5px; white-space: pre-wrap; word-break: break-all; overflow-x: auto; max-width: 100%; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
+    textarea { width:100%; border-radius:8px; border:1.5px solid #d6d6d6; font-size:1.08em; margin-top:8px; padding:8px; background:#faf8ed;}
+    .badge-ok { background: #43a047; color: #fff; }
+    .art-accordion { margin-bottom:10px; }
+    .art-accordion-btn { background:#eaf4ff; color:#1d3557; cursor:pointer; padding:9px 18px; width:100%; text-align:left; border:none; border-radius:7px; font-size:1.1em; font-weight:600; margin-bottom:2px; transition:background 0.18s;}
+    .art-accordion-btn:hover { background:#ddefff; }
+    .art-accordion-content { display:none; background:#f7fafd; border:1px solid #e3e3e3; border-radius:0 0 7px 7px; padding:13px 18px; margin-bottom:2px; }
+    .test-cleanup { background:#fffde7; border-left:4px solid #ffd700; margin-top:11px; padding:7px 12px; border-radius:5px; }
+    .badge { display:inline-block; border-radius:8px; padding:2px 10px; font-size:.94em; color:#fff; margin-right:7px; }
+    .badge-ps { background:#1976d2; }
+    .badge-cmd { background:#29b300; }
+    .badge-total { background:#888; }
+    .art-checklist { background: #f7fff7; border-radius:6px; margin-top:10px; padding:7px 15px; }
+    .art-checklist label { font-size:1.02em; margin-right:20px; }
+    .art-checklist input[type=checkbox] { transform: scale(1.2); margin-right:8px; }
+    .art-copy-btn { background:#fff; border:1px solid #bdbdbd; color:#1976d2; border-radius:6px; padding:3px 11px; margin-left:8px; font-size:0.97em; cursor:pointer;}
+    .art-copy-btn:active { background:#eaf4ff;}
+    .eksport-btn { background:#c5e1a5; color:#1b4b2b; border-radius:7px; border:none; padding:9px 17px; margin:11px 0 5px 0; font-weight:600; cursor:pointer; }
+    .eksport-btn:hover { background:#b2dfdb; }
+    .import-btn { background:#bbdefb; color:#1a237e; border-radius:7px; border:none; padding:8px 15px; margin-left:8px; font-weight:600; cursor:pointer; }
+    .import-btn:hover { background:#90caf9; }
   </style>
+  <script>
+    function toggleArtAccordion(btn) {
+      var content = btn.nextElementSibling;
+      content.style.display = (content.style.display === "block") ? "none" : "block";
+    }
+    function copyArtCode(btn) {
+      var code = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(code);
+      btn.textContent = "Skopiowano!";
+      setTimeout(()=>btn.textContent="Kopiuj", 1100);
+    }
+    function saveChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = Array.from(chks).map(x => x.checked);
+      localStorage.setItem('art-checklist-' + uniqueId, JSON.stringify(states));
+      var allChecked = states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function loadChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      if (!div) return;
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = JSON.parse(localStorage.getItem('art-checklist-' + uniqueId) || '[]');
+      chks.forEach((chk, i) => { chk.checked = !!states[i]; });
+      var allChecked = states.length && states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function resetChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      localStorage.removeItem('art-checklist-' + uniqueId);
+      loadChecklist(tid, id, scenarioBlockId, testLabel);
+    }
+    function eksportujProgres(tid, total_tests) {
+      let out = [];
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let uniqueId = tid + '-' + id;
+        let div = document.getElementById('checklist-' + uniqueId);
+        if(!div) continue;
+        let label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let chks = div.querySelectorAll('input[type=checkbox]');
+        let states = Array.from(chks).map(x => x.checked);
+        if(states.every(x=>x)) {
+          let now = new Date().toLocaleString("pl-PL");
+          out.push(`✅ [${now}] Przetestowano: ${label} – utworzono alert w Defenderze`);
+        }
+      }
+      let box = document.getElementById('eksportChecklist');
+      box.style.display = 'block';
+      box.value = out.join("\n");
+      box.select();
+      document.execCommand('copy');
+    }
+    function pokazImport() {
+      var el = document.getElementById('importBox');
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+    function importujProgres() {
+      var lines = document.getElementById('importProgress').value.split('\n');
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let label = "";
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let ok = lines.some(line => line.includes(label));
+        if(ok) {
+          let chks = div.querySelectorAll('input[type=checkbox]');
+          let states = Array(chks.length).fill(true);
+          chks.forEach((chk, idx) => { chk.checked = true; });
+          localStorage.setItem('art-checklist-' + tid + '-' + id, JSON.stringify(states));
+          document.getElementById('tested-badge-' + tid + '-' + id).style.display = 'inline-block';
+        }
+      }
+      alert('Przywrócono progres!');
+      location.reload();
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        let scenarioBlockId = div.getAttribute('data-scenario');
+        let testLabel = div.getAttribute('data-label');
+        loadChecklist(tid, id, scenarioBlockId, testLabel);
+        div.querySelectorAll('input[type=checkbox]').forEach(function(chk) {
+          chk.onchange = function() { saveChecklist(tid, id, scenarioBlockId, testLabel); };
+        });
+      }
+    });
+  </script>
 </head>
-<body>
+<body data-tid="T1070.004" data-total-tests="7">
 <div class="card">
   <h1>Alert: File Deletion</h1>
-  <div class="meta"><b>Technique ID:</b> T1070.004<div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'><b>Atomic Red Team – dostępne testy dla tej techniki:</b><ul><li><b>Delete a single file - Windows cmd</b><br><b>Polecenia testowe (cmd):</b><pre>del /f #{file_to_delete}</pre><a href='../../scenarios/atomic_tests\T1070.004\Delete_a_single_file_-_Windows_cmd/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Delete an entire folder - Windows cmd</b><br><b>Polecenia testowe (cmd):</b><pre>rmdir /s /q #{folder_to_delete}</pre><a href='../../scenarios/atomic_tests\T1070.004\Delete_an_entire_folder_-_Windows_cmd/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Delete a single file - Windows PowerShell</b><br><b>Polecenia testowe (powershell):</b><pre>Remove-Item -path #{file_to_delete}</pre><a href='../../scenarios/atomic_tests\T1070.004\Delete_a_single_file_-_Windows_PowerShel/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Delete an entire folder - Windows PowerShell</b><br><b>Polecenia testowe (powershell):</b><pre>Remove-Item -Path #{folder_to_delete} -Recurse</pre><a href='../../scenarios/atomic_tests\T1070.004\Delete_an_entire_folder_-_Windows_PowerS/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Delete Prefetch File</b><br><b>Polecenia testowe (powershell):</b><pre>Remove-Item -Path (Join-Path "$Env:SystemRoot\prefetch\" (Get-ChildItem -Path "$Env:SystemRoot\prefetch\*.pf" -Name)[0])</pre><a href='../../scenarios/atomic_tests\T1070.004\Delete_Prefetch_File/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Delete TeamViewer Log Files</b><br><b>Polecenia testowe (powershell):</b><pre>New-Item -Path #{teamviewer_log_file} -Force | Out-Null
-Remove-Item #{teamviewer_log_file} -Force -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1070.004\Delete_TeamViewer_Log_Files/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Clears Recycle bin via rd</b><br><b>Polecenia testowe (cmd):</b><pre>rd /s /q %systemdrive%\$RECYCLE.BIN</pre><a href='../../scenarios/atomic_tests\T1070.004\Clears_Recycle_bin_via_rd/test_1.cmd'>Pobierz test_1.cmd</a><br></li></ul><a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1070.004' target='_blank'>Zobacz wszystkie testy na GitHubie</a></div></div>
-  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0005/" target="_blank">Defense Evasion (TA0005)</a></div>
-  <div class="status section"><b>Status:</b> Pending</div>
-  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
-  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may delete files left behind by the actions of their intrusion activity. Malware, tools, or other non-native files dropped or created on a system by an adversary (ex: [Ingress Tool Transfer](https://attack.mitre.org/techniques/T1105)) may leave traces to indicate to what was done within a network and how. Removal of these files can occur during an intrusion, or as part of a post-intrusion process to minimize the adversary's footprint.  There are tools available from the host operating system to perform cleanup, but adversaries may use other tools as well.(Citation: Microsoft SDelete July 2016) Examples of built-in [Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059) functions include <code>del</code> on Windows, <code>rm</code> or <code>unlink</code> on Linux and macOS, and `rm` on ESXi.</div>
+  <div class="meta"><b>Technique ID:</b> T1070.004</div>
+  <div class="tactic section"><b>Tactics:</b> Defense-Evasion</div>
+  <div class="status section"><b>Status:</b> ART / do walidacji</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may delete files left behind by the actions of their intrusion activity. Malware, tools, or other non-native files dropped or created on a system by an adversary (ex: [Ingress Tool Transfer](https://attack.mitre.org/techniques/T1105)) may leave traces to indicate to what was done within a network and how. Removal of these files can occur during an intrusion, or as part of a post-intrusion process to minimize the adversary's footprint.  There are tools available from the host operating system to perform cleanup, but adversaries may use other tools as well.(Citation: Microsoft SDelete July 2016) Examples of built-in [Command and Scripting Interpreter](https://attack.mitre.org/techniques/T1059) functions include &lt;code&gt;del&lt;/code&gt; on Windows, &lt;code&gt;rm&lt;/code&gt; or &lt;code&gt;unlink&lt;/code&gt; on Linux and macOS, and `rm` on ESXi.</div>
   <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1070/004/" target="_blank">https://attack.mitre.org/techniques/T1070/004/</a></div>
+  <div class="scenario-block">
+    <b>Twój opis scenariusza:</b><br>
+    <textarea id="scenarioBlock" rows="7" readonly>
+Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
+    </textarea>
+  </div>
+  <button onclick="eksportujProgres('T1070.004',7)" class="eksport-btn">Eksportuj progres (do MD)</button>
+  <button onclick="pokazImport()" class="import-btn">Załaduj progres z .md</button>
+  <div id="importBox" style="display:none;margin-top:8px;">
+    <textarea id="importProgress" rows="4" style="width:99%;"></textarea>
+    <button onclick="importujProgres()" class="import-btn">Zastosuj progres</button>
+  </div>
+  <textarea id="eksportChecklist" rows="4" style="width:100%;margin-top:10px;display:none;"></textarea>
+  <div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'>
+    <b>Atomic Red Team – dostępne testy dla tej techniki:</b>
+    <div style="margin-bottom:10px;">
+      <span class="badge badge-total">7 testów</span>
+      <span class="badge badge-ps">4 PowerShell</span>
+      <span class="badge badge-cmd">3 CMD</span>
+      <a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1070.004' target='_blank' style="float:right;">Zobacz na GitHubie</a>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 1: Delete a single file - Windows cmd</b>
+        <span id="tested-badge-T1070.004-art01" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>del /f #{file_to_delete}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1070.004\Delete_a_single_file_-_Windows_cmd\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1070.004-art01" data-scenario="scenarioBlock" data-label="Atomic Test 1: Delete a single file - Windows cmd">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1070.004','art01','scenarioBlock','Atomic Test 1: Delete a single file - Windows cmd')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 2: Delete an entire folder - Windows cmd</b>
+        <span id="tested-badge-T1070.004-art02" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>rmdir /s /q #{folder_to_delete}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1070.004\Delete_an_entire_folder_-_Windows_cmd\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1070.004-art02" data-scenario="scenarioBlock" data-label="Atomic Test 2: Delete an entire folder - Windows cmd">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1070.004','art02','scenarioBlock','Atomic Test 2: Delete an entire folder - Windows cmd')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 3: Delete a single file - Windows PowerShell</b>
+        <span id="tested-badge-T1070.004-art03" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Remove-Item -path #{file_to_delete}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1070.004\Delete_a_single_file_-_Windows_PowerShel\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1070.004-art03" data-scenario="scenarioBlock" data-label="Atomic Test 3: Delete a single file - Windows PowerShell">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1070.004','art03','scenarioBlock','Atomic Test 3: Delete a single file - Windows PowerShell')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 4: Delete an entire folder - Windows PowerShell</b>
+        <span id="tested-badge-T1070.004-art04" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Remove-Item -Path #{folder_to_delete} -Recurse</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1070.004\Delete_an_entire_folder_-_Windows_PowerS\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1070.004-art04" data-scenario="scenarioBlock" data-label="Atomic Test 4: Delete an entire folder - Windows PowerShell">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1070.004','art04','scenarioBlock','Atomic Test 4: Delete an entire folder - Windows PowerShell')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 5: Delete Prefetch File</b>
+        <span id="tested-badge-T1070.004-art05" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Remove-Item -Path (Join-Path &quot;$Env:SystemRoot\prefetch\&quot; (Get-ChildItem -Path &quot;$Env:SystemRoot\prefetch\*.pf&quot; -Name)[0])</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1070.004\Delete_Prefetch_File\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1070.004-art05" data-scenario="scenarioBlock" data-label="Atomic Test 5: Delete Prefetch File">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1070.004','art05','scenarioBlock','Atomic Test 5: Delete Prefetch File')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 6: Delete TeamViewer Log Files</b>
+        <span id="tested-badge-T1070.004-art06" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>New-Item -Path #{teamviewer_log_file} -Force | Out-Null
+Remove-Item #{teamviewer_log_file} -Force -ErrorAction Ignore</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1070.004\Delete_TeamViewer_Log_Files\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1070.004-art06" data-scenario="scenarioBlock" data-label="Atomic Test 6: Delete TeamViewer Log Files">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1070.004','art06','scenarioBlock','Atomic Test 6: Delete TeamViewer Log Files')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 7: Clears Recycle bin via rd</b>
+        <span id="tested-badge-T1070.004-art07" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>rd /s /q %systemdrive%\$RECYCLE.BIN</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1070.004\Clears_Recycle_bin_via_rd\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1070.004-art07" data-scenario="scenarioBlock" data-label="Atomic Test 7: Clears Recycle bin via rd">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1070.004','art07','scenarioBlock','Atomic Test 7: Clears Recycle bin via rd')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

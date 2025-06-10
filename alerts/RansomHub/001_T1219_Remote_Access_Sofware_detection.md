@@ -1,5 +1,5 @@
 # Alert: Remote Access Tools
-
+#SCENARIO
 Ten scenariusz detekcji służy do wykrywania legalnych narzędzi zdalnego dostępu (Remote Access Tools, np. TeamViewer, AnyDesk, Ammyy Admin, UltraVNC, itp.), które są często wykorzystywane przez grupy ransomware/RaaS – w tym RansomHub – do uzyskania zdalnej kontroli nad stacjami roboczymi ofiary.
 
 Technika ta pozwala atakującemu na utrzymanie się w środowisku, zdalne sterowanie, eksfiltrację danych lub koordynację kolejnych etapów ataku, nie budząc podejrzeń (narzędzia te są powszechnie wykorzystywane w legalnych celach).
@@ -45,7 +45,7 @@ certInfo
 - Skontaktuj się z użytkownikiem maszyny – potwierdź, czy korzystanie z narzędzia było autoryzowane i czy użytkownik rozpoznaje tę aktywność.
 - Jeśli incydent wydaje się podejrzany – uruchom procedurę IR (response), izoluj hosta oraz przeanalizuj ruch sieciowy i potencjalne transfery plików przez zdalny pulpit.
 - Poinformuj zespół bezpieczeństwa oraz przeprowadź dodatkową analizę pod kątem obecności innych narzędzi z matrycy RansomHub.
-
+#ENDSCENARIO
 
 ---
 

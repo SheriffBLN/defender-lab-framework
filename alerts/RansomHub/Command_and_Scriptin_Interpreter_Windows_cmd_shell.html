@@ -2,29 +2,355 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Alert: Windows Command Shell</title>
+  <title>Alert: Windows Command Shell – Atomic Red Team</title>
   <style>
     body { font-family: Segoe UI, Arial, sans-serif; margin: 2rem; background: #f6f7fb; }
-    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 700px; margin: auto; }
+    .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px #bbb; padding: 2rem; max-width: 800px; margin: auto; }
     h1 { margin-top: 0; font-size: 2rem; }
     .desc, .id, .link, .author, .tactic, .status { margin-bottom: 1.1em; }
     .meta { font-size: .95em; color: #555; margin-bottom: .8em; }
     .section { font-size: .99em; }
     .scenario-block { background: #f4f0d9; border-radius: 7px; padding: 1em 1.2em; margin-bottom: 1.2em; color:#4a4500; font-size:1.07em; border-left:5px solid #e1c553; }
-    pre { background: #eee; padding: .7em 1em; border-radius: 5px; }
+    pre { background: #eee; padding: .7em 1em; border-radius: 5px; white-space: pre-wrap; word-break: break-all; overflow-x: auto; max-width: 100%; }
     code { background: #f6f6f6; padding: 2px 5px; border-radius: 2px; }
     ul { margin-left: 1.6em; }
+    textarea { width:100%; border-radius:8px; border:1.5px solid #d6d6d6; font-size:1.08em; margin-top:8px; padding:8px; background:#faf8ed;}
+    .badge-ok { background: #43a047; color: #fff; }
+    .art-accordion { margin-bottom:10px; }
+    .art-accordion-btn { background:#eaf4ff; color:#1d3557; cursor:pointer; padding:9px 18px; width:100%; text-align:left; border:none; border-radius:7px; font-size:1.1em; font-weight:600; margin-bottom:2px; transition:background 0.18s;}
+    .art-accordion-btn:hover { background:#ddefff; }
+    .art-accordion-content { display:none; background:#f7fafd; border:1px solid #e3e3e3; border-radius:0 0 7px 7px; padding:13px 18px; margin-bottom:2px; }
+    .test-cleanup { background:#fffde7; border-left:4px solid #ffd700; margin-top:11px; padding:7px 12px; border-radius:5px; }
+    .badge { display:inline-block; border-radius:8px; padding:2px 10px; font-size:.94em; color:#fff; margin-right:7px; }
+    .badge-ps { background:#1976d2; }
+    .badge-cmd { background:#29b300; }
+    .badge-total { background:#888; }
+    .art-checklist { background: #f7fff7; border-radius:6px; margin-top:10px; padding:7px 15px; }
+    .art-checklist label { font-size:1.02em; margin-right:20px; }
+    .art-checklist input[type=checkbox] { transform: scale(1.2); margin-right:8px; }
+    .art-copy-btn { background:#fff; border:1px solid #bdbdbd; color:#1976d2; border-radius:6px; padding:3px 11px; margin-left:8px; font-size:0.97em; cursor:pointer;}
+    .art-copy-btn:active { background:#eaf4ff;}
+    .eksport-btn { background:#c5e1a5; color:#1b4b2b; border-radius:7px; border:none; padding:9px 17px; margin:11px 0 5px 0; font-weight:600; cursor:pointer; }
+    .eksport-btn:hover { background:#b2dfdb; }
+    .import-btn { background:#bbdefb; color:#1a237e; border-radius:7px; border:none; padding:8px 15px; margin-left:8px; font-weight:600; cursor:pointer; }
+    .import-btn:hover { background:#90caf9; }
   </style>
+  <script>
+    function toggleArtAccordion(btn) {
+      var content = btn.nextElementSibling;
+      content.style.display = (content.style.display === "block") ? "none" : "block";
+    }
+    function copyArtCode(btn) {
+      var code = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(code);
+      btn.textContent = "Skopiowano!";
+      setTimeout(()=>btn.textContent="Kopiuj", 1100);
+    }
+    function saveChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = Array.from(chks).map(x => x.checked);
+      localStorage.setItem('art-checklist-' + uniqueId, JSON.stringify(states));
+      var allChecked = states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function loadChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      var div = document.getElementById('checklist-' + uniqueId);
+      if (!div) return;
+      var chks = div.querySelectorAll('input[type=checkbox]');
+      var states = JSON.parse(localStorage.getItem('art-checklist-' + uniqueId) || '[]');
+      chks.forEach((chk, i) => { chk.checked = !!states[i]; });
+      var allChecked = states.length && states.every(x=>x);
+      document.getElementById('tested-badge-' + uniqueId).style.display = allChecked ? 'inline-block' : 'none';
+      if(allChecked && scenarioBlockId && testLabel) {
+        var now = new Date().toLocaleString("pl-PL");
+        var msg = `✅ [${now}] Przetestowano: ${testLabel} – utworzono alert w Defenderze`;
+        var scenario = document.getElementById(scenarioBlockId);
+        if(scenario && !scenario.value.includes(msg)) {
+          scenario.value += "\n" + msg;
+        }
+      }
+    }
+    function resetChecklist(tid, id, scenarioBlockId, testLabel) {
+      var uniqueId = tid + '-' + id;
+      localStorage.removeItem('art-checklist-' + uniqueId);
+      loadChecklist(tid, id, scenarioBlockId, testLabel);
+    }
+    function eksportujProgres(tid, total_tests) {
+      let out = [];
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let uniqueId = tid + '-' + id;
+        let div = document.getElementById('checklist-' + uniqueId);
+        if(!div) continue;
+        let label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let chks = div.querySelectorAll('input[type=checkbox]');
+        let states = Array.from(chks).map(x => x.checked);
+        if(states.every(x=>x)) {
+          let now = new Date().toLocaleString("pl-PL");
+          out.push(`✅ [${now}] Przetestowano: ${label} – utworzono alert w Defenderze`);
+        }
+      }
+      let box = document.getElementById('eksportChecklist');
+      box.style.display = 'block';
+      box.value = out.join("\n");
+      box.select();
+      document.execCommand('copy');
+    }
+    function pokazImport() {
+      var el = document.getElementById('importBox');
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+    function importujProgres() {
+      var lines = document.getElementById('importProgress').value.split('\n');
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let label = "";
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        label = div.getAttribute('data-label') || ("Atomic Test " + i);
+        let ok = lines.some(line => line.includes(label));
+        if(ok) {
+          let chks = div.querySelectorAll('input[type=checkbox]');
+          let states = Array(chks.length).fill(true);
+          chks.forEach((chk, idx) => { chk.checked = true; });
+          localStorage.setItem('art-checklist-' + tid + '-' + id, JSON.stringify(states));
+          document.getElementById('tested-badge-' + tid + '-' + id).style.display = 'inline-block';
+        }
+      }
+      alert('Przywrócono progres!');
+      location.reload();
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      var tid = document.body.getAttribute('data-tid');
+      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
+      for(let i=1; i<=total_tests; i++) {
+        let id = 'art' + String(i).padStart(2,'0');
+        let div = document.getElementById('checklist-' + tid + '-' + id);
+        if(!div) continue;
+        let scenarioBlockId = div.getAttribute('data-scenario');
+        let testLabel = div.getAttribute('data-label');
+        loadChecklist(tid, id, scenarioBlockId, testLabel);
+        div.querySelectorAll('input[type=checkbox]').forEach(function(chk) {
+          chk.onchange = function() { saveChecklist(tid, id, scenarioBlockId, testLabel); };
+        });
+      }
+    });
+  </script>
 </head>
-<body>
+<body data-tid="T1059.003" data-total-tests="6">
 <div class="card">
   <h1>Alert: Windows Command Shell</h1>
-  <div class="meta"><b>Technique ID:</b> T1059.003<div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'><b>Atomic Red Team – dostępne testy dla tej techniki:</b><ul><li><b>Create and Execute Batch Script</b><br><b>Polecenia testowe (powershell):</b><pre>Start-Process "#{script_path}"</pre><a href='../../scenarios/atomic_tests\T1059.003\Create_and_Execute_Batch_Script/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>Remove-Item "#{script_path}" -Force -ErrorAction Ignore</pre><a href='../../scenarios/atomic_tests\T1059.003\Create_and_Execute_Batch_Script/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>Writes text to a file and displays it.</b><br><b>Polecenia testowe (cmd):</b><pre>echo "#{message}" > "#{file_contents_path}" & type "#{file_contents_path}"</pre><a href='../../scenarios/atomic_tests\T1059.003\Writes_text_to_a_file_and_displays_it./test_1.cmd'>Pobierz test_1.cmd</a><br><b>Polecenia cleanup (cmd):</b><pre>del "#{file_contents_path}" >nul 2>&1</pre><a href='../../scenarios/atomic_tests\T1059.003\Writes_text_to_a_file_and_displays_it./cleanup_1.cmd'>Pobierz cleanup_1.cmd</a><br></li><li><b>Suspicious Execution via Windows Command Shell</b><br><b>Polecenia testowe (cmd):</b><pre>%LOCALAPPDATA:~-3,1%md /c echo #{input_message} > #{output_file} & type #{output_file}</pre><a href='../../scenarios/atomic_tests\T1059.003\Suspicious_Execution_via_Windows_Command/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Simulate BlackByte Ransomware Print Bombing</b><br><b>Polecenia testowe (powershell):</b><pre>cmd /c "for /l %x in (1,1,#{max_to_print}) do start wordpad.exe /p #{file_to_print}" | out-null</pre><a href='../../scenarios/atomic_tests\T1059.003\Simulate_BlackByte_Ransomware_Print_Bomb/test_1.ps1'>Pobierz test_1.ps1</a><br><b>Polecenia cleanup (powershell):</b><pre>stop-process -name wordpad -force -erroraction silentlycontinue</pre><a href='../../scenarios/atomic_tests\T1059.003\Simulate_BlackByte_Ransomware_Print_Bomb/cleanup_1.ps1'>Pobierz cleanup_1.ps1</a><br></li><li><b>Command Prompt read contents from CMD file and execute</b><br><b>Polecenia testowe (cmd):</b><pre>cmd /r cmd<"#{input_file}"</pre><a href='../../scenarios/atomic_tests\T1059.003\Command_Prompt_read_contents_from_CMD_fi/test_1.cmd'>Pobierz test_1.cmd</a><br></li><li><b>Command prompt writing script to file then executes it</b><br><b>Polecenia testowe (cmd):</b><pre>c:\windows\system32\cmd.exe /c cd /d #{script_path} & echo Set objShell = CreateObject("WScript.Shell"):Set objExec = objShell.Exec("whoami"):Set objExec = Nothing:Set objShell = Nothing > #{script_name}.vbs & #{script_name}.vbs</pre><a href='../../scenarios/atomic_tests\T1059.003\Command_prompt_writing_script_to_file_th/test_1.cmd'>Pobierz test_1.cmd</a><br><b>Polecenia cleanup (cmd):</b><pre>del "#{script_name}.vbs" >nul 2>&1</pre><a href='../../scenarios/atomic_tests\T1059.003\Command_prompt_writing_script_to_file_th/cleanup_1.cmd'>Pobierz cleanup_1.cmd</a><br></li></ul><a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1059.003' target='_blank'>Zobacz wszystkie testy na GitHubie</a></div></div>
-  <div class="tactic section"><b>Tactics:</b> <a href="https://attack.mitre.org/tactics/TA0002/" target="_blank">Execution (TA0002)</a></div>
-  <div class="status section"><b>Status:</b> Pending</div>
-  <div class="scenario-block"><b>Twój opis scenariusza:</b><br>Opis scenariusza, podatności lub techniki.</div>
+  <div class="meta"><b>Technique ID:</b> T1059.003</div>
+  <div class="tactic section"><b>Tactics:</b> Execution</div>
+  <div class="status section"><b>Status:</b> ART / do walidacji</div>
   <div class="desc section"><b>MITRE Description:</b><br>Adversaries may abuse the Windows command shell for execution. The Windows command shell ([cmd](https://attack.mitre.org/software/S0106)) is the primary command prompt on Windows systems. The Windows command prompt can be used to control almost any aspect of a system, with various permission levels required for different subsets of commands. The command prompt can be invoked remotely via [Remote Services](https://attack.mitre.org/techniques/T1021) such as [SSH](https://attack.mitre.org/techniques/T1021/004).(Citation: SSH in Windows)  Batch files (ex: .bat or .cmd) also provide the shell with a list of sequential commands to run, as well as normal scripting operations such as conditionals and loops. Common uses of batch files include long or repetitive tasks, or the need to run the same set of commands on multiple systems.  Adversaries may leverage [cmd](https://attack.mitre.org/software/S0106) to execute various commands and payloads. Common uses include [cmd](https://attack.mitre.org/software/S0106) to execute a single command, or abusing [cmd](https://attack.mitre.org/software/S0106) interactively with input and output forwarded over a command and control channel.</div>
   <div class="link section"><b>MITRE Link:</b> <a href="https://attack.mitre.org/techniques/T1059/003/" target="_blank">https://attack.mitre.org/techniques/T1059/003/</a></div>
+  <div class="scenario-block">
+    <b>Twój opis scenariusza:</b><br>
+    <textarea id="scenarioBlock" rows="7" readonly>
+Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
+    </textarea>
+  </div>
+  <button onclick="eksportujProgres('T1059.003',6)" class="eksport-btn">Eksportuj progres (do MD)</button>
+  <button onclick="pokazImport()" class="import-btn">Załaduj progres z .md</button>
+  <div id="importBox" style="display:none;margin-top:8px;">
+    <textarea id="importProgress" rows="4" style="width:99%;"></textarea>
+    <button onclick="importujProgres()" class="import-btn">Zastosuj progres</button>
+  </div>
+  <textarea id="eksportChecklist" rows="4" style="width:100%;margin-top:10px;display:none;"></textarea>
+  <div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'>
+    <b>Atomic Red Team – dostępne testy dla tej techniki:</b>
+    <div style="margin-bottom:10px;">
+      <span class="badge badge-total">6 testów</span>
+      <span class="badge badge-ps">2 PowerShell</span>
+      <span class="badge badge-cmd">4 CMD</span>
+      <a href='https://github.com/redcanaryco/atomic-red-team/tree/master/atomics/T1059.003' target='_blank' style="float:right;">Zobacz na GitHubie</a>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 1: Create and Execute Batch Script</b>
+        <span id="tested-badge-T1059.003-art01" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>Start-Process &quot;#{script_path}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Create_and_Execute_Batch_Script\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>Remove-Item &quot;#{script_path}&quot; -Force -ErrorAction Ignore</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Create_and_Execute_Batch_Script\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.003-art01" data-scenario="scenarioBlock" data-label="Atomic Test 1: Create and Execute Batch Script">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.003','art01','scenarioBlock','Atomic Test 1: Create and Execute Batch Script')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 2: Writes text to a file and displays it.</b>
+        <span id="tested-badge-T1059.003-art02" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>echo &quot;#{message}&quot; &gt; &quot;#{file_contents_path}&quot; & type &quot;#{file_contents_path}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Writes_text_to_a_file_and_displays_it\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (cmd):</b>
+          <pre>del &quot;#{file_contents_path}&quot; &gt;nul 2&gt;&1</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Writes_text_to_a_file_and_displays_it\cleanup_1.cmd" download>Pobierz cleanup_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.003-art02" data-scenario="scenarioBlock" data-label="Atomic Test 2: Writes text to a file and displays it.">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.003','art02','scenarioBlock','Atomic Test 2: Writes text to a file and displays it.')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 3: Suspicious Execution via Windows Command Shell</b>
+        <span id="tested-badge-T1059.003-art03" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>%LOCALAPPDATA:~-3,1%md /c echo #{input_message} &gt; #{output_file} & type #{output_file}</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Suspicious_Execution_via_Windows_Command\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.003-art03" data-scenario="scenarioBlock" data-label="Atomic Test 3: Suspicious Execution via Windows Command Shell">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.003','art03','scenarioBlock','Atomic Test 3: Suspicious Execution via Windows Command Shell')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-ps">PowerShell</span>
+        <b>Atomic Test 4: Simulate BlackByte Ransomware Print Bombing</b>
+        <span id="tested-badge-T1059.003-art04" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (powershell):</b>
+          <pre>cmd /c &quot;for /l %x in (1,1,#{max_to_print}) do start wordpad.exe /p #{file_to_print}&quot; | out-null</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Simulate_BlackByte_Ransomware_Print_Bomb\test_1.ps1" download>Pobierz test_1.ps1</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (powershell):</b>
+          <pre>stop-process -name wordpad -force -erroraction silentlycontinue</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Simulate_BlackByte_Ransomware_Print_Bomb\cleanup_1.ps1" download>Pobierz cleanup_1.ps1</a><br>
+        <div class="art-checklist" id="checklist-T1059.003-art04" data-scenario="scenarioBlock" data-label="Atomic Test 4: Simulate BlackByte Ransomware Print Bombing">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.003','art04','scenarioBlock','Atomic Test 4: Simulate BlackByte Ransomware Print Bombing')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 5: Command Prompt read contents from CMD file and execute</b>
+        <span id="tested-badge-T1059.003-art05" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>cmd /r cmd&lt;&quot;#{input_file}&quot;</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Command_Prompt_read_contents_from_CMD_fi\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.003-art05" data-scenario="scenarioBlock" data-label="Atomic Test 5: Command Prompt read contents from CMD file and execute">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.003','art05','scenarioBlock','Atomic Test 5: Command Prompt read contents from CMD file and execute')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="art-accordion">
+      <button class="art-accordion-btn" onclick="toggleArtAccordion(this)">
+        <span class="badge badge-cmd">CMD</span>
+        <b>Atomic Test 6: Command prompt writing script to file then executes it</b>
+        <span id="tested-badge-T1059.003-art06" class="badge badge-ok" style="display:none; float:right;">PRZETESTOWANE</span>
+      </button>
+      <div class="art-accordion-content">
+        <div class="test-desc"><b>Opis:</b> </div>
+
+        <div>
+          <b>Polecenia testowe (cmd):</b>
+          <pre>c:\windows\system32\cmd.exe /c cd /d #{script_path} & echo Set objShell = CreateObject(&quot;WScript.Shell&quot;):Set objExec = objShell.Exec(&quot;whoami&quot;):Set objExec = Nothing:Set objShell = Nothing &gt; #{script_name}.vbs & #{script_name}.vbs</pre>
+          <button class="art-copy-btn" onclick="copyArtCode(this)">Kopiuj</button>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Command_prompt_writing_script_to_file_th\test_1.cmd" download>Pobierz test_1.cmd</a><br>
+        <div class="test-cleanup">
+          <b>Cleanup (cmd):</b>
+          <pre>del &quot;#{script_name}.vbs&quot; &gt;nul 2&gt;&1</pre>
+        </div>
+<a href="..\..\scenarios\atomic_tests\T1059.003\Command_prompt_writing_script_to_file_th\cleanup_1.cmd" download>Pobierz cleanup_1.cmd</a><br>
+        <div class="art-checklist" id="checklist-T1059.003-art06" data-scenario="scenarioBlock" data-label="Atomic Test 6: Command prompt writing script to file then executes it">
+          <label><input type="checkbox"> Uruchomiono test</label><br>
+          <label><input type="checkbox"> Wykonano cleanup</label><br>
+          <label><input type="checkbox"> Zdarzenie widoczne w Defenderze</label><br>
+          <label><input type="checkbox"> Utworzono alert</label><br>
+          <button onclick="resetChecklist('T1059.003','art06','scenarioBlock','Atomic Test 6: Command prompt writing script to file then executes it')">Resetuj</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
   <div class="author section"><b>Author:</b> Krzysztof K.</div>
 </div>
 </body>

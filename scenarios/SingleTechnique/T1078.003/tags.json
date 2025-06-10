@@ -7,7 +7,7 @@
         "Persistence",
         "Privilege-Escalation"
     ],
-    "status": "Audit",
-    "linked_rule": "alerts\\SingleTechnique\\alert4.md",
+    "status": "Pending",
+    "linked_rule": "alerts\\SingleTechnique\\al3.md",
     "author": "Krzysztof K."
 }

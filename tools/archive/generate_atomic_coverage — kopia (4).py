@@ -262,8 +262,6 @@ def generate_art_html(tid, technique_name, tactic_str, atomic_tests, mitre_desc,
     .art-copy-btn:active {{ background:#eaf4ff;}}
     .eksport-btn {{ background:#c5e1a5; color:#1b4b2b; border-radius:7px; border:none; padding:9px 17px; margin:11px 0 5px 0; font-weight:600; cursor:pointer; }}
     .eksport-btn:hover {{ background:#b2dfdb; }}
-    .import-btn {{ background:#bbdefb; color:#1a237e; border-radius:7px; border:none; padding:8px 15px; margin-left:8px; font-weight:600; cursor:pointer; }}
-    .import-btn:hover {{ background:#90caf9; }}
   </style>
   <script>
     function toggleArtAccordion(btn) {{
@@ -337,32 +335,6 @@ def generate_art_html(tid, technique_name, tactic_str, atomic_tests, mitre_desc,
       box.select();
       document.execCommand('copy');
     }}
-    function pokazImport() {{
-      var el = document.getElementById('importBox');
-      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-    }}
-    function importujProgres() {{
-      var lines = document.getElementById('importProgress').value.split('\\n');
-      var tid = document.body.getAttribute('data-tid');
-      var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
-      for(let i=1; i<=total_tests; i++) {{
-        let id = 'art' + String(i).padStart(2,'0');
-        let label = "";
-        let div = document.getElementById('checklist-' + tid + '-' + id);
-        if(!div) continue;
-        label = div.getAttribute('data-label') || ("Atomic Test " + i);
-        let ok = lines.some(line => line.includes(label));
-        if(ok) {{
-          let chks = div.querySelectorAll('input[type=checkbox]');
-          let states = Array(chks.length).fill(true);
-          chks.forEach((chk, idx) => {{ chk.checked = true; }});
-          localStorage.setItem('art-checklist-' + tid + '-' + id, JSON.stringify(states));
-          document.getElementById('tested-badge-' + tid + '-' + id).style.display = 'inline-block';
-        }}
-      }}
-      alert('Przywrócono progres!');
-      location.reload();
-    }}
     window.addEventListener('DOMContentLoaded', function() {{
       var tid = document.body.getAttribute('data-tid');
       var total_tests = Number(document.body.getAttribute('data-total-tests')||'1');
@@ -395,11 +367,6 @@ Tutaj wpisz opis scenariusza lub eksportuj progres z checklisty poniżej.
     </textarea>
   </div>
   <button onclick="eksportujProgres('{escape(tid)}',{total})" class="eksport-btn">Eksportuj progres (do MD)</button>
-  <button onclick="pokazImport()" class="import-btn">Załaduj progres z .md</button>
-  <div id="importBox" style="display:none;margin-top:8px;">
-    <textarea id="importProgress" rows="4" style="width:99%;"></textarea>
-    <button onclick="importujProgres()" class="import-btn">Zastosuj progres</button>
-  </div>
   <textarea id="eksportChecklist" rows="4" style="width:100%;margin-top:10px;display:none;"></textarea>
   <div style='background:#eaf4ff;border-radius:8px;padding:15px 16px;margin-top:25px;'>
     <b>Atomic Red Team – dostępne testy dla tej techniki:</b>
@@ -486,6 +453,7 @@ def merge_pro():
         with open(md_path, encoding="utf-8") as f:
             content = f.read()
         tid, tname, tactics, mitre_desc, mitre_link, author = parse_md(content)
+        # Pobierz pełne dane z MITRE jeśli coś jest puste lub domyślne
         if tid in mitre_db:
             if not tname or tname == "(brak nazwy techniki)":
                 tname = mitre_db[tid]["name"]
@@ -533,7 +501,7 @@ def merge_pro():
 def main():
     print("\n=== Mode 6: Atomic Coverage (Atomic Red Team) ===\n")
     print("1) Generuj macierz pokrycia (Atomic Coverage Matrix)")
-    print("2) Merge PRO – generuj foldery/skrypty i czytelny raport HTML (PL) + eksport/import progresu z MD")
+    print("2) Merge PRO – generuj foldery/skrypty i czytelny raport HTML (PL) + eksport progresu do MD")
     wyb = input("Wybierz tryb (1/2): ").strip()
     if wyb == "1":
         atomic_coverage_matrix()
