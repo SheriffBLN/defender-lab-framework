@@ -104,7 +104,14 @@ Szczegóły: [docs/Instrukcja update.md](docs/Instrukcja%20update.md)
 
 ## 📄 Licencja
 
-Projekt dostępny jest na licencji **MIT**. Możesz z niego swobodnie korzystać, rozwijać go i dzielić się nim (forkować, modyfikować) zgodnie z warunkami licencji. Szanuj jednak wkład innych – zachowaj informację o autorach projektu.
+Ten projekt objęty jest licencją **zastrzeżoną (proprietary / all rights reserved)**.
+
+Kod źródłowy nie jest przeznaczony do swobodnego użytku, kopiowania ani dystrybucji bez uprzedniej pisemnej zgody autora.
+
+> 🔒 Wszelkie prawa zastrzeżone. Udostępnianie, forki i użycie w projektach komercyjnych lub grantowych bez zgody są zabronione.
+
+Jeśli jesteś zainteresowany współpracą, testami lub wykorzystaniem komercyjnym – skontaktuj się z autorem.
+
 
 ---
 ## 📣 Kontakt i rozwój
