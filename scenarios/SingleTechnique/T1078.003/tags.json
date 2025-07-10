@@ -7,7 +7,7 @@
         "Persistence",
         "Privilege-Escalation"
     ],
-    "status": "Pending",
-    "linked_rule": "alerts\\SingleTechnique\\al3.md",
-    "author": "Krzysztof K."
+    "status": "Tested",
+    "linked_rule": "alerts\\SingleTechnique\\Suspicious_PS_Exec.md",
+    "author": "Krzysztof Krzymowski"
 }

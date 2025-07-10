@@ -42,7 +42,7 @@ def load_score_map(score_csv_path):
                         score_map[tech.strip()] = 1
     return score_map
 
-def generate_layer_for_csv(csv_path, output_json_path, score_map):
+def generate_layer_for_csv(csv_path, output_json_path, score_map, mode="classic"):
     techniques = []
     with open(csv_path, encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -54,8 +54,31 @@ def generate_layer_for_csv(csv_path, output_json_path, score_map):
                 or row.get("techniqueID")
                 or row.get("ID")
             )
-            if tech_id:
-                tech_id = tech_id.strip()
+            if not tech_id:
+                continue
+            tech_id = tech_id.strip()
+            # Opcje generowania
+            if mode == "only_fired":
+                count = score_map.get(tech_id, 0)
+                if count > 0:
+                    score = 1
+                    color = get_color(score)
+                    techniques.append({
+                        "techniqueID": tech_id,
+                        "score": score,
+                        "color": color
+                    })
+                # Jeśli nie było wykrycia, NIE dodajemy tej techniki do warstwy.
+            elif mode == "binary":
+                count = score_map.get(tech_id, 0)
+                score = 1 if count > 0 else 0
+                color = get_color(score)
+                techniques.append({
+                    "techniqueID": tech_id,
+                    "score": score,
+                    "color": color
+                })
+            else:  # classic
                 score = score_map.get(tech_id)
                 if score is None:
                     score = 0.5
@@ -79,13 +102,28 @@ def main():
     mapping_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "mapping"))
     score_csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "tools", "helpers", "last30days_alerts.csv"))
     score_map = load_score_map(score_csv_path)
+    print("Wybierz tryb generowania warstwy MITRE Navigator:")
+    print("1) Klasyczna warstwa (score/kolory wg liczby wykryć, score=0.5 dla technik nieaktywowanych)")
+    print("2) Warstwa binarna (score=1 jeśli technika wystąpiła, 0 jeśli nie)")
+    print("3) Tylko wystąpienia – warstwa zawiera wyłącznie techniki z alertami (score=1), reszta pominięta")
+    mode_input = input("Wybierz tryb (1/2/3): ").strip()
+    mode = "classic"
+    if mode_input == "2":
+        mode = "binary"
+    elif mode_input == "3":
+        mode = "only_fired"
     found = False
     for root, dirs, files in os.walk(mapping_dir):
         for file in files:
             if file == "status.csv":
                 csv_path = os.path.join(root, file)
-                output_json_path = os.path.join(root, "layer.json")
-                generate_layer_for_csv(csv_path, output_json_path, score_map)
+                if mode == "binary":
+                    output_json_path = os.path.join(root, "layer_binary.json")
+                elif mode == "only_fired":
+                    output_json_path = os.path.join(root, "layer_firedonly.json")
+                else:
+                    output_json_path = os.path.join(root, "layer.json")
+                generate_layer_for_csv(csv_path, output_json_path, score_map, mode)
                 print(f"[OK] Wygenerowano: {output_json_path}")
                 found = True
     if not found:

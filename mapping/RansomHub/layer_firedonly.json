@@ -4,7 +4,7 @@
     "techniques": [
         {
             "techniqueID": "T1059.001",
-            "score": 2,
+            "score": 1,
             "color": "#ffff00"
         }
     ],
